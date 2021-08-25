@@ -4,6 +4,7 @@ export * from "./fetchKeysFromLoader";
 export * from "./native";
 export * from "./parsers";
 export * from "./provider";
+export * from "./tx";
 export * from "./types";
 export * from "./useAccountData";
 export * from "./useAccountsData";
