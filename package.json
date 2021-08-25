@@ -1,0 +1,57 @@
+{
+  "name": "@saber-hq/sail",
+  "version": "0.1.0",
+  "description": "Account caching and batched loading for React-based Solana applications.",
+  "keywords": [
+    "solana"
+  ],
+  "author": "Ian Macalinao <ian@saber.so>",
+  "homepage": "https://saber.so",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saber-hq/sail.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "bugs": {
+    "url": "https://github.com/saber-hq/sail/issues"
+  },
+  "devDependencies": {
+    "@saberhq/eslint-config-react": "^0.14.0",
+    "@types/lodash.zip": "^4.2.6",
+    "@types/react": "^17.0.18",
+    "@types/react-dom": "^17.0.9",
+    "eslint": "^7.32.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@saberhq/solana-contrib": "^0.14.0",
+    "@saberhq/token-utils": "^0.14.0",
+    "@saberhq/use-solana": "^0.14.0",
+    "@solana/web3.js": "^1.24.0",
+    "dataloader": "^2.0.0",
+    "eventemitter3": "^4.0.7",
+    "lodash.zip": "^4.2.0",
+    "tiny-invariant": "^1.1.0",
+    "tslib": "^2.3.1",
+    "use-debounce": "^7.0.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

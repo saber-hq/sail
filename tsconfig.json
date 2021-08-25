@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "ESNext",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "preserveConstEnums": true,
+    "lib": ["es2015", "es2016", "dom"],
+    "types": ["node"],
+
+    "declaration": true,
+    "removeComments": false,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist/"
+  },
+  "include": ["./src"]
+}
