@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AccountDatum } from "../types";
 import type { CacheUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
+import type { SolanaGetMultipleAccountsError } from "./fetchers";
 import { getMultipleAccounts } from "./fetchers";
 import type { SolanaAccountLoadError } from "./fetchKeysUsingLoader";
 import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
@@ -50,6 +51,10 @@ export interface UseAccountsArgs {
    * Callback called whenever an account fails to load.
    */
   onAccountLoadError?: (err: SolanaAccountLoadError) => void;
+  /**
+   * Callback called whenever getMultipleAccounts fails.
+   */
+  onGetMultipleAccountsError?: (err: SolanaGetMultipleAccountsError) => void;
 }
 
 export interface UseAccounts {
@@ -90,6 +95,7 @@ export const useAccountsInternal = ({
   batchDurationMs = 500,
   refreshIntervalMs = 60_000,
   onAccountLoadError,
+  onGetMultipleAccountsError,
 }: UseAccountsArgs): UseAccounts => {
   const { network, connection } = useConnectionContext();
 
@@ -111,7 +117,12 @@ export const useAccountsInternal = ({
     () =>
       new DataLoader<PublicKey, AccountInfo<Buffer> | null, string>(
         async (keys: readonly PublicKey[]) => {
-          const result = await getMultipleAccounts(connection, keys, "recent");
+          const result = await getMultipleAccounts(
+            connection,
+            keys,
+            onGetMultipleAccountsError,
+            "recent"
+          );
           result.array.forEach((info, i) => {
             const addr = keys[i];
             if (addr && !(info instanceof Error)) {
@@ -127,7 +138,13 @@ export const useAccountsInternal = ({
           cacheKeyFn: getCacheKeyOfPublicKey,
         }
       ),
-    [accountsCache, batchDurationMs, connection, emitter]
+    [
+      accountsCache,
+      batchDurationMs,
+      connection,
+      emitter,
+      onGetMultipleAccountsError,
+    ]
   );
 
   const fetchKeys = useCallback(

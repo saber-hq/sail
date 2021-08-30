@@ -15,6 +15,7 @@ export function chunks<T>(array: readonly T[], size: number): T[][] {
 export const getMultipleAccounts = async (
   connection: Connection,
   keys: readonly PublicKey[],
+  onGetMultipleAccountsError?: (err: SolanaGetMultipleAccountsError) => void,
   commitment: Commitment = "recent"
 ): Promise<{
   keys: readonly PublicKey[];
@@ -29,13 +30,15 @@ export const getMultipleAccounts = async (
       try {
         return await getMultipleAccountsCore(connection, chunk, commitment);
       } catch (e) {
+        const error = new SolanaGetMultipleAccountsError(
+          chunk,
+          commitment,
+          e as Error
+        );
+        onGetMultipleAccountsError?.(error);
         return {
           keys: chunk,
-          error: new SolanaGetMultipleAccountsError(
-            chunk,
-            commitment,
-            e as Error
-          ),
+          error,
         };
       }
     })
