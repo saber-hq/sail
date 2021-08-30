@@ -44,6 +44,11 @@ export interface UseHandleTXsArgs {
    * Called whenever a transaction throws an error.
    */
   onTxError?: (err: SolanaTransactionError) => void;
+
+  /**
+   * If true, waits for a confirmation before proceeding to the next transaction.
+   */
+  waitForConfirmation?: boolean;
 }
 
 export interface UseHandleTXs {
@@ -56,6 +61,7 @@ export const useHandleTXsInternal = ({
   onTxSend,
   onTxError,
   txRefetchDelayMs = 1_000,
+  waitForConfirmation = false,
 }: UseHandleTXsArgs): UseHandleTXs => {
   const { network } = useSolana();
 
@@ -93,6 +99,7 @@ export const useHandleTXsInternal = ({
                 preflightCommitment: "recent",
                 commitment: "recent",
               },
+              confirm: waitForConfirmation,
             })
           ).map((p) => new PendingTransaction(provider, p));
 
@@ -141,7 +148,14 @@ export const useHandleTXsInternal = ({
         return { success: false, pending: [] };
       }
     },
-    [network, onTxError, onTxSend, refetch, txRefetchDelayMs]
+    [
+      network,
+      onTxError,
+      onTxSend,
+      refetch,
+      txRefetchDelayMs,
+      waitForConfirmation,
+    ]
   );
 
   const handleTX = useCallback(
