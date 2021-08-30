@@ -86,16 +86,10 @@ export interface UseAccounts {
   subscribe: (key: PublicKey) => () => Promise<void>;
 }
 
-export const DEFAULT_ACCOUNT_LOAD_ERROR_HANDLER = (
-  err: SolanaAccountLoadError
-): void => {
-  console.error(err.userMessage, err.originalError);
-};
-
 export const useAccountsInternal = ({
   batchDurationMs = 500,
   refreshIntervalMs = 60_000,
-  onAccountLoadError = DEFAULT_ACCOUNT_LOAD_ERROR_HANDLER,
+  onAccountLoadError,
 }: UseAccountsArgs): UseAccounts => {
   const { network, connection } = useConnectionContext();
 

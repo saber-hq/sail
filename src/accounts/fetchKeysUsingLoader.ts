@@ -25,7 +25,7 @@ export class SolanaAccountLoadError extends Error {
 export const fetchKeysUsingLoader = async (
   loader: AccountLoader,
   keys: (PublicKey | null | undefined)[],
-  onAccountLoadError: (err: SolanaAccountLoadError) => void
+  onAccountLoadError?: (err: SolanaAccountLoadError) => void
 ): Promise<AccountDatum[]> => {
   const keysWithIndex = keys.map((k, i) => [k, i]);
   const keysSpecified = keysWithIndex.filter(
@@ -39,8 +39,10 @@ export const fetchKeysUsingLoader = async (
 
     const [accountId, nextIndex] = indexInfo;
     if (keyResult instanceof Error) {
-      const err = new SolanaAccountLoadError(keyResult, accountId);
-      onAccountLoadError(err);
+      if (onAccountLoadError) {
+        const err = new SolanaAccountLoadError(keyResult, accountId);
+        onAccountLoadError(err);
+      }
       nextData[nextIndex] = null;
       return;
     }
