@@ -10,8 +10,8 @@ import { AccountsEmitter } from "./emitter";
 import { getMultipleAccounts } from "./fetchers";
 import type { SolanaAccountLoadError } from "./fetchKeysFromLoader";
 import { fetchKeysUsingLoader } from "./fetchKeysFromLoader";
-import type { UseHandleTXs, UseHandleTXsArgs } from "./tx/useHandleTXs";
-import { useHandleTXs } from "./tx/useHandleTXs";
+import type { UseHandleTXsArgs } from "./tx/useHandleTXs";
+import { useHandleTXsInternal } from "./tx/useHandleTXs";
 import type { AccountDatum } from "./types";
 
 /**
@@ -40,7 +40,7 @@ const newState = (): AccountsProviderState => ({
   subscribedAccounts: new Map(),
 });
 
-export interface AccountsContext extends UseHandleTXs {
+export interface AccountsContext {
   /**
    * The loader. Usually should not be used directly.
    */
@@ -99,6 +99,7 @@ const useAccountsContextInternal = ({
   batchDurationMs = 500,
   refreshIntervalMs = 60_000,
   onAccountLoadError = DEFAULT_ACCOUNT_LOAD_ERROR_HANDLER,
+  ...handleTXsArgs
 }: UseAccountsContext = {}): AccountsContext => {
   const { network, connection } = useConnectionContext();
 
@@ -212,7 +213,7 @@ const useAccountsContextInternal = ({
     [accountLoader, onAccountLoadError]
   );
 
-  const handleTXsContext = useHandleTXs({ refetch });
+  const handleTXsContext = useHandleTXsInternal({ refetch, ...handleTXsArgs });
 
   return {
     loader: accountLoader,

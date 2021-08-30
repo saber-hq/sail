@@ -1,6 +1,6 @@
 import type { PublicKey } from "@solana/web3.js";
 import { useCallback, useEffect, useState } from "react";
-import { useDebouncedCallback } from "use-debounce/lib";
+import { useDebouncedCallback } from "use-debounce";
 
 import { useAccountsContext } from "./provider";
 import type { AccountDatum } from "./types";

@@ -1,4 +1,6 @@
-import type { AccountDatum } from "./types";
+import type { AccountDatum } from "../types";
+
+export * from "./logTransactionEnvelope";
 
 export const accountsEqual = (a: AccountDatum, b: AccountDatum): boolean => {
   if (a && b) {

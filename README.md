@@ -1,6 +1,6 @@
-# `react-solana-accounts-provider`
+# sail ⛵️
 
-> TODO: description
+A React library for Solana account management and transaction handling.
 
 ## Usage
 

@@ -5,6 +5,7 @@ import type { AccountInfo, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
+import { logTransactionEnvelope } from "../utils/logTransactionEnvelope";
 import {
   InsufficientSOLError,
   SolanaTransactionError,
@@ -21,6 +22,9 @@ export interface HandleTXsResponse {
 }
 
 export interface UseHandleTXsArgs {
+  /**
+   * Fetches a transaction.
+   */
   refetch: (key: PublicKey) => Promise<AccountInfo<Buffer> | null>;
 
   /**
@@ -28,10 +32,17 @@ export interface UseHandleTXsArgs {
    */
   txRefetchDelayMs?: number;
 
+  /**
+   * Called whenever a transaction is sent.
+   */
   onTxSend?: (args: {
     network: Network;
     pending: PendingTransaction[];
   }) => void;
+
+  /**
+   * Called whenever a transaction throws an error.
+   */
   onTxError?: (err: Error) => void;
 }
 
@@ -40,7 +51,7 @@ export interface UseHandleTXs {
   handleTXs: (txEnv: TransactionEnvelope[]) => Promise<HandleTXsResponse>;
 }
 
-export const useHandleTXs = ({
+export const useHandleTXsInternal = ({
   refetch,
   onTxSend,
   onTxError,
@@ -70,7 +81,7 @@ export const useHandleTXs = ({
           await provider.connection.getAccountInfo(provider.wallet.publicKey)
         )?.lamports;
         if (!nativeBalance || nativeBalance === 0) {
-          throw new SolanaTransactionError(network, new InsufficientSOLError());
+          throw new InsufficientSOLError();
         }
 
         try {
@@ -115,29 +126,18 @@ export const useHandleTXs = ({
           };
         } catch (e) {
           // Log the instruction logs
-          console.error("Transaction failed.");
+          console.error("Transaction failed.", e);
           txs.forEach((tx, i) => {
-            const serialized = tx.instructionsJSON;
-            console.error(`TX #${i + 1} of ${txs.length}`);
-            console.error(
-              "=> Instructions",
-              JSON.stringify(serialized, null, 2)
-            );
-            console.error(
-              "=> Signers",
-              JSON.stringify(
-                tx.signers.map((sg) => sg.publicKey.toString()),
-                null,
-                2
-              )
-            );
+            if (txs.length > 1) {
+              console.debug(`TX #${i + 1} of ${txs.length}`);
+            }
+            logTransactionEnvelope(tx);
           });
 
-          const error = new SolanaTransactionError(network, e);
-          throw error;
+          throw e;
         }
       } catch (e) {
-        onTxError?.(e);
+        onTxError?.(new SolanaTransactionError(network, e as Error));
         return { success: false, pending: [] };
       }
     },
