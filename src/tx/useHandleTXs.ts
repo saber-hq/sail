@@ -137,7 +137,7 @@ export const useHandleTXsInternal = ({
           throw e;
         }
       } catch (e) {
-        onTxError?.(new SolanaTransactionError(network, e as Error));
+        onTxError?.(new SolanaTransactionError(network, e as Error, txs));
         return { success: false, pending: [] };
       }
     },

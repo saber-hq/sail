@@ -1,4 +1,4 @@
-import type { Network } from "@saberhq/solana-contrib";
+import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
 
 import { categorizeTransactionError } from "./categorizeTransactionError";
 import type { TransactionErrorType } from "./types";
@@ -9,7 +9,8 @@ import type { TransactionErrorType } from "./types";
 export class SolanaTransactionError extends Error {
   constructor(
     public readonly network: Network,
-    public readonly originalError: Error
+    public readonly originalError: Error,
+    public readonly txs: readonly TransactionEnvelope[]
   ) {
     super(originalError.message);
     this.name = "SolanaTransactionError";
