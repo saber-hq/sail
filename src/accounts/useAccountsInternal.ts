@@ -117,14 +117,10 @@ export const useAccountsInternal = ({
     () =>
       new DataLoader<PublicKey, AccountInfo<Buffer> | null, string>(
         async (keys: readonly PublicKey[]) => {
-          const result = await getMultipleAccounts(
-            connection,
-            keys,
-            "processed"
-          );
+          const result = await getMultipleAccounts(connection, keys, "recent");
           result.array.forEach((info, i) => {
             const addr = keys[i];
-            if (addr) {
+            if (addr && !(info instanceof Error)) {
               accountsCache.set(getCacheKeyOfPublicKey(addr), info);
               emitter.raiseCacheUpdated(addr, true);
             }

@@ -15,19 +15,37 @@ export function chunks<T>(array: readonly T[], size: number): T[][] {
 export const getMultipleAccounts = async (
   connection: Connection,
   keys: readonly PublicKey[],
-  commitment: Commitment | undefined
+  commitment: Commitment = "recent"
 ): Promise<{
   keys: readonly PublicKey[];
-  array: readonly (AccountInfo<Buffer> | null)[];
+  array: readonly (
+    | AccountInfo<Buffer>
+    | null
+    | SolanaGetMultipleAccountsError
+  )[];
 }> => {
   const result = await Promise.all(
-    chunks(keys, 99).map((chunk) =>
-      getMultipleAccountsCore(connection, chunk, commitment)
-    )
+    chunks(keys, 99).map(async (chunk) => {
+      try {
+        return await getMultipleAccountsCore(connection, chunk, commitment);
+      } catch (e) {
+        return {
+          keys: chunk,
+          error: new SolanaGetMultipleAccountsError(
+            chunk,
+            commitment,
+            e as Error
+          ),
+        };
+      }
+    })
   );
   const array = result
-    .map(({ array }) =>
-      array.map((acc) => {
+    .map((el) => {
+      if ("error" in el) {
+        return el.keys.map(() => el.error);
+      }
+      return el.array.map((acc) => {
         if (!acc) {
           return null;
         }
@@ -37,8 +55,8 @@ export const getMultipleAccounts = async (
           ...rest,
           data: dataStr ? Buffer.from(dataStr, "base64") : Buffer.alloc(0),
         } as AccountInfo<Buffer>;
-      })
-    )
+      });
+    })
     .flat();
   return { keys, array };
 };
@@ -46,7 +64,7 @@ export const getMultipleAccounts = async (
 const getMultipleAccountsCore = async (
   conn: Connection,
   keys: readonly PublicKey[],
-  commitment: Commitment | undefined
+  commitment: Commitment = "recent"
 ): Promise<{
   keys: readonly PublicKey[];
   array: readonly AccountInfo<string[]>[];
@@ -79,3 +97,14 @@ const getMultipleAccountsCore = async (
 
   throw new Error("getMultipleAccountsCore could not get info");
 };
+
+export class SolanaGetMultipleAccountsError extends Error {
+  constructor(
+    public readonly keys: readonly PublicKey[],
+    public readonly commitment: Commitment,
+    public readonly originalError: Error
+  ) {
+    super(`Error fetching accounts: ${originalError.message}`);
+    this.name = "SolanaGetMultipleAccountsError";
+  }
+}
