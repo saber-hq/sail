@@ -43,7 +43,7 @@ export interface UseHandleTXsArgs {
   /**
    * Called whenever a transaction throws an error.
    */
-  onTxError?: (err: Error) => void;
+  onTxError?: (err: SolanaTransactionError) => void;
 }
 
 export interface UseHandleTXs {
