@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint": "eslint .",
+    "lint": "eslint . --cache",
+    "lint:ci": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix"
   },
   "bugs": {
