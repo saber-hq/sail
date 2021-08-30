@@ -202,7 +202,7 @@ export const useAccountsInternal = ({
   const refetchAllSubscriptions = useCallback(async () => {
     return await Promise.all(
       [...subscribedAccounts.keys()].map(async (keyStr) => {
-        const key = new PublicKey(keyStr);
+        const key = new PublicKey(Buffer.from(keyStr, "base64"));
         await refetch(key);
       })
     );
