@@ -137,23 +137,23 @@
     eventemitter3 "^4.0.7"
 
 "@saberhq/eslint-config-react@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@saberhq/eslint-config-react/-/eslint-config-react-0.14.0.tgz#007c83f98da11a68410d3e891af787cf712edce9"
-  integrity sha512-wxse1u57YlCBZ8eBR4EUQXnakVb3UT/S2YpgWsb1WJ4/0VjqPbLGmTI9GB1E0nofzRUltUTvvnNT4ob8faWtoQ==
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@saberhq/eslint-config-react/-/eslint-config-react-0.14.1.tgz#f2ba68ec09fba20397e7fc5915ed9e21f7de47f2"
+  integrity sha512-ZERaA1Zo39/M+OXI31BVKxWyZc7rt20qY/u8Dqzbu9iHmT1Vi9RBWJYcAhPhhtyLarZqKSvZsLsrRA9dWIvSRA==
   dependencies:
-    "@saberhq/eslint-config" "^0.14.0"
+    "@saberhq/eslint-config" "^0.14.1"
     eslint-plugin-react "^7.24.0"
     eslint-plugin-react-hooks "^4.2.0"
 
-"@saberhq/eslint-config@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@saberhq/eslint-config/-/eslint-config-0.14.0.tgz#9dd77404ad6cd686e201ccfc7cb4ead82a96765d"
-  integrity sha512-BBHgeRDJHMvdRgmUBslhl4nU+lGyQ0DL/SmgRCAt5sxHd3wdL0dKGZ2ThxlMtk6Fad4nZ9SnstU4B49E/MNuFw==
+"@saberhq/eslint-config@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@saberhq/eslint-config/-/eslint-config-0.14.1.tgz#a2043b28acf3e4c9dcfb27dc6206140e3828081a"
+  integrity sha512-100waxHmyXa/0HjijguIoqIAhwjn/Y7qWthldiHvbtZzx+zJ/ppxplUNd5Cn9mtugocOclp+MYFYSIDMqjkPaw==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.29.0"
     "@typescript-eslint/parser" "^4.29.0"
     eslint-config-prettier "^8.3.0"
-    eslint-plugin-import "^2.23.4"
+    eslint-plugin-import "^2.24.2"
     eslint-plugin-prettier "^3.4.0"
     eslint-plugin-simple-import-sort "^7.0.0"
     eslint-plugin-unused-imports "^1.1.2"
@@ -969,7 +969,7 @@ eslint-module-utils@^2.6.2:
     debug "^3.2.7"
     pkg-dir "^2.0.0"
 
-eslint-plugin-import@^2.23.4:
+eslint-plugin-import@^2.24.2:
   version "2.24.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.24.2.tgz#2c8cd2e341f3885918ee27d18479910ade7bb4da"
   integrity sha512-hNVtyhiEtZmpsabL4neEj+6M5DCLgpYyG9nzJY8lZQeQXEn5UPW1DpUdsMHMXsq98dbNm7nt1w9ZMSVpfJdi8Q==
