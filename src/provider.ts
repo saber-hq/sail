@@ -14,6 +14,14 @@ import type { UseHandleTXs, UseHandleTXsArgs } from "./tx/useHandleTXs";
 import { useHandleTXs } from "./tx/useHandleTXs";
 import type { AccountDatum } from "./types";
 
+/**
+ * Gets the cache key associated with the given pubkey.
+ * @param pubkey
+ * @returns
+ */
+export const getCacheKeyOfPublicKey = (pubkey: PublicKey): string =>
+  pubkey.toBuffer().toString("base64");
+
 export type AccountLoader = DataLoader<
   PublicKey,
   AccountInfo<Buffer> | null,
@@ -100,7 +108,7 @@ const useAccountsContextInternal = ({
 
   const subscribe = useCallback(
     (key: PublicKey): (() => Promise<void>) => {
-      const keyStr = key.toString();
+      const keyStr = getCacheKeyOfPublicKey(key);
       const amount = subscribedAccounts.get(keyStr);
       if (amount === undefined || amount === 0) {
         subscribedAccounts.set(keyStr, 1);
@@ -124,7 +132,7 @@ const useAccountsContextInternal = ({
     (key: PublicKey): AccountInfo<Buffer> | null | undefined => {
       // null: account not found on blockchain
       // undefined: cache miss (not yet fetched)
-      return accountsCache.get(key.toString());
+      return accountsCache.get(getCacheKeyOfPublicKey(key));
     },
     [accountsCache]
   );
@@ -152,7 +160,7 @@ const useAccountsContextInternal = ({
           result.array.forEach((info, i) => {
             const addr = keys[i];
             if (addr) {
-              accountsCache.set(addr.toString(), info);
+              accountsCache.set(getCacheKeyOfPublicKey(addr), info);
               emitter.raiseCacheUpdated(addr, true);
             }
           });
@@ -161,7 +169,7 @@ const useAccountsContextInternal = ({
         {
           // aggregate all requests over 500ms
           batchScheduleFn: (callback) => setTimeout(callback, batchDurationMs),
-          cacheKeyFn: (k) => k.toString(),
+          cacheKeyFn: getCacheKeyOfPublicKey,
         }
       ),
     [accountsCache, batchDurationMs, connection, emitter]
