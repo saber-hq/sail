@@ -2,8 +2,8 @@ import type { PublicKey } from "@solana/web3.js";
 import zip from "lodash.zip";
 import invariant from "tiny-invariant";
 
-import type { AccountLoader } from "./provider";
-import type { AccountDatum } from "./types";
+import type { AccountDatum } from "../types";
+import type { AccountLoader } from "./useAccountsInternal";
 
 /**
  * Thrown if an account could not be loaded.

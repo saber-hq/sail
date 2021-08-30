@@ -2,7 +2,7 @@ import type { PublicKey } from "@solana/web3.js";
 import { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { useAccountsContext } from "./provider";
+import { useSail } from ".";
 import type { AccountDatum } from "./types";
 
 /**
@@ -17,7 +17,7 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getCached, onCache, subscribe, fetchKeys } = useAccountsContext();
+  const { getCached, onCache, subscribe, fetchKeys } = useSail();
 
   // makes a datum from a public key
   const makeDatumFromKey = useCallback(
