@@ -1,12 +1,7 @@
 import type { Network } from "@saberhq/solana-contrib";
 
-export enum TransactionErrorType {
-  NotConfirmed = "not-confirmed",
-  Cancelled = "cancelled",
-  NodeBehind = "node-behind",
-  SignatureRequestDenied = "signature-request-denied",
-  InsufficientSOL = "insufficient-sol",
-}
+import { categorizeTransactionError } from "./categorizeTransactionError";
+import type { TransactionErrorType } from "./types";
 
 /**
  * Error on a Solana transaction
@@ -25,24 +20,7 @@ export class SolanaTransactionError extends Error {
    * Tag used for grouping errors together.
    */
   get tag(): TransactionErrorType | null {
-    if (this.message.startsWith("Transaction was not confirmed in")) {
-      return TransactionErrorType.NotConfirmed;
-    }
-    if (this.message.startsWith("Transaction cancelled")) {
-      return TransactionErrorType.Cancelled;
-    }
-    if (
-      this.message.startsWith("failed to send transaction: Node is behind by")
-    ) {
-      return TransactionErrorType.NodeBehind;
-    }
-    if (this.message === "Signature request denied") {
-      return TransactionErrorType.SignatureRequestDenied;
-    }
-    if (this.message === "Insufficient SOL balance") {
-      return TransactionErrorType.InsufficientSOL;
-    }
-    return null;
+    return categorizeTransactionError(this.message);
   }
 
   /**
