@@ -30,7 +30,7 @@
     "url": "https://github.com/saber-hq/sail/issues"
   },
   "devDependencies": {
-    "@saberhq/eslint-config-react": "^0.14.1",
+    "@saberhq/eslint-config-react": "^0.16.0",
     "@types/lodash.zip": "^4.2.6",
     "@types/react": "^17.0.18",
     "@types/react-dom": "^17.0.9",
