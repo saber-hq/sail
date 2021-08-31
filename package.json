@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@saberhq/solana-contrib": "^0.16.0",
-    "@saberhq/token-utils": "^0.14.5",
+    "@saberhq/token-utils": "^0.16.0",
     "@saberhq/use-solana": "^0.16.0",
     "@solana/web3.js": "^1.24.0",
     "dataloader": "^2.0.0",
