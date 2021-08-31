@@ -40,7 +40,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@saberhq/solana-contrib": "^0.14.2",
+    "@saberhq/solana-contrib": "^0.16.0",
     "@saberhq/token-utils": "^0.14.5",
     "@saberhq/use-solana": "^0.16.0",
     "@solana/web3.js": "^1.24.0",
