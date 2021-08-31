@@ -42,7 +42,7 @@
   "dependencies": {
     "@saberhq/solana-contrib": "^0.14.2",
     "@saberhq/token-utils": "^0.14.5",
-    "@saberhq/use-solana": "^0.14.3",
+    "@saberhq/use-solana": "^0.16.0",
     "@solana/web3.js": "^1.24.0",
     "dataloader": "^2.0.0",
     "eventemitter3": "^4.0.7",
