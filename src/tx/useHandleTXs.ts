@@ -5,7 +5,6 @@ import type { AccountInfo, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
-import { logTransactionEnvelope } from "../utils/logTransactionEnvelope";
 import {
   InsufficientSOLError,
   SolanaTransactionError,
@@ -138,7 +137,7 @@ export const useHandleTXsInternal = ({
             if (txs.length > 1) {
               console.debug(`TX #${i + 1} of ${txs.length}`);
             }
-            logTransactionEnvelope(tx);
+            console.debug(tx.debugStr);
           });
 
           throw e;
