@@ -4,8 +4,8 @@ A React library for Solana account management and transaction handling.
 
 ## Usage
 
-```
-const reactSolanaAccountsProvider = require('react-solana-accounts-provider');
+```typescript
+import { SailProvider } from "@saberhq/sail";
 
-// TODO: DEMONSTRATE API
+const MyApp = <SailProvider>{/* stuff */}</SailProvider>;
 ```
