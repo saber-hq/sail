@@ -48,7 +48,7 @@
     "@saberhq/solana-contrib": "^0.16.0",
     "@saberhq/token-utils": "^0.16.0",
     "@saberhq/use-solana": "^0.16.0",
-    "@solana/web3.js": "^1.24.0",
+    "@solana/web3.js": "^1.24.1",
     "dataloader": "^2.0.0",
     "eventemitter3": "^4.0.7",
     "lodash.zip": "^4.2.0",
