@@ -3,7 +3,9 @@
   "version": "1.2.0",
   "description": "Account caching and batched loading for React-based Solana applications.",
   "keywords": [
-    "solana"
+    "solana",
+    "blockchain",
+    "react"
   ],
   "author": "Ian Macalinao <ian@saber.so>",
   "homepage": "https://saber.so",
@@ -24,7 +26,8 @@
     "build": "tsc",
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings=0",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ts/ src/index.ts"
   },
   "bugs": {
     "url": "https://github.com/saber-hq/sail/issues"
@@ -37,6 +40,7 @@
     "eslint": "^7.32.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "typedoc": "^0.21.9",
     "typescript": "^4.4.2"
   },
   "dependencies": {
