@@ -8,7 +8,7 @@
     "react"
   ],
   "author": "Ian Macalinao <ian@saber.so>",
-  "homepage": "https://saber.so",
+  "homepage": "https://sail.saber.so",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "files": [
@@ -17,6 +17,10 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/saber-hq/sail/issues",
+    "email": "ian@saber.so"
   },
   "repository": {
     "type": "git",
@@ -28,9 +32,6 @@
     "lint:ci": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ts/ src/index.ts"
-  },
-  "bugs": {
-    "url": "https://github.com/saber-hq/sail/issues"
   },
   "devDependencies": {
     "@saberhq/eslint-config-react": "^0.16.0",
