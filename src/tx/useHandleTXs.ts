@@ -32,17 +32,18 @@ export interface UseHandleTXsArgs {
   txRefetchDelayMs?: number;
 
   /**
-   * Called whenever a transaction is sent.
+   * Called whenever a Transaction is sent.
    */
   onTxSend?: (args: {
     network: Network;
     pending: PendingTransaction[];
+    message?: string;
   }) => void;
 
   /**
    * Called whenever a transaction throws an error.
    */
-  onTxError?: (err: SolanaTransactionError) => void;
+  onTxError?: (err: SolanaTransactionError, message?: string) => void;
 
   /**
    * If true, waits for a confirmation before proceeding to the next transaction.
@@ -51,8 +52,14 @@ export interface UseHandleTXsArgs {
 }
 
 export interface UseHandleTXs {
-  handleTX: (txEnv: TransactionEnvelope) => Promise<HandleTXResponse>;
-  handleTXs: (txEnv: TransactionEnvelope[]) => Promise<HandleTXsResponse>;
+  handleTX: (
+    txEnv: TransactionEnvelope,
+    msg?: string
+  ) => Promise<HandleTXResponse>;
+  handleTXs: (
+    txEnv: TransactionEnvelope[],
+    msg?: string
+  ) => Promise<HandleTXsResponse>;
 }
 
 export const useHandleTXsInternal = ({
@@ -66,7 +73,8 @@ export const useHandleTXsInternal = ({
 
   const handleTXs = useCallback(
     async (
-      txs: TransactionEnvelope[]
+      txs: TransactionEnvelope[],
+      message?: string
     ): Promise<{ success: boolean; pending: PendingTransaction[] }> => {
       if (txs.length === 0) {
         return {
@@ -125,7 +133,7 @@ export const useHandleTXsInternal = ({
             );
           })();
 
-          onTxSend?.({ network, pending });
+          onTxSend?.({ network, pending, message });
           return {
             success: true,
             pending,
@@ -143,7 +151,10 @@ export const useHandleTXsInternal = ({
           throw e;
         }
       } catch (e) {
-        onTxError?.(new SolanaTransactionError(network, e as Error, txs));
+        onTxError?.(
+          new SolanaTransactionError(network, e as Error, txs),
+          message
+        );
         return { success: false, pending: [] };
       }
     },
@@ -159,9 +170,10 @@ export const useHandleTXsInternal = ({
 
   const handleTX = useCallback(
     async (
-      txEnv: TransactionEnvelope
+      txEnv: TransactionEnvelope,
+      message?: string
     ): Promise<{ success: boolean; pending: PendingTransaction | null }> => {
-      const { success, pending } = await handleTXs([txEnv]);
+      const { success, pending } = await handleTXs([txEnv], message);
       return { success, pending: pending[0] ?? null };
     },
     [handleTXs]
