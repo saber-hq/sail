@@ -115,7 +115,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="UseAccounts.html">UseAccounts</a>.<a href="UseAccounts.html#loader">loader</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/accounts/useAccountsInternal.ts#L64">src/accounts/useAccountsInternal.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/accounts/useAccountsInternal.ts#L64">src/accounts/useAccountsInternal.ts:64</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -138,7 +138,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseAccounts.html">UseAccounts</a>.<a href="UseAccounts.html#fetchKeys">fetchKeys</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/accounts/useAccountsInternal.ts#L84">src/accounts/useAccountsInternal.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/accounts/useAccountsInternal.ts#L84">src/accounts/useAccountsInternal.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -167,7 +167,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseAccounts.html">UseAccounts</a>.<a href="UseAccounts.html#getCached">getCached</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/accounts/useAccountsInternal.ts#L69">src/accounts/useAccountsInternal.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/accounts/useAccountsInternal.ts#L69">src/accounts/useAccountsInternal.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,20 +189,23 @@
 					<a name="handleTX" class="tsd-anchor"></a>
 					<h3>handleTX</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">handleTX<span class="tsd-signature-symbol">(</span>txEnv<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransactionEnvelope</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="HandleTXResponse.html" class="tsd-signature-type" data-tsd-kind="Interface">HandleTXResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">handleTX<span class="tsd-signature-symbol">(</span>txEnv<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransactionEnvelope</span>, msg<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="HandleTXResponse.html" class="tsd-signature-type" data-tsd-kind="Interface">HandleTXResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseHandleTXs.html">UseHandleTXs</a>.<a href="UseHandleTXs.html#handleTX">handleTX</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/tx/useHandleTXs.ts#L54">src/tx/useHandleTXs.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/tx/useHandleTXs.ts#L55">src/tx/useHandleTXs.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>txEnv: <span class="tsd-signature-type">TransactionEnvelope</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> msg: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="HandleTXResponse.html" class="tsd-signature-type" data-tsd-kind="Interface">HandleTXResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -213,20 +216,23 @@
 					<a name="handleTXs" class="tsd-anchor"></a>
 					<h3>handleTXs</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">handleTXs<span class="tsd-signature-symbol">(</span>txEnv<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransactionEnvelope</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="HandleTXsResponse.html" class="tsd-signature-type" data-tsd-kind="Interface">HandleTXsResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">handleTXs<span class="tsd-signature-symbol">(</span>txEnv<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransactionEnvelope</span><span class="tsd-signature-symbol">[]</span>, msg<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="HandleTXsResponse.html" class="tsd-signature-type" data-tsd-kind="Interface">HandleTXsResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseHandleTXs.html">UseHandleTXs</a>.<a href="UseHandleTXs.html#handleTXs">handleTXs</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/tx/useHandleTXs.ts#L55">src/tx/useHandleTXs.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/tx/useHandleTXs.ts#L59">src/tx/useHandleTXs.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>txEnv: <span class="tsd-signature-type">TransactionEnvelope</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> msg: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="HandleTXsResponse.html" class="tsd-signature-type" data-tsd-kind="Interface">HandleTXsResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -244,7 +250,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseAccounts.html">UseAccounts</a>.<a href="UseAccounts.html#onCache">onCache</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/accounts/useAccountsInternal.ts#L79">src/accounts/useAccountsInternal.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/accounts/useAccountsInternal.ts#L79">src/accounts/useAccountsInternal.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -291,7 +297,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseAccounts.html">UseAccounts</a>.<a href="UseAccounts.html#refetch">refetch</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/accounts/useAccountsInternal.ts#L74">src/accounts/useAccountsInternal.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/accounts/useAccountsInternal.ts#L74">src/accounts/useAccountsInternal.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -320,7 +326,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="UseAccounts.html">UseAccounts</a>.<a href="UseAccounts.html#subscribe">subscribe</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/269fd6c/src/accounts/useAccountsInternal.ts#L91">src/accounts/useAccountsInternal.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/saber-hq/sail/blob/dac1463/src/accounts/useAccountsInternal.ts#L91">src/accounts/useAccountsInternal.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
