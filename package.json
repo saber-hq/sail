@@ -41,13 +41,13 @@
     "eslint": "^7.32.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "typedoc": "^0.21.9",
-    "typescript": "^4.4.2"
+    "typedoc": "^0.22.3",
+    "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@saberhq/solana-contrib": "^0.16.0",
-    "@saberhq/token-utils": "^0.16.0",
-    "@saberhq/use-solana": "^0.16.0",
+    "@saberhq/solana-contrib": "^0.18.0",
+    "@saberhq/token-utils": "^0.18.0",
+    "@saberhq/use-solana": "^0.18.1",
     "@solana/web3.js": "^1.24.1",
     "dataloader": "^2.0.0",
     "eventemitter3": "^4.0.7",
