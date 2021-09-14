@@ -36,7 +36,7 @@ export const useAccountsData = (
           return null;
         }
       }
-      return k;
+      return k === undefined ? undefined : null;
     },
     [getCached]
   );
