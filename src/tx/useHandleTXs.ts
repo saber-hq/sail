@@ -1,5 +1,8 @@
-import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
-import { PendingTransaction, sendAll } from "@saberhq/solana-contrib";
+import type {
+  Network,
+  PendingTransaction,
+  TransactionEnvelope,
+} from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { AccountInfo, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
@@ -98,17 +101,13 @@ export const useHandleTXsInternal = ({
         }
 
         try {
-          const pending = (
-            await sendAll({
-              provider,
-              reqs: txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
-              opts: {
-                preflightCommitment: "recent",
-                commitment: "recent",
-              },
-              confirm: waitForConfirmation,
-            })
-          ).map((p) => new PendingTransaction(provider, p));
+          const pending = await provider.sendAll(
+            txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
+            {
+              preflightCommitment: "recent",
+              commitment: "recent",
+            }
+          );
 
           // get the unique writable keys for every transaction
           const writable = [
@@ -132,6 +131,11 @@ export const useHandleTXsInternal = ({
               })
             );
           })();
+
+          if (waitForConfirmation) {
+            // await for the tx to be confirmed
+            await Promise.all(pending.map((p) => p.wait()));
+          }
 
           onTxSend?.({ network, pending, message });
           return {
