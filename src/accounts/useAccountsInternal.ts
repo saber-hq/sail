@@ -4,7 +4,7 @@ import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { SailCacheRefetchError } from "..";
+import type { SailAccountParseError, SailCacheRefetchError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
 import type { CacheUpdateEvent } from "./emitter";
@@ -65,9 +65,13 @@ export interface UseAccountsArgs {
    * Called if a cache refetch results in an error.
    */
   onCacheRefetchError?: (err: SailCacheRefetchError) => void;
+  /**
+   * Called if there is an error parsing an account.
+   */
+  onAccountParseError?: (err: SailAccountParseError) => void;
 }
 
-export interface UseAccounts extends UseAccountsArgs {
+export interface UseAccounts extends Required<UseAccountsArgs> {
   /**
    * The loader. Usually should not be used directly.
    */
@@ -105,9 +109,28 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   const {
     batchDurationMs = 500,
     refreshIntervalMs = 60_000,
-    onAccountLoadError,
-    onGetMultipleAccountsError,
-    onRefetchSubscriptionsError,
+
+    onAccountLoadError = (err) => {
+      console.warn(`Error loading account ${err.accountId.toString()}:`, err);
+    },
+    onGetMultipleAccountsError = (err) => {
+      console.warn(
+        `Error fetching multiple accounts (${err.keys.length}):`,
+        err
+      );
+    },
+    onRefetchSubscriptionsError = (err) => {
+      console.warn(`Error refetching subscriptions:`, err);
+    },
+    onAccountParseError = (err) => {
+      console.warn(
+        `Error parsing account ${err.data.accountId.toString()}:`,
+        err
+      );
+    },
+    onCacheRefetchError = (err) => {
+      console.warn(`Error refetching from cache:`, err);
+    },
   } = args;
   const { network, connection } = useConnectionContext();
 
@@ -230,12 +253,19 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   }, [onRefetchSubscriptionsError, refetchAllSubscriptions, refreshIntervalMs]);
 
   return {
-    ...args,
     loader: accountLoader,
     getCached,
     refetch,
     onCache,
     fetchKeys,
     subscribe,
+
+    batchDurationMs,
+    refreshIntervalMs,
+    onAccountLoadError,
+    onGetMultipleAccountsError,
+    onRefetchSubscriptionsError,
+    onAccountParseError,
+    onCacheRefetchError,
   };
 };

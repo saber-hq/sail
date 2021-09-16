@@ -1,8 +1,12 @@
 import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
-import type { PublicKey, TransactionSignature } from "@solana/web3.js";
+import type {
+  KeyedAccountInfo,
+  PublicKey,
+  TransactionSignature,
+} from "@solana/web3.js";
 
-import { categorizeTransactionError } from "./categorizeTransactionError";
-import type { TransactionErrorType } from "./types";
+import { categorizeTransactionError } from "./tx/categorizeTransactionError";
+import type { TransactionErrorType } from "./tx/types";
 
 /**
  * Error on a Solana transaction
@@ -107,5 +111,19 @@ export class SailCacheRefetchError extends Error {
       }`
     );
     this.name = "SailCacheRefetchError";
+  }
+}
+
+export class SailAccountParseError extends Error {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly data: KeyedAccountInfo
+  ) {
+    super(
+      `Error parsing account: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailAccountParseError";
   }
 }
