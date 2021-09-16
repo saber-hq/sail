@@ -22,14 +22,23 @@ export const useParsedAccountsData = <T extends unknown>(
           if (prevParsed[i]?.raw.equals(datum.accountInfo.data)) {
             return prevParsed[i];
           }
-          return {
-            ...datum,
-            accountInfo: {
-              ...datum.accountInfo,
-              data: parser(datum),
-            },
-            raw: datum.accountInfo.data,
-          };
+          try {
+            const parsed = parser(datum);
+            return {
+              ...datum,
+              accountInfo: {
+                ...datum.accountInfo,
+                data: parsed,
+              },
+              raw: datum.accountInfo.data,
+            };
+          } catch (e) {
+            console.warn(
+              `Error parsing account ${datum.accountId.toString()}:`,
+              e
+            );
+            return null;
+          }
         }
         return datum;
       });

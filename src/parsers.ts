@@ -16,13 +16,6 @@ export const TOKEN_ACCOUNT_PARSER: AccountParser<TokenAccountData> = (info) => {
 /**
  * Parses mint accounts.
  */
-export const MINT_PARSER: AccountParser<MintData | null> = (d) => {
-  try {
-    return deserializeMint(d.accountInfo.data);
-  } catch (e) {
-    console.warn(
-      `Could not deserialize mint for ${d.accountId?.toString() ?? "(none)"}`
-    );
-    return null;
-  }
+export const MINT_PARSER: AccountParser<MintData> = (d) => {
+  return deserializeMint(d.accountInfo.data);
 };
