@@ -41,6 +41,25 @@ export class SolanaTransactionError extends Error {
     }
     return [this.name, ...this.message.split(": ")];
   }
+
+  /**
+   * Generates a debug string representation of the transactions involved in this error.
+   * @param network
+   * @returns
+   */
+  generateTXsString(network: Network = "mainnet-beta"): string {
+    return this.txs
+      .map((tx, i) => {
+        const parts = [`TX #${i + 1} of ${this.txs.length}:`, tx.debugStr];
+        if (network !== "localnet") {
+          parts.push(
+            `View on Solana Explorer: ${tx.generateInspectLink(network)}`
+          );
+        }
+        return parts.join("\n");
+      })
+      .join("\n\n");
+  }
 }
 
 export class InsufficientSOLError extends Error {
