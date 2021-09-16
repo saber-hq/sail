@@ -1,4 +1,5 @@
 import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
+import type { PublicKey, TransactionSignature } from "@solana/web3.js";
 
 import { categorizeTransactionError } from "./categorizeTransactionError";
 import type { TransactionErrorType } from "./types";
@@ -66,5 +67,20 @@ export class InsufficientSOLError extends Error {
   constructor() {
     super("Insufficient SOL balance");
     this.name = "InsufficientSOLError";
+  }
+}
+
+export class SailRefetchError extends Error {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly writable: readonly PublicKey[],
+    public readonly txSigs: readonly TransactionSignature[]
+  ) {
+    super(
+      `Error refetching accounts after transaction: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailRefetchError";
   }
 }
