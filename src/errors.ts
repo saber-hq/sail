@@ -52,13 +52,13 @@ export class SolanaTransactionError extends Error {
    * @param network
    * @returns
    */
-  generateTXsString(network: Network = "mainnet-beta"): string {
+  generateTXsString(): string {
     return this.txs
       .map((tx, i) => {
         const parts = [`TX #${i + 1} of ${this.txs.length}:`, tx.debugStr];
-        if (network !== "localnet") {
+        if (this.network !== "localnet") {
           parts.push(
-            `View on Solana Explorer: ${tx.generateInspectLink(network)}`
+            `View on Solana Explorer: ${tx.generateInspectLink(this.network)}`
           );
         }
         return parts.join("\n");
