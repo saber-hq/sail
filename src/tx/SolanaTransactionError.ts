@@ -1,4 +1,5 @@
 import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
+import type { PublicKey, TransactionSignature } from "@solana/web3.js";
 
 import { categorizeTransactionError } from "./categorizeTransactionError";
 import type { TransactionErrorType } from "./types";
@@ -25,6 +26,13 @@ export class SolanaTransactionError extends Error {
   }
 
   /**
+   * Returns true if this error is associated with a simulation.
+   */
+  get isSimulation(): boolean {
+    return this.message.includes("Transaction simulation failed: ");
+  }
+
+  /**
    * Fingerprint used for grouping errors.
    */
   get fingerprint(): string[] {
@@ -34,11 +42,70 @@ export class SolanaTransactionError extends Error {
     }
     return [this.name, ...this.message.split(": ")];
   }
+
+  /**
+   * Generates a debug string representation of the transactions involved in this error.
+   * @param network
+   * @returns
+   */
+  generateTXsString(network: Network = "mainnet-beta"): string {
+    return this.txs
+      .map((tx, i) => {
+        const parts = [`TX #${i + 1} of ${this.txs.length}:`, tx.debugStr];
+        if (network !== "localnet") {
+          parts.push(
+            `View on Solana Explorer: ${tx.generateInspectLink(network)}`
+          );
+        }
+        return parts.join("\n");
+      })
+      .join("\n\n");
+  }
 }
 
 export class InsufficientSOLError extends Error {
   constructor() {
     super("Insufficient SOL balance");
     this.name = "InsufficientSOLError";
+  }
+}
+
+export class SailRefetchAfterTXError extends Error {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly writable: readonly PublicKey[],
+    public readonly txSigs: readonly TransactionSignature[]
+  ) {
+    super(
+      `Error refetching accounts after transaction: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailRefetchAfterTXError";
+  }
+}
+
+export class SailRefetchSubscriptionsError extends Error {
+  constructor(public readonly originalError: unknown) {
+    super(
+      `Error refetching subscribed accounts: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailRefetchSubscriptionsError";
+  }
+}
+
+export class SailCacheRefetchError extends Error {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly keys: readonly (PublicKey | null | undefined)[]
+  ) {
+    super(
+      `Error refetching from cache: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailCacheRefetchError";
   }
 }

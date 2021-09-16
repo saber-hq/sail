@@ -23,5 +23,8 @@ export const categorizeTransactionError = (
   if (msg === "Insufficient SOL balance") {
     return TransactionErrorType.InsufficientSOL;
   }
+  if (msg.endsWith("Blockhash not found")) {
+    return TransactionErrorType.BlockhashNotFound;
+  }
   return null;
 };

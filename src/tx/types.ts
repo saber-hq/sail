@@ -4,4 +4,5 @@ export enum TransactionErrorType {
   NodeBehind = "node-behind",
   SignatureRequestDenied = "signature-request-denied",
   InsufficientSOL = "insufficient-sol",
+  BlockhashNotFound = "blockhash-not-found",
 }

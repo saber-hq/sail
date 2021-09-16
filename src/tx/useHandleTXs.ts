@@ -10,6 +10,7 @@ import invariant from "tiny-invariant";
 
 import {
   InsufficientSOLError,
+  SailRefetchAfterTXError,
   SolanaTransactionError,
 } from "./SolanaTransactionError";
 
@@ -49,6 +50,11 @@ export interface UseHandleTXsArgs {
   onTxError?: (err: SolanaTransactionError, message?: string) => void;
 
   /**
+   * Called whenever an error occurs with the refetch.
+   */
+  onRefetchError?: (err: unknown) => void;
+
+  /**
    * If true, waits for a confirmation before proceeding to the next transaction.
    */
   waitForConfirmation?: boolean;
@@ -69,6 +75,7 @@ export const useHandleTXsInternal = ({
   refetch,
   onTxSend,
   onTxError,
+  onRefetchError,
   txRefetchDelayMs = 1_000,
   waitForConfirmation = false,
 }: UseHandleTXsArgs): UseHandleTXs => {
@@ -119,17 +126,35 @@ export const useHandleTXsInternal = ({
           // more importantly, this should be handled server-side
           // with our own websocket server
           void (async () => {
-            // await for the tx to be confirmed
-            await Promise.all(pending.map((p) => p.wait()));
-            // then fetch
-            await Promise.all(
-              writable.map(async (wr) => {
-                await refetch(wr);
-                setTimeout(() => {
-                  void refetch(wr);
-                }, txRefetchDelayMs);
-              })
-            );
+            try {
+              // await for the tx to be confirmed
+              await Promise.all(pending.map((p) => p.wait()));
+              // then fetch
+              await Promise.all(
+                writable.map(async (wr) => {
+                  await refetch(wr);
+                  setTimeout(() => {
+                    void refetch(wr).catch((e) => {
+                      onRefetchError?.(
+                        new SailRefetchAfterTXError(
+                          e,
+                          writable,
+                          pending.map((p) => p.signature)
+                        )
+                      );
+                    });
+                  }, txRefetchDelayMs);
+                })
+              );
+            } catch (e) {
+              onRefetchError?.(
+                new SailRefetchAfterTXError(
+                  e,
+                  writable,
+                  pending.map((p) => p.signature)
+                )
+              );
+            }
           })();
 
           if (waitForConfirmation) {
@@ -150,6 +175,11 @@ export const useHandleTXsInternal = ({
               console.debug(`TX #${i + 1} of ${txs.length}`);
             }
             console.debug(tx.debugStr);
+            if (network !== "localnet") {
+              console.debug(
+                `View on Solana Explorer: ${tx.generateInspectLink(network)}`
+              );
+            }
           });
 
           throw e;
@@ -164,6 +194,7 @@ export const useHandleTXsInternal = ({
     },
     [
       network,
+      onRefetchError,
       onTxError,
       onTxSend,
       refetch,
