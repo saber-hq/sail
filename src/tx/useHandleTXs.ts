@@ -10,7 +10,7 @@ import invariant from "tiny-invariant";
 
 import {
   InsufficientSOLError,
-  SailRefetchError,
+  SailRefetchAfterTXError,
   SolanaTransactionError,
 } from "./SolanaTransactionError";
 
@@ -136,7 +136,7 @@ export const useHandleTXsInternal = ({
                   setTimeout(() => {
                     void refetch(wr).catch((e) => {
                       onRefetchError?.(
-                        new SailRefetchError(
+                        new SailRefetchAfterTXError(
                           e,
                           writable,
                           pending.map((p) => p.signature)
@@ -148,7 +148,7 @@ export const useHandleTXsInternal = ({
               );
             } catch (e) {
               onRefetchError?.(
-                new SailRefetchError(
+                new SailRefetchAfterTXError(
                   e,
                   writable,
                   pending.map((p) => p.signature)

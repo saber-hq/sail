@@ -2,7 +2,7 @@ import type { PublicKey } from "@solana/web3.js";
 import { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { useSail } from ".";
+import { SailCacheRefetchError, useSail } from ".";
 import type { AccountDatum } from "./types";
 
 /**
@@ -17,7 +17,8 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getCached, onCache, subscribe, fetchKeys } = useSail();
+  const { getCached, onCache, subscribe, fetchKeys, onCacheRefetchError } =
+    useSail();
 
   // makes a datum from a public key
   const makeDatumFromKey = useCallback(
@@ -57,9 +58,11 @@ export const useAccountsData = (
 
   useEffect(() => {
     void (async () => {
-      await fetchAndSetKeys(fetchKeys, keys);
+      await fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
+        onCacheRefetchError?.(new SailCacheRefetchError(e, keys));
+      });
     })();
-  }, [keys, fetchAndSetKeys, fetchKeys]);
+  }, [keys, fetchAndSetKeys, fetchKeys, onCacheRefetchError]);
 
   // subscribe to account changes
   useEffect(() => {
@@ -75,10 +78,12 @@ export const useAccountsData = (
   useEffect(() => {
     return onCache((e) => {
       if (keys.find((key) => key?.equals(e.id))) {
-        void fetchAndSetKeys(fetchKeys, keys);
+        void fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
+          onCacheRefetchError?.(new SailCacheRefetchError(e, keys));
+        });
       }
     });
-  }, [keys, onCache, fetchAndSetKeys, fetchKeys]);
+  }, [keys, onCache, fetchAndSetKeys, fetchKeys, onCacheRefetchError]);
 
   // unload debounces when the component dismounts
   useEffect(() => {

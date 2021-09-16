@@ -70,7 +70,7 @@ export class InsufficientSOLError extends Error {
   }
 }
 
-export class SailRefetchError extends Error {
+export class SailRefetchAfterTXError extends Error {
   constructor(
     public readonly originalError: unknown,
     public readonly writable: readonly PublicKey[],
@@ -81,6 +81,31 @@ export class SailRefetchError extends Error {
         originalError instanceof Error ? originalError.message : "unknown"
       }`
     );
-    this.name = "SailRefetchError";
+    this.name = "SailRefetchAfterTXError";
+  }
+}
+
+export class SailRefetchSubscriptionsError extends Error {
+  constructor(public readonly originalError: unknown) {
+    super(
+      `Error refetching subscribed accounts: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailRefetchSubscriptionsError";
+  }
+}
+
+export class SailCacheRefetchError extends Error {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly keys: readonly (PublicKey | null | undefined)[]
+  ) {
+    super(
+      `Error refetching from cache: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailCacheRefetchError";
   }
 }

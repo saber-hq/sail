@@ -4,6 +4,8 @@ import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import type { SailCacheRefetchError } from "..";
+import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
 import type { CacheUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
@@ -55,9 +57,17 @@ export interface UseAccountsArgs {
    * Callback called whenever getMultipleAccounts fails.
    */
   onGetMultipleAccountsError?: (err: SolanaGetMultipleAccountsError) => void;
+  /**
+   * Called if an error happens.
+   */
+  onRefetchSubscriptionsError?: (err: SailRefetchSubscriptionsError) => void;
+  /**
+   * Called if a cache refetch results in an error.
+   */
+  onCacheRefetchError?: (err: SailCacheRefetchError) => void;
 }
 
-export interface UseAccounts {
+export interface UseAccounts extends UseAccountsArgs {
   /**
    * The loader. Usually should not be used directly.
    */
@@ -91,12 +101,14 @@ export interface UseAccounts {
   subscribe: (key: PublicKey) => () => Promise<void>;
 }
 
-export const useAccountsInternal = ({
-  batchDurationMs = 500,
-  refreshIntervalMs = 60_000,
-  onAccountLoadError,
-  onGetMultipleAccountsError,
-}: UseAccountsArgs): UseAccounts => {
+export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
+  const {
+    batchDurationMs = 500,
+    refreshIntervalMs = 60_000,
+    onAccountLoadError,
+    onGetMultipleAccountsError,
+    onRefetchSubscriptionsError,
+  } = args;
   const { network, connection } = useConnectionContext();
 
   // Cache of accounts
@@ -210,12 +222,15 @@ export const useAccountsInternal = ({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      void refetchAllSubscriptions();
+      void refetchAllSubscriptions().catch((e) => {
+        onRefetchSubscriptionsError?.(new SailRefetchSubscriptionsError(e));
+      });
     }, refreshIntervalMs);
     return () => clearInterval(interval);
-  }, [refetchAllSubscriptions, refreshIntervalMs]);
+  }, [onRefetchSubscriptionsError, refetchAllSubscriptions, refreshIntervalMs]);
 
   return {
+    ...args,
     loader: accountLoader,
     getCached,
     refetch,
