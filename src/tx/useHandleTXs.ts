@@ -12,7 +12,7 @@ import {
   InsufficientSOLError,
   SailRefetchAfterTXError,
   SolanaTransactionError,
-} from "./SolanaTransactionError";
+} from "../errors";
 
 export interface HandleTXResponse {
   success: boolean;

@@ -1,6 +1,7 @@
 import type { KeyedAccountInfo, PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 
+import { SailAccountParseError, useSail } from ".";
 import type { ParsedAccountDatum } from "./types";
 import { useAccountsData } from "./useAccountsData";
 
@@ -10,9 +11,10 @@ export const useParsedAccountsData = <T extends unknown>(
   keys: (PublicKey | null | undefined)[],
   parser: AccountParser<T>
 ): ParsedAccountDatum<T>[] => {
+  const { onAccountParseError } = useSail();
   const data = useAccountsData(keys);
   const [parsed, setParsed] = useState<ParsedAccountDatum<T>[]>(
-    keys.map(() => undefined)
+    keys.map((k) => (k === null ? null : undefined))
   );
 
   useEffect(() => {
@@ -22,19 +24,25 @@ export const useParsedAccountsData = <T extends unknown>(
           if (prevParsed[i]?.raw.equals(datum.accountInfo.data)) {
             return prevParsed[i];
           }
-          return {
-            ...datum,
-            accountInfo: {
-              ...datum.accountInfo,
-              data: parser(datum),
-            },
-            raw: datum.accountInfo.data,
-          };
+          try {
+            const parsed = parser(datum);
+            return {
+              ...datum,
+              accountInfo: {
+                ...datum.accountInfo,
+                data: parsed,
+              },
+              raw: datum.accountInfo.data,
+            };
+          } catch (e) {
+            onAccountParseError?.(new SailAccountParseError(e, datum));
+            return null;
+          }
         }
         return datum;
       });
     });
-  }, [data, parser]);
+  }, [data, onAccountParseError, parser]);
 
   return parsed;
 };
