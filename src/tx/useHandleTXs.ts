@@ -194,6 +194,7 @@ export const useHandleTXsInternal = ({
     },
     [
       network,
+      onRefetchError,
       onTxError,
       onTxSend,
       refetch,
