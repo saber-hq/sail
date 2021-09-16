@@ -25,6 +25,13 @@ export class SolanaTransactionError extends Error {
   }
 
   /**
+   * Returns true if this error is associated with a simulation.
+   */
+  get isSimulation(): boolean {
+    return this.message.includes("Transaction simulation failed: ");
+  }
+
+  /**
    * Fingerprint used for grouping errors.
    */
   get fingerprint(): string[] {

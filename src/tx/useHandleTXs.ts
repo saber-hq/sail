@@ -150,6 +150,11 @@ export const useHandleTXsInternal = ({
               console.debug(`TX #${i + 1} of ${txs.length}`);
             }
             console.debug(tx.debugStr);
+            if (network !== "localnet") {
+              console.debug(
+                `View on Solana Explorer: ${tx.generateInspectLink(network)}`
+              );
+            }
           });
 
           throw e;
