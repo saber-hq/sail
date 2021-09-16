@@ -7,7 +7,10 @@ import type { AccountParser } from "./useParsedAccountsData";
  * Parses token accounts.
  */
 export const TOKEN_ACCOUNT_PARSER: AccountParser<TokenAccountData> = (info) => {
-  return deserializeAccount(info.accountId, info.accountInfo.data);
+  return {
+    address: info.accountId,
+    ...deserializeAccount(info.accountInfo.data),
+  };
 };
 
 /**
