@@ -12,7 +12,7 @@ export const useParsedAccountsData = <T extends unknown>(
 ): ParsedAccountDatum<T>[] => {
   const data = useAccountsData(keys);
   const [parsed, setParsed] = useState<ParsedAccountDatum<T>[]>(
-    keys.map(() => undefined)
+    keys.map((k) => (k === null ? null : undefined))
   );
 
   useEffect(() => {
