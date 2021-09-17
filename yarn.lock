@@ -151,9 +151,9 @@
     prettier "^2.3.2"
 
 "@saberhq/solana-contrib@^1.0.0", "@saberhq/solana-contrib@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@saberhq/solana-contrib/-/solana-contrib-1.1.1.tgz#effafaa5c9a80e6289c986d81a3d79c59ae96bd9"
-  integrity sha512-D3rwz+n/TVKDOp9l9vS9p/vwtD+1yUIWcfo/zekRl/Vytca9axjbYKP5PTF4rtf1QHSHTwDZMAeSQgCGEyp7/A==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@saberhq/solana-contrib/-/solana-contrib-1.2.0.tgz#94a8d3784b24d140fb254ba83d22a96bded66001"
+  integrity sha512-swzyDBxW1f7iMYkwqXrRHBjTkq77BxD67kYS0OWYSn5I2yRRJ9+I+UcKxDnKMM1crcXYltTaoVD5ex2YRh7eJg==
   dependencies:
     "@solana/web3.js" "^1.27.0"
     "@types/promise-retry" "^1.1.3"
