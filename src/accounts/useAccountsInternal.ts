@@ -105,7 +105,9 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
   subscribe: (key: PublicKey) => () => Promise<void>;
 }
 
-export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
+export const useAccountsInternal = (
+  args: UseAccountsArgs = {}
+): UseAccounts => {
   const {
     batchDurationMs = 500,
     refreshIntervalMs = 60_000,
