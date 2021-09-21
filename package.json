@@ -34,21 +34,21 @@
     "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ts/ src/index.ts"
   },
   "devDependencies": {
-    "@saberhq/eslint-config-react": "^1.0.0",
+    "@saberhq/eslint-config-react": "^1.3.1",
     "@types/lodash.zip": "^4.2.6",
-    "@types/react": "^17.0.21",
+    "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "eslint": "^7.32.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "typedoc": "^0.22.3",
+    "typedoc": "^0.22.4",
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@saberhq/solana-contrib": "^1.0.0",
-    "@saberhq/token-utils": "^1.0.0",
-    "@saberhq/use-solana": "^1.0.0",
-    "@solana/web3.js": "^1.24.1",
+    "@saberhq/solana-contrib": "^1.3.1",
+    "@saberhq/token-utils": "^1.3.1",
+    "@saberhq/use-solana": "^1.3.1",
+    "@solana/web3.js": "^1.29.0",
     "dataloader": "^2.0.0",
     "eventemitter3": "^4.0.7",
     "lodash.zip": "^4.2.0",
