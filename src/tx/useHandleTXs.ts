@@ -8,11 +8,9 @@ import type { AccountInfo, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
-import {
-  InsufficientSOLError,
-  SailRefetchAfterTXError,
-  SolanaTransactionError,
-} from "../errors";
+import type { SailError } from "..";
+import { SailTransactionError } from "..";
+import { InsufficientSOLError, SailRefetchAfterTXError } from "../errors";
 
 export interface HandleTXResponse {
   success: boolean;
@@ -45,14 +43,9 @@ export interface UseHandleTXsArgs {
   }) => void;
 
   /**
-   * Called whenever a transaction throws an error.
+   * Called whenever an error occurs.
    */
-  onTxError?: (err: SolanaTransactionError, message?: string) => void;
-
-  /**
-   * Called whenever an error occurs with the refetch.
-   */
-  onRefetchError?: (err: unknown) => void;
+  onError: (err: SailError) => void;
 
   /**
    * If true, waits for a confirmation before proceeding to the next transaction.
@@ -74,8 +67,7 @@ export interface UseHandleTXs {
 export const useHandleTXsInternal = ({
   refetch,
   onTxSend,
-  onTxError,
-  onRefetchError,
+  onError,
   txRefetchDelayMs = 1_000,
   waitForConfirmation = false,
 }: UseHandleTXsArgs): UseHandleTXs => {
@@ -135,7 +127,7 @@ export const useHandleTXsInternal = ({
                   await refetch(wr);
                   setTimeout(() => {
                     void refetch(wr).catch((e) => {
-                      onRefetchError?.(
+                      onError(
                         new SailRefetchAfterTXError(
                           e,
                           writable,
@@ -147,7 +139,7 @@ export const useHandleTXsInternal = ({
                 })
               );
             } catch (e) {
-              onRefetchError?.(
+              onError(
                 new SailRefetchAfterTXError(
                   e,
                   writable,
@@ -185,22 +177,11 @@ export const useHandleTXsInternal = ({
           throw e;
         }
       } catch (e) {
-        onTxError?.(
-          new SolanaTransactionError(network, e as Error, txs),
-          message
-        );
+        onError(new SailTransactionError(network, e as Error, txs, message));
         return { success: false, pending: [] };
       }
     },
-    [
-      network,
-      onRefetchError,
-      onTxError,
-      onTxSend,
-      refetch,
-      txRefetchDelayMs,
-      waitForConfirmation,
-    ]
+    [network, onError, onTxSend, refetch, txRefetchDelayMs, waitForConfirmation]
   );
 
   const handleTX = useCallback(

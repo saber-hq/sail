@@ -1,5 +1,6 @@
 import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
 import type {
+  Commitment,
   KeyedAccountInfo,
   PublicKey,
   TransactionSignature,
@@ -8,14 +9,25 @@ import type {
 import { categorizeTransactionError } from "./tx/categorizeTransactionError";
 import type { TransactionErrorType } from "./tx/types";
 
+export class SailError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "SailError";
+  }
+}
+
 /**
  * Error on a Solana transaction
  */
-export class SolanaTransactionError extends Error {
+export class SailTransactionError extends SailError {
   constructor(
     public readonly network: Network,
     public readonly originalError: Error,
-    public readonly txs: readonly TransactionEnvelope[]
+    public readonly txs: readonly TransactionEnvelope[],
+    /**
+     * User message representing the transaction.
+     */
+    public readonly userMessage?: string
   ) {
     super(originalError.message);
     this.name = "SolanaTransactionError";
@@ -67,14 +79,14 @@ export class SolanaTransactionError extends Error {
   }
 }
 
-export class InsufficientSOLError extends Error {
+export class InsufficientSOLError extends SailError {
   constructor() {
     super("Insufficient SOL balance");
     this.name = "InsufficientSOLError";
   }
 }
 
-export class SailRefetchAfterTXError extends Error {
+export class SailRefetchAfterTXError extends SailError {
   constructor(
     public readonly originalError: unknown,
     public readonly writable: readonly PublicKey[],
@@ -89,7 +101,10 @@ export class SailRefetchAfterTXError extends Error {
   }
 }
 
-export class SailRefetchSubscriptionsError extends Error {
+/**
+ * Thrown if an error occurs when refetching subscriptions.
+ */
+export class SailRefetchSubscriptionsError extends SailError {
   constructor(public readonly originalError: unknown) {
     super(
       `Error refetching subscribed accounts: ${
@@ -100,7 +115,10 @@ export class SailRefetchSubscriptionsError extends Error {
   }
 }
 
-export class SailCacheRefetchError extends Error {
+/**
+ * Thrown if a cache refetch results in an error.
+ */
+export class SailCacheRefetchError extends SailError {
   constructor(
     public readonly originalError: unknown,
     public readonly keys: readonly (PublicKey | null | undefined)[]
@@ -114,7 +132,10 @@ export class SailCacheRefetchError extends Error {
   }
 }
 
-export class SailAccountParseError extends Error {
+/**
+ * Thrown if there is an error parsing an account.
+ */
+export class SailAccountParseError extends SailError {
   constructor(
     public readonly originalError: unknown,
     public readonly data: KeyedAccountInfo
@@ -125,5 +146,44 @@ export class SailAccountParseError extends Error {
       }`
     );
     this.name = "SailAccountParseError";
+  }
+}
+
+/**
+ * Thrown if an account could not be loaded.
+ */
+export class SailAccountLoadError extends SailError {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly accountId: PublicKey
+  ) {
+    super(
+      `Error loading account: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailAccountLoadError";
+  }
+
+  get userMessage(): string {
+    return `Error loading account ${this.accountId.toString()}`;
+  }
+}
+
+/**
+ * Callback called whenever getMultipleAccounts fails.
+ */
+export class SailGetMultipleAccountsError extends SailError {
+  constructor(
+    public readonly keys: readonly PublicKey[],
+    public readonly commitment: Commitment,
+    public readonly originalError: unknown
+  ) {
+    super(
+      `GetMultipleAccountsError: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailGetMultipleAccountsError";
   }
 }

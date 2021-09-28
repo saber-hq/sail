@@ -11,7 +11,7 @@ export const useParsedAccountsData = <T extends unknown>(
   keys: (PublicKey | null | undefined)[],
   parser: AccountParser<T>
 ): ParsedAccountDatum<T>[] => {
-  const { onAccountParseError } = useSail();
+  const { onError } = useSail();
   const data = useAccountsData(keys);
   const [parsed, setParsed] = useState<ParsedAccountDatum<T>[]>(
     keys.map((k) => (k === null ? null : undefined))
@@ -35,14 +35,14 @@ export const useParsedAccountsData = <T extends unknown>(
               raw: datum.accountInfo.data,
             };
           } catch (e) {
-            onAccountParseError?.(new SailAccountParseError(e, datum));
+            onError(new SailAccountParseError(e, datum));
             return null;
           }
         }
         return datum;
       });
     });
-  }, [data, onAccountParseError, parser]);
+  }, [data, onError, parser]);
 
   return parsed;
 };
