@@ -2,30 +2,14 @@ import type { PublicKey } from "@solana/web3.js";
 import zip from "lodash.zip";
 import invariant from "tiny-invariant";
 
+import { SailAccountLoadError } from "../errors";
 import type { AccountDatum } from "../types";
 import type { AccountLoader } from "./useAccountsInternal";
-
-/**
- * Thrown if an account could not be loaded.
- */
-export class SolanaAccountLoadError extends Error {
-  constructor(
-    public readonly originalError: Error,
-    public readonly accountId: PublicKey
-  ) {
-    super(`Error loading account: ${originalError.message}`);
-    this.name = "SolanaAccountLoadError";
-  }
-
-  get userMessage(): string {
-    return `Error loading account ${this.accountId.toString()}`;
-  }
-}
 
 export const fetchKeysUsingLoader = async (
   loader: AccountLoader,
   keys: (PublicKey | null | undefined)[],
-  onAccountLoadError?: (err: SolanaAccountLoadError) => void
+  onAccountLoadError?: (err: SailAccountLoadError) => void
 ): Promise<AccountDatum[]> => {
   const keysWithIndex = keys.map((k, i) => [k, i]);
   const keysSpecified = keysWithIndex.filter(
@@ -40,7 +24,7 @@ export const fetchKeysUsingLoader = async (
     const [accountId, nextIndex] = indexInfo;
     if (keyResult instanceof Error) {
       if (onAccountLoadError) {
-        const err = new SolanaAccountLoadError(keyResult, accountId);
+        const err = new SailAccountLoadError(keyResult, accountId);
         onAccountLoadError(err);
       }
       nextData[nextIndex] = null;

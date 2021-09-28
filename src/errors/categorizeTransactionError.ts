@@ -1,4 +1,11 @@
-import { TransactionErrorType } from "./types";
+export enum TransactionErrorType {
+  NotConfirmed = "not-confirmed",
+  Cancelled = "cancelled",
+  NodeBehind = "node-behind",
+  SignatureRequestDenied = "signature-request-denied",
+  InsufficientSOL = "insufficient-sol",
+  BlockhashNotFound = "blockhash-not-found",
+}
 
 /**
  * Categorizes an error coming from the Solana Web3 SDK.

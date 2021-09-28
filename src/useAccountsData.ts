@@ -17,8 +17,7 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getCached, onCache, subscribe, fetchKeys, onCacheRefetchError } =
-    useSail();
+  const { getCached, onCache, subscribe, fetchKeys, onError } = useSail();
 
   // makes a datum from a public key
   const makeDatumFromKey = useCallback(
@@ -75,10 +74,10 @@ export const useAccountsData = (
   useEffect(() => {
     void (async () => {
       await fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
-        onCacheRefetchError?.(new SailCacheRefetchError(e, keys));
+        onError(new SailCacheRefetchError(e, keys));
       });
     })();
-  }, [keys, fetchAndSetKeys, fetchKeys, onCacheRefetchError]);
+  }, [keys, fetchAndSetKeys, fetchKeys, onError]);
 
   // subscribe to account changes
   useEffect(() => {
@@ -95,11 +94,11 @@ export const useAccountsData = (
     return onCache((e) => {
       if (keys.find((key) => key?.equals(e.id))) {
         void fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
-          onCacheRefetchError?.(new SailCacheRefetchError(e, keys));
+          onError(new SailCacheRefetchError(e, keys));
         });
       }
     });
-  }, [keys, onCache, fetchAndSetKeys, fetchKeys, onCacheRefetchError]);
+  }, [keys, onCache, fetchAndSetKeys, fetchKeys, onError]);
 
   // unload debounces when the component dismounts
   useEffect(() => {
