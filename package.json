@@ -16,8 +16,7 @@
     "src/"
   ],
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "access": "public"
   },
   "bugs": {
     "url": "https://github.com/saber-hq/sail/issues",
