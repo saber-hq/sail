@@ -58,18 +58,16 @@ export const useAccountsData = (
       keys: (PublicKey | null | undefined)[]
     ) => {
       const keysData = await fetchKeys(keys);
-      setData(
-        keys.reduce(
-          (cacheState, key, keyIndex) =>
-            key
-              ? {
-                  ...cacheState,
-                  [key?.toString()]: keysData[keyIndex],
-                }
-              : cacheState,
+      const nextData = keys
+        .filter((key): key is PublicKey => !!key)
+        .reduce(
+          (cacheState, key, keyIndex) => ({
+            ...cacheState,
+            [key.toString()]: keysData[keyIndex],
+          }),
           {}
-        )
-      );
+        );
+      setData(nextData);
     },
     100
   );
