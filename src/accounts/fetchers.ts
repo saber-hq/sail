@@ -5,6 +5,8 @@ import type {
   PublicKey,
 } from "@solana/web3.js";
 
+import { SailGetMultipleAccountsError } from "..";
+
 export function chunks<T>(array: readonly T[], size: number): T[][] {
   return Array.apply<number, T[], T[][]>(
     0,
@@ -15,26 +17,18 @@ export function chunks<T>(array: readonly T[], size: number): T[][] {
 export const getMultipleAccounts = async (
   connection: Connection,
   keys: readonly PublicKey[],
-  onGetMultipleAccountsError?: (err: SolanaGetMultipleAccountsError) => void,
+  onGetMultipleAccountsError?: (err: SailGetMultipleAccountsError) => void,
   commitment: Commitment = "recent"
 ): Promise<{
   keys: readonly PublicKey[];
-  array: readonly (
-    | AccountInfo<Buffer>
-    | null
-    | SolanaGetMultipleAccountsError
-  )[];
+  array: readonly (AccountInfo<Buffer> | null | SailGetMultipleAccountsError)[];
 }> => {
   const result = await Promise.all(
     chunks(keys, 99).map(async (chunk) => {
       try {
         return await getMultipleAccountsCore(connection, chunk, commitment);
       } catch (e) {
-        const error = new SolanaGetMultipleAccountsError(
-          chunk,
-          commitment,
-          e as Error
-        );
+        const error = new SailGetMultipleAccountsError(chunk, commitment, e);
         onGetMultipleAccountsError?.(error);
         return {
           keys: chunk,
@@ -100,14 +94,3 @@ const getMultipleAccountsCore = async (
 
   throw new Error("getMultipleAccountsCore could not get info");
 };
-
-export class SolanaGetMultipleAccountsError extends Error {
-  constructor(
-    public readonly keys: readonly PublicKey[],
-    public readonly commitment: Commitment,
-    public readonly originalError: Error
-  ) {
-    super(`Error fetching accounts: ${originalError.message}`);
-    this.name = "SolanaGetMultipleAccountsError";
-  }
-}

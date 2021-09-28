@@ -4,14 +4,12 @@ import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { SailAccountParseError, SailCacheRefetchError } from "..";
+import type { SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
 import type { CacheUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
-import type { SolanaGetMultipleAccountsError } from "./fetchers";
 import { getMultipleAccounts } from "./fetchers";
-import type { SolanaAccountLoadError } from "./fetchKeysUsingLoader";
 import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
 
 /**
@@ -50,25 +48,9 @@ export interface UseAccountsArgs {
    */
   refreshIntervalMs?: number;
   /**
-   * Callback called whenever an account fails to load.
+   * Called whenever an error occurs.
    */
-  onAccountLoadError?: (err: SolanaAccountLoadError) => void;
-  /**
-   * Callback called whenever getMultipleAccounts fails.
-   */
-  onGetMultipleAccountsError?: (err: SolanaGetMultipleAccountsError) => void;
-  /**
-   * Called if an error happens.
-   */
-  onRefetchSubscriptionsError?: (err: SailRefetchSubscriptionsError) => void;
-  /**
-   * Called if a cache refetch results in an error.
-   */
-  onCacheRefetchError?: (err: SailCacheRefetchError) => void;
-  /**
-   * Called if there is an error parsing an account.
-   */
-  onAccountParseError?: (err: SailAccountParseError) => void;
+  onError: (err: SailError) => void;
 }
 
 export interface UseAccounts extends Required<UseAccountsArgs> {
@@ -106,32 +88,7 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
 }
 
 export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
-  const {
-    batchDurationMs = 500,
-    refreshIntervalMs = 60_000,
-
-    onAccountLoadError = (err) => {
-      console.warn(`Error loading account ${err.accountId.toString()}:`, err);
-    },
-    onGetMultipleAccountsError = (err) => {
-      console.warn(
-        `Error fetching multiple accounts (${err.keys.length}):`,
-        err
-      );
-    },
-    onRefetchSubscriptionsError = (err) => {
-      console.warn(`Error refetching subscriptions:`, err);
-    },
-    onAccountParseError = (err) => {
-      console.warn(
-        `Error parsing account ${err.data.accountId.toString()}:`,
-        err
-      );
-    },
-    onCacheRefetchError = (err) => {
-      console.warn(`Error refetching from cache:`, err);
-    },
-  } = args;
+  const { batchDurationMs = 500, refreshIntervalMs = 60_000, onError } = args;
   const { network, connection } = useConnectionContext();
 
   // Cache of accounts
@@ -155,7 +112,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
           const result = await getMultipleAccounts(
             connection,
             keys,
-            onGetMultipleAccountsError,
+            onError,
             "recent"
           );
           result.array.forEach((info, i) => {
@@ -173,24 +130,14 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
           cacheKeyFn: getCacheKeyOfPublicKey,
         }
       ),
-    [
-      accountsCache,
-      batchDurationMs,
-      connection,
-      emitter,
-      onGetMultipleAccountsError,
-    ]
+    [accountsCache, batchDurationMs, connection, emitter, onError]
   );
 
   const fetchKeys = useCallback(
     async (keys: (PublicKey | null | undefined)[]) => {
-      return await fetchKeysUsingLoader(
-        accountLoader,
-        keys,
-        onAccountLoadError
-      );
+      return await fetchKeysUsingLoader(accountLoader, keys, onError);
     },
-    [accountLoader, onAccountLoadError]
+    [accountLoader, onError]
   );
 
   const onCache = useMemo(() => emitter.onCache.bind(emitter), [emitter]);
@@ -246,11 +193,11 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   useEffect(() => {
     const interval = setInterval(() => {
       void refetchAllSubscriptions().catch((e) => {
-        onRefetchSubscriptionsError?.(new SailRefetchSubscriptionsError(e));
+        onError(new SailRefetchSubscriptionsError(e));
       });
     }, refreshIntervalMs);
     return () => clearInterval(interval);
-  }, [onRefetchSubscriptionsError, refetchAllSubscriptions, refreshIntervalMs]);
+  }, [onError, refetchAllSubscriptions, refreshIntervalMs]);
 
   return {
     loader: accountLoader,
@@ -262,10 +209,6 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
 
     batchDurationMs,
     refreshIntervalMs,
-    onAccountLoadError,
-    onGetMultipleAccountsError,
-    onRefetchSubscriptionsError,
-    onAccountParseError,
-    onCacheRefetchError,
+    onError,
   };
 };

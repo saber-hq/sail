@@ -1,5 +1,6 @@
 import { createContainer } from "unstated-next";
 
+import type { SailError } from ".";
 import type {
   UseAccounts,
   UseAccountsArgs,
@@ -10,14 +11,23 @@ import { useHandleTXsInternal } from "./tx/useHandleTXs";
 
 export interface UseSail extends UseAccounts, UseHandleTXs {}
 
-export interface UseSailArgs
-  extends UseAccountsArgs,
-    Omit<UseHandleTXsArgs, "refetch"> {}
+export type UseSailArgs = Omit<
+  UseAccountsArgs & Omit<UseHandleTXsArgs, "refetch">,
+  "onError"
+> & {
+  onSailError?: (err: SailError) => void;
+};
 
-const useSailInternal = (args: UseSailArgs = {}): UseSail => {
-  const accounts = useAccountsInternal(args);
+const defaultOnError = (err: SailError) => console.error(err.message, err);
+
+const useSailInternal = ({
+  onSailError = defaultOnError,
+  ...args
+}: UseSailArgs = {}): UseSail => {
+  const accounts = useAccountsInternal({ ...args, onError: onSailError });
   const handleTXs = useHandleTXsInternal({
     ...args,
+    onError: onSailError,
     refetch: accounts.refetch,
   });
 
