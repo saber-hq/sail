@@ -33,7 +33,7 @@ export class SailTransactionError extends SailError {
     public readonly userMessage?: string
   ) {
     super(originalError.message);
-    this.name = "SolanaTransactionError";
+    this.name = "SailTransactionError";
     this.stack = originalError.stack;
   }
 
