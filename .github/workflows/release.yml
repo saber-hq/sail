@@ -28,6 +28,7 @@ jobs:
       - run: yarn build
       - run: |
           echo "npmAuthToken: \"${NPM_AUTH_TOKEN}\"" >> .yarnrc.yml
+          cat .yarnrc.yml
       - name: Publish
         run: yarn npm publish
         env:
