@@ -55,6 +55,7 @@
     "lodash.zip": "^4.2.0",
     "tiny-invariant": "^1.1.0",
     "tslib": "^2.3.1",
+    "unstated-next": "^1.1.0",
     "use-debounce": "^7.0.0"
   },
   "peerDependencies": {
