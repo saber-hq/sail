@@ -296,6 +296,7 @@ __metadata:
     "@saberhq/use-solana": ^1.3.1
     "@solana/web3.js": ^1.29.1
     "@types/lodash.zip": ^4.2.6
+    "@types/node": ^16.10.1
     "@types/react": ^17.0.24
     "@types/react-dom": ^17.0.9
     "@typescript-eslint/eslint-plugin": ^4.32.0
@@ -588,6 +589,13 @@ __metadata:
   version: 12.20.25
   resolution: "@types/node@npm:12.20.25"
   checksum: efc0db15d0a3f7c09702173436cf62b69aa1776d627c6f72ec26b4be95be7aff1746373790c1f203c15aec7a2d55aad90e4c816bc23bce4cf378f4a7144cf474
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.10.1":
+  version: 16.10.1
+  resolution: "@types/node@npm:16.10.1"
+  checksum: 84d7f082e9421fdf1f08dbe00b66848897b2675eacc94a4fa445c4d34cef57c901ecd3276d03ebe110607a848d3df0ab33816aeff51a234e036111dd8ef1422f
   languageName: node
   linkType: hard
 
