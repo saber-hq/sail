@@ -1,5 +1,5 @@
 import type { KeyedAccountInfo, PublicKey } from "@solana/web3.js";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { SailAccountParseError, useSail } from ".";
 import type { ParsedAccountDatum } from "./types";
@@ -7,6 +7,12 @@ import { useAccountsData } from "./useAccountsData";
 
 export type AccountParser<T> = (info: KeyedAccountInfo) => T;
 
+/**
+ * Parses accounts with the given parser.
+ * @param keys
+ * @param parser
+ * @returns
+ */
 export const useParsedAccountsData = <T extends unknown>(
   keys: (PublicKey | null | undefined)[],
   parser: AccountParser<T>
@@ -45,4 +51,20 @@ export const useParsedAccountsData = <T extends unknown>(
   }, [data, onError, parser]);
 
   return parsed;
+};
+
+/**
+ * Loads the parsed data of a single account.
+ * @returns
+ */
+export const useParsedAccountData = <T extends unknown>(
+  key: PublicKey | null | undefined,
+  parser: AccountParser<T>
+): { loading: boolean; data: ParsedAccountDatum<T> } => {
+  const theKey = useMemo(() => [key], [key]);
+  const [data] = useParsedAccountsData(theKey, parser);
+  return {
+    loading: key !== undefined && data === undefined,
+    data,
+  };
 };
