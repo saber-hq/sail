@@ -10,7 +10,6 @@
     "skipLibCheck": true,
     "preserveConstEnums": true,
     "lib": ["es2015", "es2016", "dom"],
-    "types": ["node"],
     "outDir": "esm",
     "declaration": true,
     "removeComments": false,
