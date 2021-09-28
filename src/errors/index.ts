@@ -6,9 +6,12 @@ import type {
   TransactionSignature,
 } from "@solana/web3.js";
 
-import { categorizeTransactionError } from "./tx/categorizeTransactionError";
-import type { TransactionErrorType } from "./tx/types";
+import type { TransactionErrorType } from "./categorizeTransactionError";
+import { categorizeTransactionError } from "./categorizeTransactionError";
 
+/**
+ * Error originating from Sail.
+ */
 export class SailError extends Error {
   constructor(message: string) {
     super(message);
@@ -80,7 +83,7 @@ export class SailTransactionError extends SailError {
 }
 
 export class InsufficientSOLError extends SailError {
-  constructor() {
+  constructor(public readonly currentBalance?: number) {
     super("Insufficient SOL balance");
     this.name = "InsufficientSOLError";
   }

@@ -8,9 +8,12 @@ import type { AccountInfo, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
-import type { SailError } from "..";
-import { SailTransactionError } from "..";
-import { InsufficientSOLError, SailRefetchAfterTXError } from "../errors";
+import type { SailError } from "../errors";
+import {
+  InsufficientSOLError,
+  SailRefetchAfterTXError,
+  SailTransactionError,
+} from "../errors";
 
 export interface HandleTXResponse {
   success: boolean;
@@ -96,7 +99,7 @@ export const useHandleTXsInternal = ({
           await provider.connection.getAccountInfo(provider.wallet.publicKey)
         )?.lamports;
         if (!nativeBalance || nativeBalance === 0) {
-          throw new InsufficientSOLError();
+          throw new InsufficientSOLError(nativeBalance);
         }
 
         try {
