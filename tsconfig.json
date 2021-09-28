@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "ESNext",
     "jsx": "react",
     "moduleResolution": "node",
     "strict": true,
+    "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "preserveConstEnums": true,
     "lib": ["es2015", "es2016", "dom"],
-    "types": ["node"],
 
     "declaration": true,
     "removeComments": false,
