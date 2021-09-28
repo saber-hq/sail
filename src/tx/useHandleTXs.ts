@@ -4,7 +4,7 @@ import type {
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
-import type { AccountInfo, PublicKey } from "@solana/web3.js";
+import type { AccountInfo, ConfirmOptions, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
@@ -59,11 +59,13 @@ export interface UseHandleTXsArgs {
 export interface UseHandleTXs {
   handleTX: (
     txEnv: TransactionEnvelope,
-    msg?: string
+    msg?: string,
+    confirmOptions?: ConfirmOptions
   ) => Promise<HandleTXResponse>;
   handleTXs: (
     txEnv: TransactionEnvelope[],
-    msg?: string
+    msg?: string,
+    confirmOptions?: ConfirmOptions
   ) => Promise<HandleTXsResponse>;
 }
 
@@ -79,7 +81,8 @@ export const useHandleTXsInternal = ({
   const handleTXs = useCallback(
     async (
       txs: TransactionEnvelope[],
-      message?: string
+      message?: string,
+      confirmOptions?: ConfirmOptions
     ): Promise<{ success: boolean; pending: PendingTransaction[] }> => {
       if (txs.length === 0) {
         return {
@@ -103,12 +106,14 @@ export const useHandleTXsInternal = ({
         }
 
         try {
-          const pending = await provider.sendAll(
+          const signedTXs = await provider.signer.signAll(
             txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
-            {
-              preflightCommitment: "recent",
-              commitment: "recent",
-            }
+            confirmOptions
+          );
+          const pending = await Promise.all(
+            signedTXs.map((signedTX) =>
+              provider.broadcaster.broadcast(signedTX, confirmOptions)
+            )
           );
 
           // get the unique writable keys for every transaction
@@ -190,9 +195,14 @@ export const useHandleTXsInternal = ({
   const handleTX = useCallback(
     async (
       txEnv: TransactionEnvelope,
-      message?: string
+      message?: string,
+      confirmOptions?: ConfirmOptions
     ): Promise<{ success: boolean; pending: PendingTransaction | null }> => {
-      const { success, pending } = await handleTXs([txEnv], message);
+      const { success, pending } = await handleTXs(
+        [txEnv],
+        message,
+        confirmOptions
+      );
       return { success, pending: pending[0] ?? null };
     },
     [handleTXs]
