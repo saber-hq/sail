@@ -1,5 +1,5 @@
 import type { PublicKey } from "@solana/web3.js";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import { SailCacheRefetchError, useSail } from ".";
@@ -42,7 +42,13 @@ export const useAccountsData = (
     [getCached]
   );
 
-  const [data, setData] = useState<AccountDatum[]>(keys.map(makeDatumFromKey));
+  const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
+    keys.reduce(
+      (acc, key) =>
+        key ? { ...acc, [key.toString()]: makeDatumFromKey(key) } : acc,
+      {}
+    )
+  );
 
   const fetchAndSetKeys = useDebouncedCallback(
     async (
@@ -51,7 +57,19 @@ export const useAccountsData = (
       ) => Promise<AccountDatum[]>,
       keys: (PublicKey | null | undefined)[]
     ) => {
-      setData(await fetchKeys(keys));
+      const keysData = await fetchKeys(keys);
+      setData(
+        keys.reduce(
+          (cacheState, key, keyIndex) =>
+            key
+              ? {
+                  ...cacheState,
+                  [key?.toString()]: keysData[keyIndex],
+                }
+              : cacheState,
+          {}
+        )
+      );
     },
     100
   );
@@ -92,5 +110,13 @@ export const useAccountsData = (
     };
   }, [fetchAndSetKeys]);
 
-  return data;
+  return useMemo(() => {
+    return keys.map((key) => {
+      if (key) {
+        return data[key.toString()];
+      }
+
+      return key;
+    });
+  }, [data, keys]);
 };
