@@ -8,11 +8,12 @@ import type { AccountInfo, ConfirmOptions, PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
-import type { SailError } from "../errors";
 import {
   InsufficientSOLError,
+  SailError,
   SailRefetchAfterTXError,
   SailTransactionError,
+  SailUnknownTXFailError,
 } from "../errors";
 
 export interface HandleTXResponse {
@@ -99,8 +100,8 @@ export const useHandleTXsInternal = ({
         // TODO(igm): when we support other accounts being the payer,
         // we need to alter this check
         const nativeBalance = (
-          await provider.connection.getAccountInfo(provider.wallet.publicKey)
-        )?.lamports;
+          await provider.getAccountInfo(provider.wallet.publicKey)
+        )?.accountInfo.lamports;
         if (!nativeBalance || nativeBalance === 0) {
           throw new InsufficientSOLError(nativeBalance);
         }
@@ -110,10 +111,40 @@ export const useHandleTXsInternal = ({
             txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
             confirmOptions
           );
-          const pending = await Promise.all(
-            signedTXs.map((signedTX) =>
-              provider.broadcaster.broadcast(signedTX, confirmOptions)
-            )
+          const maybePending = await Promise.all(
+            signedTXs.map(async (signedTX, i) => {
+              try {
+                return await provider.broadcaster.broadcast(
+                  signedTX,
+                  confirmOptions
+                );
+              } catch (e) {
+                const txEnvelope = txs[i];
+                if (!txEnvelope) {
+                  // should be impossible
+                  throw new Error(`Unknown TX: ${i} of ${txs.length}`);
+                }
+                const txError = new SailTransactionError(
+                  network,
+                  e,
+                  txEnvelope,
+                  message
+                );
+                console.error(`Error sending TX ${i}: ${txError.message}`);
+                console.error(txError.generateLogMessage());
+                onError(txError);
+              }
+            })
+          );
+
+          // if any TXs could not send, do not continue.
+          if (maybePending.find((p) => !p)) {
+            // don't throw anything here because we already threw the errors above
+            return { success: false, pending: [] };
+          }
+
+          const pending = maybePending.filter(
+            (p): p is PendingTransaction => !!p
           );
 
           // get the unique writable keys for every transaction
@@ -185,7 +216,11 @@ export const useHandleTXsInternal = ({
           throw e;
         }
       } catch (e) {
-        onError(new SailTransactionError(network, e as Error, txs, message));
+        if (e instanceof SailError) {
+          onError(e);
+        } else {
+          onError(new SailUnknownTXFailError(e, network, txs));
+        }
         return { success: false, pending: [] };
       }
     },

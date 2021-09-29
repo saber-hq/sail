@@ -20,21 +20,44 @@ export class SailError extends Error {
 }
 
 /**
+ * Error originating from Sail.
+ */
+export class SailUnknownTXFailError extends Error {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly network: Network,
+    public readonly txs: readonly TransactionEnvelope[]
+  ) {
+    super(
+      `Transaction failed: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailUnknownTXFailError";
+    if (originalError instanceof Error) {
+      this.stack = originalError.stack;
+    }
+  }
+}
+
+/**
  * Error on a Solana transaction
  */
 export class SailTransactionError extends SailError {
   constructor(
     public readonly network: Network,
-    public readonly originalError: Error,
-    public readonly txs: readonly TransactionEnvelope[],
+    public readonly originalError: unknown,
+    public readonly tx: TransactionEnvelope,
     /**
      * User message representing the transaction.
      */
     public readonly userMessage?: string
   ) {
-    super(originalError.message);
+    super(originalError instanceof Error ? originalError.message : "unknown");
     this.name = "SailTransactionError";
-    this.stack = originalError.stack;
+    if (originalError instanceof Error) {
+      this.stack = originalError.stack;
+    }
   }
 
   /**
@@ -67,21 +90,20 @@ export class SailTransactionError extends SailError {
    * @param network
    * @returns
    */
-  generateTXsString(): string {
-    return this.txs
-      .map((tx, i) => {
-        const parts = [`TX #${i + 1} of ${this.txs.length}:`, tx.debugStr];
-        if (this.network !== "localnet") {
-          parts.push(
-            `View on Solana Explorer: ${tx.generateInspectLink(this.network)}`
-          );
-        }
-        return parts.join("\n");
-      })
-      .join("\n\n");
+  generateLogMessage(): string {
+    const parts = [this.tx.debugStr];
+    if (this.network !== "localnet") {
+      parts.push(
+        `View on Solana Explorer: ${this.tx.generateInspectLink(this.network)}`
+      );
+    }
+    return parts.join("\n");
   }
 }
 
+/**
+ * Thrown if there is not enough SOL to pay for a transaction.
+ */
 export class InsufficientSOLError extends SailError {
   constructor(public readonly currentBalance?: number) {
     super("Insufficient SOL balance");
@@ -89,6 +111,9 @@ export class InsufficientSOLError extends SailError {
   }
 }
 
+/**
+ * Thrown if there is an error refetching accounts after a transaction.
+ */
 export class SailRefetchAfterTXError extends SailError {
   constructor(
     public readonly originalError: unknown,
