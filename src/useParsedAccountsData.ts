@@ -19,20 +19,31 @@ export const useParsedAccountsData = <T extends unknown>(
 ): ParsedAccountDatum<T>[] => {
   const { onError } = useSail();
   const data = useAccountsData(keys);
-  const [parsed, setParsed] = useState<ParsedAccountDatum<T>[]>(
-    keys.map((k) => (k === null ? null : undefined))
+  const [parsed, setParsed] = useState<Record<string, ParsedAccountDatum<T>>>(
+    keys.reduce(
+      (acc, k) => (k ? { ...acc, [k.toString()]: undefined } : acc),
+      {}
+    )
   );
 
   useEffect(() => {
     setParsed((prevParsed) => {
-      return data.map((datum, i) => {
+      const nextParsed = { ...prevParsed };
+      data.forEach((datum) => {
         if (datum) {
-          if (prevParsed[i]?.raw.equals(datum.accountInfo.data)) {
-            return prevParsed[i];
+          const key = datum.accountId.toString();
+          const prevValue = prevParsed[key];
+          if (
+            prevValue &&
+            prevValue.raw.length === datum.accountInfo.data.length &&
+            prevValue.raw.equals(datum.accountInfo.data)
+          ) {
+            // preserve referential equality if buffers are equal
+            return;
           }
           try {
             const parsed = parser(datum);
-            return {
+            nextParsed[key] = {
               ...datum,
               accountInfo: {
                 ...datum.accountInfo,
@@ -47,10 +58,18 @@ export const useParsedAccountsData = <T extends unknown>(
         }
         return datum;
       });
+      return nextParsed;
     });
   }, [data, onError, parser]);
 
-  return parsed;
+  return useMemo(() => {
+    return keys.map((k) => {
+      if (!k) {
+        return k;
+      }
+      return parsed[k.toString()];
+    });
+  }, [keys, parsed]);
 };
 
 /**
