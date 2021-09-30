@@ -200,22 +200,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config-react@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@saberhq/eslint-config-react@npm:1.3.1"
+"@saberhq/eslint-config-react@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@saberhq/eslint-config-react@npm:1.3.5"
   dependencies:
-    "@saberhq/eslint-config": ^1.3.1
+    "@saberhq/eslint-config": ^1.3.5
     eslint-plugin-react: ^7.25.2
     eslint-plugin-react-hooks: ^4.2.0
   peerDependencies:
     eslint: ">=7"
-  checksum: 76ee84b1616679200605a79103b9f66cccb119b8aa2e60341216878481a4ee77e692cfdbed025272aae2c0a07c224bf8d1326def8015f086f5ba1c3698ebceb6
+  checksum: 3161a870a258faca695e14d2ff70fef8d8f57c11c5aa1d8e4ed5864610aa1f708826868468a93ee5674807126f8d218adea1fce36838c607fbf842abbe653306
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@saberhq/eslint-config@npm:1.3.1"
+"@saberhq/eslint-config@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@saberhq/eslint-config@npm:1.3.5"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^4.31.0
     "@typescript-eslint/parser": ^4.31.2
@@ -227,7 +227,7 @@ __metadata:
     prettier: ^2.3.2
   peerDependencies:
     eslint: ">=7"
-  checksum: 8a16c6cd7207e516b2356be979a78218b9176c58f3f01b8acb01c372dc1dea1f4293920b70d1d5b6ac327350656d2dd3b71ba10e4726dfa5d2174942af370b66
+  checksum: 09d9569bb89afd299c3817cb40c86e43b39f9c58d3db89895a003949c2beb7de71e6e58087a97536e550e1cf3272c636f3efe3ab777c264effe9fdbd38347d16
   languageName: node
   linkType: hard
 
@@ -235,13 +235,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@saberhq/sail@workspace:."
   dependencies:
-    "@saberhq/eslint-config-react": ^1.3.1
-    "@saberhq/solana-contrib": ^1.3.1
-    "@saberhq/token-utils": ^1.3.1
-    "@saberhq/use-solana": ^1.3.1
-    "@solana/web3.js": ^1.29.1
+    "@saberhq/eslint-config-react": ^1.3.5
+    "@saberhq/solana-contrib": ^1.3.5
+    "@saberhq/token-utils": ^1.3.5
+    "@saberhq/use-solana": ^1.3.5
+    "@solana/web3.js": ^1.29.2
     "@types/lodash.zip": ^4.2.6
-    "@types/react": ^17.0.24
+    "@types/react": ^17.0.25
     "@types/react-dom": ^17.0.9
     "@typescript-eslint/eslint-plugin": ^4.32.0
     "@typescript-eslint/parser": ^4.32.0
@@ -257,10 +257,10 @@ __metadata:
     eslint-plugin-simple-import-sort: ^7.0.0
     eslint-plugin-unused-imports: ^1.1.5
     eventemitter3: ^4.0.7
-    husky: ">=6"
-    lint-staged: ">=10"
+    husky: ^7.0.2
+    lint-staged: ^11.1.2
     lodash.zip: ^4.2.0
-    pinst: ">=2"
+    pinst: ^2.1.6
     prettier: ^2.4.1
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -278,9 +278,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@saberhq/solana-contrib@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@saberhq/solana-contrib@npm:1.3.1"
+"@saberhq/solana-contrib@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@saberhq/solana-contrib@npm:1.3.5"
   dependencies:
     "@solana/web3.js": ^1.29.0
     "@types/promise-retry": ^1.1.3
@@ -288,15 +288,15 @@ __metadata:
     promise-retry: ^2.0.1
     tiny-invariant: ^1.1.0
     tslib: ^2.3.0
-  checksum: 5b97744c93ab119b67850884685ca0d1ab29b6637acc249253c9ac9ff6d9ce865a1dd102195d35b7b9f1f78b15908dd76b08dc3a1df234edb8c13b773d1634d3
+  checksum: 865f0d7b5a22a513c6852cdcccc8bb29ead2240a6e2a50b954386913b6dd3825c5e65aaf2acbdd635f88eef8c7fe8cd4ac85df51a70ecab7fafa9eaab6b33d0e
   languageName: node
   linkType: hard
 
-"@saberhq/token-utils@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@saberhq/token-utils@npm:1.3.1"
+"@saberhq/token-utils@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@saberhq/token-utils@npm:1.3.5"
   dependencies:
-    "@saberhq/solana-contrib": ^1.3.1
+    "@saberhq/solana-contrib": ^1.3.5
     "@solana/buffer-layout": ^3.0.0
     "@solana/spl-token": ^0.1.5
     "@solana/spl-token-registry": ^0.2.247
@@ -306,18 +306,18 @@ __metadata:
     tslib: ^2.3.0
   peerDependencies:
     bn.js: "*"
-  checksum: 450f9f33f0dc5e771d8d9c60b21a9bd1fb21815b62ecbf08924b673b2be140c03ada7082bb6095415eccfd75c623e73b173c99d88326f6141a9943a3502d8752
+  checksum: 0079c4c9e3930ecefd17fceca11830eaac32368bfc1532091f76b4254c89a1c01ca7deda7293199a1c788fc1105c9115c47e984de8a417715861132c2c1613a3
   languageName: node
   linkType: hard
 
-"@saberhq/use-solana@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@saberhq/use-solana@npm:1.3.1"
+"@saberhq/use-solana@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@saberhq/use-solana@npm:1.3.5"
   dependencies:
     "@ledgerhq/hw-transport": ^6.7.0
     "@ledgerhq/hw-transport-webusb": ^6.7.0
     "@project-serum/sol-wallet-adapter": ^0.2.0
-    "@saberhq/solana-contrib": ^1.3.1
+    "@saberhq/solana-contrib": ^1.3.5
     "@solana/web3.js": ^1.29.0
     "@types/bs58": ^4.0.1
     bs58: ^4.0.1
@@ -329,7 +329,7 @@ __metadata:
   peerDependencies:
     "@types/react": ^17.0.8
     react: ">=16"
-  checksum: a703a0123bbd8428767c0db546ba87bed74f81e2546d87bb64413741baa6918b493fd3ecb7a9461ec0a25cb3caf6bafce220c74a69e71dcdb7a6e18b0878b624
+  checksum: 50846df5d3c773f6c59dfcb81a32b3be99a9d44b93381739ae3825921d8efb66e2e5a24769bccbf21fb671ada7c2b9378484dd98208ae7afdcca5fbe50d51e05
   languageName: node
   linkType: hard
 
@@ -365,7 +365,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@solana/web3.js@npm:^1.21.0, @solana/web3.js@npm:^1.29.0, @solana/web3.js@npm:^1.29.1":
+"@solana/web3.js@npm:^1.21.0, @solana/web3.js@npm:^1.29.0":
   version: 1.29.1
   resolution: "@solana/web3.js@npm:1.29.1"
   dependencies:
@@ -384,6 +384,28 @@ __metadata:
     superstruct: ^0.14.2
     tweetnacl: ^1.0.0
   checksum: 2df277d9f55ef3c6675525c36c112c373ffe6aea0a1939493390399d7141918a2b25c99605a4ee5d2ba1c043aeeed5020203320b1dc9f8245db25d1ce277cd8c
+  languageName: node
+  linkType: hard
+
+"@solana/web3.js@npm:^1.29.2":
+  version: 1.29.2
+  resolution: "@solana/web3.js@npm:1.29.2"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@solana/buffer-layout": ^3.0.0
+    bn.js: ^5.0.0
+    borsh: ^0.4.0
+    bs58: ^4.0.1
+    buffer: 6.0.1
+    cross-fetch: ^3.1.4
+    crypto-hash: ^1.2.2
+    jayson: ^3.4.4
+    js-sha3: ^0.8.0
+    rpc-websockets: ^7.4.2
+    secp256k1: ^4.0.2
+    superstruct: ^0.14.2
+    tweetnacl: ^1.0.0
+  checksum: 6b3821ffc52e17bcb44b35ae792cdb7f81eafdd86fc31d8a622d1cd53cc750d14ef1409211cb82902cdcb8b57f62b491d05bcc949dd43f3e12d45897b53c9d85
   languageName: node
   linkType: hard
 
@@ -549,14 +571,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17.0.24":
-  version: 17.0.24
-  resolution: "@types/react@npm:17.0.24"
+"@types/react@npm:^17.0.25":
+  version: 17.0.25
+  resolution: "@types/react@npm:17.0.25"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 99383e2cbaa85831984cc17ec4a5fe7fd091aa21ef023855570440d8d0b5038efb8159701e8e2a0f6ddff3efae655922ded690190e7d172653608cbde016cb66
+  checksum: a5838a943e73c7ab2c188a6e16918d3120ca04e52f03d98d68dd1fe019503c301b1b3fbac0b6330be2b7d4ffba6e227fe43a0a2e716fe9f79000d5e43308039a
   languageName: node
   linkType: hard
 
@@ -2419,7 +2441,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:>=6":
+"husky@npm:^7.0.2":
   version: 7.0.2
   resolution: "husky@npm:7.0.2"
   bin:
@@ -2875,7 +2897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:>=10":
+"lint-staged@npm:^11.1.2":
   version: 11.1.2
   resolution: "lint-staged@npm:11.1.2"
   dependencies:
@@ -3577,7 +3599,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pinst@npm:>=2":
+"pinst@npm:^2.1.6":
   version: 2.1.6
   resolution: "pinst@npm:2.1.6"
   dependencies:
