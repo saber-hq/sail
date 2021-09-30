@@ -32,7 +32,7 @@
     "lint:ci": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ts/ src/index.ts",
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
