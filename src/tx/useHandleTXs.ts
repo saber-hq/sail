@@ -19,11 +19,13 @@ import {
 export interface HandleTXResponse {
   success: boolean;
   pending: PendingTransaction | null;
+  errors?: SailError[];
 }
 
 export interface HandleTXsResponse {
   success: boolean;
   pending: PendingTransaction[];
+  errors?: SailError[];
 }
 
 export interface UseHandleTXsArgs {
@@ -87,13 +89,12 @@ export const useHandleTXsInternal = ({
     ): Promise<{
       success: boolean;
       pending: PendingTransaction[];
-      errors: SailError[];
+      errors?: SailError[];
     }> => {
       if (txs.length === 0) {
         return {
           success: true,
           pending: [],
-          errors: [],
         };
       }
 
@@ -211,7 +212,6 @@ export const useHandleTXsInternal = ({
         return {
           success: true,
           pending,
-          errors: [],
         };
       } catch (e) {
         // Log the instruction logs
@@ -243,13 +243,17 @@ export const useHandleTXsInternal = ({
       txEnv: TransactionEnvelope,
       message?: string,
       confirmOptions?: ConfirmOptions
-    ): Promise<{ success: boolean; pending: PendingTransaction | null }> => {
-      const { success, pending } = await handleTXs(
+    ): Promise<{
+      success: boolean;
+      pending: PendingTransaction | null;
+      errors?: SailError[];
+    }> => {
+      const { success, pending, errors } = await handleTXs(
         [txEnv],
         message,
         confirmOptions
       );
-      return { success, pending: pending[0] ?? null };
+      return { success, pending: pending[0] ?? null, errors };
     },
     [handleTXs]
   );
