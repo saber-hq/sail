@@ -109,10 +109,12 @@ export const useHandleTXsInternal = ({
           await provider.getAccountInfo(provider.wallet.publicKey)
         )?.accountInfo.lamports;
         if (!nativeBalance || nativeBalance === 0) {
+          const error = new InsufficientSOLError(nativeBalance);
+          onError(error);
           return {
             success: false,
             pending: [],
-            errors: [new InsufficientSOLError(nativeBalance)],
+            errors: [error],
           };
         }
 
@@ -228,11 +230,13 @@ export const useHandleTXsInternal = ({
           }
         });
 
-        const error: SailError =
-          e instanceof SailError
-            ? e
+        const sailError: SailError =
+          e instanceof SailError ||
+          ("_isSailError" in (e as SailError) && (e as SailError)._isSailError)
+            ? (e as SailError)
             : new SailUnknownTXFailError(e, network, txs);
-        return { success: false, pending: [], errors: [error] };
+        onError(sailError);
+        return { success: false, pending: [], errors: [sailError] };
       }
     },
     [network, onError, onTxSend, refetch, txRefetchDelayMs, waitForConfirmation]

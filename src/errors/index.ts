@@ -13,6 +13,7 @@ import { categorizeTransactionError } from "./categorizeTransactionError";
  * Error originating from Sail.
  */
 export class SailError extends Error {
+  _isSailError = true;
   constructor(message: string) {
     super(message);
     this.name = "SailError";
@@ -22,7 +23,7 @@ export class SailError extends Error {
 /**
  * Error originating from Sail.
  */
-export class SailUnknownTXFailError extends Error {
+export class SailUnknownTXFailError extends SailError {
   constructor(
     public readonly originalError: unknown,
     public readonly network: Network,
