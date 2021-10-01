@@ -145,6 +145,26 @@ export class SailRefetchSubscriptionsError extends SailError {
 }
 
 /**
+ * Thrown if transactions could not be signed.
+ */
+export class SailTransactionSignError extends SailError {
+  constructor(
+    public readonly originalError: unknown,
+    public readonly txs: readonly TransactionEnvelope[]
+  ) {
+    super(
+      `Error signing transactions: ${
+        originalError instanceof Error ? originalError.message : "unknown"
+      }`
+    );
+    this.name = "SailTransactionSignError";
+    if (originalError instanceof Error) {
+      this.stack = originalError.stack;
+    }
+  }
+}
+
+/**
  * Thrown if a cache refetch results in an error.
  */
 export class SailCacheRefetchError extends SailError {

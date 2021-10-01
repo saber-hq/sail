@@ -4,7 +4,12 @@ import type {
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
-import type { AccountInfo, ConfirmOptions, PublicKey } from "@solana/web3.js";
+import type {
+  AccountInfo,
+  ConfirmOptions,
+  PublicKey,
+  Transaction,
+} from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
@@ -13,6 +18,7 @@ import {
   SailError,
   SailRefetchAfterTXError,
   SailTransactionError,
+  SailTransactionSignError,
   SailUnknownTXFailError,
 } from "../errors";
 
@@ -118,10 +124,21 @@ export const useHandleTXsInternal = ({
           };
         }
 
-        const signedTXs = await provider.signer.signAll(
-          txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
-          confirmOptions
-        );
+        let signedTXs: Transaction[];
+        try {
+          signedTXs = await provider.signer.signAll(
+            txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
+            confirmOptions
+          );
+        } catch (e) {
+          const fail = new SailTransactionSignError(e, txs);
+          onError(fail);
+          return {
+            success: false,
+            pending: [],
+            errors: [fail],
+          };
+        }
 
         const errors: SailError[] = [];
         const maybePending = await Promise.all(
