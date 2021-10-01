@@ -1,19 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "ESNext",
-    "jsx": "react",
-    "moduleResolution": "node",
+    "target": "ES2015",
+    "module": "CommonJS",
     "strict": true,
-    "downlevelIteration": true,
+    "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "preserveConstEnums": true,
-    "lib": ["es2015", "es2016", "dom"],
+    "lib": ["ES2015", "dom"],
 
+    "importHelpers": true,
     "declaration": true,
-    "removeComments": false,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "dist/"

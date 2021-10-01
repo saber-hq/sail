@@ -239,6 +239,7 @@ __metadata:
     "@saberhq/solana-contrib": ^1.3.7
     "@saberhq/token-utils": ^1.3.7
     "@saberhq/use-solana": ^1.3.7
+    "@solana/spl-token-registry": ^0.2.270
     "@solana/web3.js": ^1.29.2
     "@types/lodash.chunk": ^4.2.6
     "@types/lodash.zip": ^4.2.6
@@ -346,6 +347,15 @@ __metadata:
   dependencies:
     buffer: ~6.0.3
   checksum: 72384aeff35ad6ae3bc1aed10be4f55205179d9eba6a3f0df9bf6bcb27613d6f661f6cb84691dd4dbc354f07bf9f7f8113ededceb1aee03b479e4a1847d86ae1
+  languageName: node
+  linkType: hard
+
+"@solana/spl-token-registry@npm:^0.2.270":
+  version: 0.2.270
+  resolution: "@solana/spl-token-registry@npm:0.2.270"
+  dependencies:
+    cross-fetch: 3.0.6
+  checksum: 0a59716a7a16e3c6051c9a39f3bde3ea5b5a25bf3f68d77bd7b265acab538aad8a25ab9ad897edeff3110464b468521d4715009c8dc56e743d3add2dc858a9f5
   languageName: node
   linkType: hard
 
@@ -1272,6 +1282,15 @@ __metadata:
     path-type: ^4.0.0
     yaml: ^1.10.0
   checksum: 4be63e7117955fd88333d7460e4c466a90f556df6ef34efd59034d2463484e339666c41f02b523d574a797ec61f4a91918c5b89a316db2ea2f834e0d2d09465b
+  languageName: node
+  linkType: hard
+
+"cross-fetch@npm:3.0.6":
+  version: 3.0.6
+  resolution: "cross-fetch@npm:3.0.6"
+  dependencies:
+    node-fetch: 2.6.1
+  checksum: fc855278c3bae191a00003eed618a40b48dfadf25ccf707ffdb173add97921f89ef459815bc5cbd20554de713da4f0a2c1258f83e60895efdeab5a7834c6e3b6
   languageName: node
   linkType: hard
 
