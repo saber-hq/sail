@@ -164,6 +164,7 @@ export const useHandleTXsInternal = ({
               console.error(txError.generateLogMessage());
               errors.push(txError);
               onError(txError);
+              return null;
             }
           })
         );

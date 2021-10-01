@@ -1,22 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "ESNext",
-    "jsx": "react",
-    "moduleResolution": "node",
+    "module": "CommonJS",
+    "target": "ES2015",
+
     "strict": true,
-    "downlevelIteration": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+
     "esModuleInterop": true,
     "skipLibCheck": true,
     "preserveConstEnums": true,
-    "lib": ["es2015", "es2016", "dom"],
 
+    "lib": ["ES2015", "dom"],
+
+    "importHelpers": true,
     "declaration": true,
-    "removeComments": false,
     "declarationMap": true,
+    "inlineSources": true,
     "sourceMap": true,
-    "outDir": "dist/"
+    "outDir": "dist/cjs/",
+    "rootDir": "src/"
   },
   "include": ["./src"]
 }

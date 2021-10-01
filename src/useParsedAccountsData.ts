@@ -54,7 +54,8 @@ export const useParsedAccountsData = <T extends unknown>(
             };
           } catch (e) {
             onError(new SailAccountParseError(e, datum));
-            return null;
+            nextParsed[key.toString()] = null;
+            return;
           }
         }
         if (key && datum === null) {
