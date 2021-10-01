@@ -97,12 +97,13 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     useState<AccountsProviderState>(newState());
 
   useEffect(() => {
-    // clear accounts cache and subscriptions whenever the network changes
-    accountsCache.clear();
-    subscribedAccounts.clear();
-    emitter.raiseCacheCleared();
-
-    setState(newState());
+    setState((prevState) => {
+      // clear accounts cache and subscriptions whenever the network changes
+      prevState.accountsCache.clear();
+      prevState.subscribedAccounts.clear();
+      prevState.emitter.raiseCacheCleared();
+      return newState();
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [network]);
 
@@ -185,13 +186,14 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   );
 
   const refetchAllSubscriptions = useCallback(async () => {
-    return await Promise.all(
-      [...subscribedAccounts.keys()].map(async (keyStr) => {
-        const key = new PublicKey(Buffer.from(keyStr, "base64"));
-        await refetch(key);
-      })
-    );
-  }, [refetch, subscribedAccounts]);
+    const keysToFetch = [...subscribedAccounts.keys()].map((keyStr) => {
+      return new PublicKey(Buffer.from(keyStr, "base64"));
+    });
+    keysToFetch.forEach((key) => {
+      accountLoader.clear(key);
+    });
+    await accountLoader.loadMany(keysToFetch);
+  }, [accountLoader, subscribedAccounts]);
 
   useEffect(() => {
     const interval = setInterval(() => {
