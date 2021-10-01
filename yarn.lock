@@ -271,6 +271,10 @@ __metadata:
     unstated-next: ^1.1.0
     use-debounce: ^7.0.0
   peerDependencies:
+    "@saberhq/solana-contrib": ^1.3.5
+    "@saberhq/token-utils": ^1.3.6
+    "@saberhq/use-solana": ^1.3.5
+    "@solana/web3.js": ^1.29.2
     bn.js: ^5.2.0
     jsbi: "*"
     react: ^17.0.2

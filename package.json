@@ -38,6 +38,10 @@
   },
   "devDependencies": {
     "@saberhq/eslint-config-react": "^1.3.5",
+    "@saberhq/solana-contrib": "^1.3.5",
+    "@saberhq/token-utils": "^1.3.6",
+    "@saberhq/use-solana": "^1.3.5",
+    "@solana/web3.js": "^1.29.2",
     "@types/lodash.zip": "^4.2.6",
     "@types/react": "^17.0.26",
     "@types/react-dom": "^17.0.9",
@@ -63,10 +67,6 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@saberhq/solana-contrib": "^1.3.5",
-    "@saberhq/token-utils": "^1.3.6",
-    "@saberhq/use-solana": "^1.3.5",
-    "@solana/web3.js": "^1.29.2",
     "dataloader": "^2.0.0",
     "eventemitter3": "^4.0.7",
     "lodash.zip": "^4.2.0",
@@ -76,6 +76,10 @@
     "use-debounce": "^7.0.0"
   },
   "peerDependencies": {
+    "@saberhq/solana-contrib": "^1.3.5",
+    "@saberhq/token-utils": "^1.3.6",
+    "@saberhq/use-solana": "^1.3.5",
+    "@solana/web3.js": "^1.29.2",
     "bn.js": "^5.2.0",
     "jsbi": "*",
     "react": "^17.0.2",
@@ -84,6 +88,6 @@
   "packageManager": "yarn@3.0.2",
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix",
-    "*.{json,js,jsx,html,css}": "prettier --write"
+    "*.{json,js,jsx,html,css,md}": "prettier --write"
   }
 }

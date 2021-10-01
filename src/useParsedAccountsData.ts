@@ -1,4 +1,5 @@
 import type { KeyedAccountInfo, PublicKey } from "@solana/web3.js";
+import zip from "lodash.zip";
 import { useEffect, useMemo, useState } from "react";
 
 import { SailAccountParseError, useSail } from ".";
@@ -29,7 +30,7 @@ export const useParsedAccountsData = <T extends unknown>(
   useEffect(() => {
     setParsed((prevParsed) => {
       const nextParsed = { ...prevParsed };
-      data.forEach((datum) => {
+      zip(keys, data).forEach(([key, datum]) => {
         if (datum) {
           const key = datum.accountId.toString();
           const prevValue = prevParsed[key];
@@ -56,11 +57,13 @@ export const useParsedAccountsData = <T extends unknown>(
             return null;
           }
         }
-        return datum;
+        if (key && datum === null) {
+          nextParsed[key.toString()] = null;
+        }
       });
       return nextParsed;
     });
-  }, [data, onError, parser]);
+  }, [data, keys, onError, parser]);
 
   return useMemo(() => {
     return keys.map((k) => {
