@@ -1,5 +1,5 @@
 import type { PublicKey } from "@solana/web3.js";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import { SailCacheRefetchError, useSail } from ".";
@@ -17,34 +17,11 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getCached, onCache, subscribe, fetchKeys, onError } = useSail();
-
-  // makes a datum from a public key
-  const makeDatumFromKey = useCallback(
-    (k: PublicKey | null | undefined) => {
-      if (k) {
-        const accountInfo = getCached(k);
-        if (accountInfo) {
-          return {
-            accountId: k,
-            accountInfo,
-          };
-        }
-
-        if (accountInfo === null) {
-          // Cache hit but null entry in cache
-          return null;
-        }
-      }
-      return k === undefined ? undefined : null;
-    },
-    [getCached]
-  );
+  const { getDatum, onCache, subscribe, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
     keys.reduce(
-      (acc, key) =>
-        key ? { ...acc, [key.toString()]: makeDatumFromKey(key) } : acc,
+      (acc, key) => (key ? { ...acc, [key.toString()]: getDatum(key) } : acc),
       {}
     )
   );

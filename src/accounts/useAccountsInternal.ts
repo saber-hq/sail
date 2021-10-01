@@ -61,11 +61,6 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
   loader: AccountLoader;
 
   /**
-   * Gets the cached data of an account.
-   */
-  getCached: (key: PublicKey) => AccountInfo<Buffer> | null | undefined;
-
-  /**
    * Refetches an account.
    */
   refetch: (key: PublicKey) => Promise<AccountInfo<Buffer> | null>;
@@ -86,6 +81,15 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    * Causes a key to be refetched periodically.
    */
   subscribe: (key: PublicKey) => () => Promise<void>;
+
+  /**
+   * Gets the cached data of an account.
+   */
+  getCached: (key: PublicKey) => AccountInfo<Buffer> | null | undefined;
+  /**
+   * Gets an AccountDatum from a key.
+   */
+  getDatum: (key: PublicKey | null | undefined) => AccountDatum;
 }
 
 export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
@@ -97,12 +101,13 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     useState<AccountsProviderState>(newState());
 
   useEffect(() => {
-    // clear accounts cache and subscriptions whenever the network changes
-    accountsCache.clear();
-    subscribedAccounts.clear();
-    emitter.raiseCacheCleared();
-
-    setState(newState());
+    setState((prevState) => {
+      // clear accounts cache and subscriptions whenever the network changes
+      prevState.accountsCache.clear();
+      prevState.subscribedAccounts.clear();
+      prevState.emitter.raiseCacheCleared();
+      return newState();
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [network]);
 
@@ -185,13 +190,14 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   );
 
   const refetchAllSubscriptions = useCallback(async () => {
-    return await Promise.all(
-      [...subscribedAccounts.keys()].map(async (keyStr) => {
-        const key = new PublicKey(Buffer.from(keyStr, "base64"));
-        await refetch(key);
-      })
-    );
-  }, [refetch, subscribedAccounts]);
+    const keysToFetch = [...subscribedAccounts.keys()].map((keyStr) => {
+      return new PublicKey(Buffer.from(keyStr, "base64"));
+    });
+    keysToFetch.forEach((key) => {
+      accountLoader.clear(key);
+    });
+    await accountLoader.loadMany(keysToFetch);
+  }, [accountLoader, subscribedAccounts]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -202,9 +208,30 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     return () => clearInterval(interval);
   }, [onError, refetchAllSubscriptions, refreshIntervalMs]);
 
+  const getDatum = useCallback(
+    (k: PublicKey | null | undefined) => {
+      if (k) {
+        const accountInfo = getCached(k);
+        if (accountInfo) {
+          return {
+            accountId: k,
+            accountInfo,
+          };
+        }
+        if (accountInfo === null) {
+          // Cache hit but null entry in cache
+          return null;
+        }
+      }
+      return k === undefined ? undefined : null;
+    },
+    [getCached]
+  );
+
   return {
     loader: accountLoader,
     getCached,
+    getDatum,
     refetch,
     onCache,
     fetchKeys,
