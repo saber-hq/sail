@@ -47,6 +47,7 @@
     "@solana/web3.js": "^1.29.2",
     "@types/lodash.chunk": "^4.2.6",
     "@types/lodash.zip": "^4.2.6",
+    "@types/node": "^16.10.2",
     "@types/react": "^17.0.26",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.32.0",

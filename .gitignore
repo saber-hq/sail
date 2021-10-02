@@ -118,13 +118,13 @@ dist
 # yarn berry
 
 # the bin needs to be included
+.pnp.*
 .yarn/*
 !.yarn/patches
-!.yarn/releases
 !.yarn/plugins
+!.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
