@@ -64,6 +64,12 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    * Refetches an account.
    */
   refetch: (key: PublicKey) => Promise<AccountInfo<Buffer> | null>;
+  /**
+   * Refetches multiple accounts.
+   */
+  refetchMany: (
+    keys: PublicKey[]
+  ) => Promise<(AccountInfo<Buffer> | Error | null)[]>;
 
   /**
    * Registers a callback to be called whenever an item is cached.
@@ -158,6 +164,16 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     [accountLoader]
   );
 
+  const refetchMany = useCallback(
+    async (keys: PublicKey[]) => {
+      keys.forEach((key) => {
+        accountLoader.clear(key);
+      });
+      return await accountLoader.loadMany(keys);
+    },
+    [accountLoader]
+  );
+
   const getCached = useCallback(
     (key: PublicKey): AccountInfo<Buffer> | null | undefined => {
       // null: account not found on blockchain
@@ -193,11 +209,8 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     const keysToFetch = [...subscribedAccounts.keys()].map((keyStr) => {
       return new PublicKey(Buffer.from(keyStr, "base64"));
     });
-    keysToFetch.forEach((key) => {
-      accountLoader.clear(key);
-    });
-    await accountLoader.loadMany(keysToFetch);
-  }, [accountLoader, subscribedAccounts]);
+    await refetchMany(keysToFetch);
+  }, [refetchMany, subscribedAccounts]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -233,6 +246,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     getCached,
     getDatum,
     refetch,
+    refetchMany,
     onCache,
     fetchKeys,
     subscribe,

@@ -4,15 +4,11 @@ import type {
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
-import type {
-  AccountInfo,
-  ConfirmOptions,
-  PublicKey,
-  Transaction,
-} from "@solana/web3.js";
+import type { ConfirmOptions, Transaction } from "@solana/web3.js";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
+import type { UseAccounts } from "..";
 import {
   InsufficientSOLError,
   SailError,
@@ -34,12 +30,7 @@ export interface HandleTXsResponse {
   errors?: SailError[];
 }
 
-export interface UseHandleTXsArgs {
-  /**
-   * Fetches a transaction.
-   */
-  refetch: (key: PublicKey) => Promise<AccountInfo<Buffer> | null>;
-
+export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
   /**
    * Delay for the writable accounts to be refetched into the cache after a transaction.
    */
@@ -79,7 +70,7 @@ export interface UseHandleTXs {
 }
 
 export const useHandleTXsInternal = ({
-  refetch,
+  refetchMany,
   onTxSend,
   onError,
   txRefetchDelayMs = 1_000,
@@ -161,7 +152,7 @@ export const useHandleTXsInternal = ({
                 message
               );
               console.error(`Error sending TX ${i}: ${txError.message}`);
-              console.error(txError.generateLogMessage());
+              console.debug(txError.generateLogMessage());
               errors.push(txError);
               onError(txError);
               return null;
@@ -173,7 +164,7 @@ export const useHandleTXsInternal = ({
         const pending = maybePending.filter(
           (p): p is PendingTransaction => !!p
         );
-        if (maybePending.find((p) => !p)) {
+        if (errors.length > 0) {
           // don't throw anything here because we already threw the errors above
           return {
             success: false,
@@ -196,22 +187,18 @@ export const useHandleTXsInternal = ({
             // await for the tx to be confirmed
             await Promise.all(pending.map((p) => p.wait()));
             // then fetch
-            await Promise.all(
-              writable.map(async (wr) => {
-                await refetch(wr);
-                setTimeout(() => {
-                  void refetch(wr).catch((e) => {
-                    onError(
-                      new SailRefetchAfterTXError(
-                        e,
-                        writable,
-                        pending.map((p) => p.signature)
-                      )
-                    );
-                  });
-                }, txRefetchDelayMs);
-              })
-            );
+            await refetchMany(writable);
+            setTimeout(() => {
+              void refetchMany(writable).catch((e) => {
+                onError(
+                  new SailRefetchAfterTXError(
+                    e,
+                    writable,
+                    pending.map((p) => p.signature)
+                  )
+                );
+              });
+            }, txRefetchDelayMs);
           } catch (e) {
             onError(
               new SailRefetchAfterTXError(
@@ -257,7 +244,14 @@ export const useHandleTXsInternal = ({
         return { success: false, pending: [], errors: [sailError] };
       }
     },
-    [network, onError, onTxSend, refetch, txRefetchDelayMs, waitForConfirmation]
+    [
+      network,
+      onError,
+      onTxSend,
+      refetchMany,
+      txRefetchDelayMs,
+      waitForConfirmation,
+    ]
   );
 
   const handleTX = useCallback(

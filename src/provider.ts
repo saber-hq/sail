@@ -12,7 +12,7 @@ import { useHandleTXsInternal } from "./tx/useHandleTXs";
 export interface UseSail extends UseAccounts, UseHandleTXs {}
 
 export type UseSailArgs = Omit<
-  UseAccountsArgs & Omit<UseHandleTXsArgs, "refetch">,
+  UseAccountsArgs & Omit<UseHandleTXsArgs, "refetchMany">,
   "onError"
 > & {
   onSailError?: (err: SailError) => void;
@@ -28,7 +28,7 @@ const useSailInternal = ({
   const handleTXs = useHandleTXsInternal({
     ...args,
     onError: onSailError,
-    refetch: accounts.refetch,
+    refetchMany: accounts.refetchMany,
   });
 
   return {
