@@ -70,6 +70,10 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
   refetchMany: (
     keys: PublicKey[]
   ) => Promise<(AccountInfo<Buffer> | Error | null)[]>;
+  /**
+   * Refetches all accounts that are being subscribed to.
+   */
+  refetchAllSubscriptions: () => Promise<void>;
 
   /**
    * Registers a callback to be called whenever an item is cached.
@@ -247,6 +251,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     getDatum,
     refetch,
     refetchMany,
+    refetchAllSubscriptions,
     onCache,
     fetchKeys,
     subscribe,
