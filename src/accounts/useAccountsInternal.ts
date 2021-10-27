@@ -5,7 +5,7 @@ import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import type { SailError } from "..";
+import type { AccountFetchResult, SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
 import type { CacheUpdateEvent } from "./emitter";
@@ -85,7 +85,7 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    */
   fetchKeys: (
     keys: (PublicKey | null | undefined)[]
-  ) => Promise<AccountDatum[]>;
+  ) => Promise<AccountFetchResult[]>;
 
   /**
    * Causes a key to be refetched periodically.
@@ -153,9 +153,9 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
 
   const fetchKeys = useCallback(
     async (keys: (PublicKey | null | undefined)[]) => {
-      return await fetchKeysUsingLoader(accountLoader, keys, onError);
+      return await fetchKeysUsingLoader(accountLoader, keys);
     },
-    [accountLoader, onError]
+    [accountLoader]
   );
 
   const onCache = useMemo(() => emitter.onCache.bind(emitter), [emitter]);

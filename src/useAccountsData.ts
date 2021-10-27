@@ -2,6 +2,7 @@ import type { PublicKey } from "@solana/web3.js";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
+import type { AccountFetchResult } from ".";
 import { SailCacheRefetchError, useSail } from ".";
 import type { AccountDatum } from "./types";
 
@@ -30,7 +31,7 @@ export const useAccountsData = (
     async (
       fetchKeys: (
         keys: (PublicKey | null | undefined)[]
-      ) => Promise<AccountDatum[]>,
+      ) => Promise<AccountFetchResult[]>,
       keys: (PublicKey | null | undefined)[]
     ) => {
       const keysData = await fetchKeys(keys);
@@ -39,10 +40,10 @@ export const useAccountsData = (
           key
             ? {
                 ...cacheState,
-                [key.toString()]: keysData[keyIndex],
+                [key.toString()]: keysData[keyIndex]?.data,
               }
             : cacheState,
-        {}
+        {} as { [cacheKey: string]: AccountDatum }
       );
       setData(nextData);
     },
