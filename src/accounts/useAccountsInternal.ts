@@ -1,17 +1,27 @@
+import { networkToChainId } from "@saberhq/token-utils";
 import { useConnectionContext } from "@saberhq/use-solana";
-import type { AccountInfo } from "@solana/web3.js";
+import type { AccountInfo, SlotInfo } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { zip } from "lodash";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
+import { QueryClient } from "react-query";
 
-import type { AccountFetchResult, SailError } from "..";
+import type {
+  AccountFetchResult,
+  AccountParser,
+  ParsedAccountDatum,
+  SailError,
+} from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
 import type { CacheUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
 import { getMultipleAccounts } from "./fetchers";
 import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
+import { createAccountStore, AccountStore } from "./store";
+import { useUpdater } from "./useUpdater";
 
 /**
  * Gets the cache key associated with the given pubkey.
@@ -55,6 +65,8 @@ export interface UseAccountsArgs {
 }
 
 export interface UseAccounts extends Required<UseAccountsArgs> {
+  queryClient: QueryClient;
+  accountStore: AccountStore;
   /**
    * The loader. Usually should not be used directly.
    */
@@ -100,11 +112,74 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    * Gets an AccountDatum from a key.
    */
   getDatum: (key: PublicKey | null | undefined) => AccountDatum;
+
+  // registerParsers: (parsersConfig: {
+  //   [key: string]: AccountParser<unknown>;
+  // }) => void;
 }
 
+interface NamedParsers {
+  [key: string]: AccountParser<unknown>;
+}
+
+// dataloader will not worry about caching
 export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
+  const queryClientRef = useRef<QueryClient>();
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient();
+  }
+
+  const accountStoreRef = useRef<AccountStore>();
+  if (!accountStoreRef.current) {
+    accountStoreRef.current = createAccountStore();
+  }
+
+  // const parsers = useRef<NamedParsers>({});
+  // const registerParsers = useCallback(
+  //   (parsersConfig: { [key: string]: AccountParser<unknown> }) => {
+  //     for (let [key, parser] of Object.entries(parsersConfig)) {
+  //       parsers.current[key] = parser;
+  //     }
+  //   },
+  //   []
+  // );
+
   const { batchDurationMs = 500, refreshIntervalMs = 60_000, onError } = args;
   const { network, connection } = useConnectionContext();
+  const chainId = networkToChainId(network);
+
+  const set = accountStoreRef.current!((state) => state.set);
+
+  useEffect(() => {
+    const slotUpdateHandler = (slotUpdate: SlotInfo) => {
+      try {
+        // const slotNumber = await provider.connection.getSlot();
+        const slotNumber = slotUpdate.slot;
+        set((state) => {
+          state.slotNumber[chainId] = slotNumber;
+        });
+      } catch (e) {
+        console.log({ error: e });
+      }
+
+      // if (networkCheckTimeoutId.current) {
+      //   clearTimeout(networkCheckTimeoutId.current);
+      // }
+
+      // // trailing check after NETWORK_CHECK_TIMEOUT
+      // networkCheckTimeoutId.current = setTimeout(() => {
+      //   void networkCheck();
+      // }, NETWORK_CHECK_TIMEOUT);
+    };
+
+    const cid = connection.onSlotChange(slotUpdateHandler);
+
+    return () => {
+      if (cid) {
+        void connection.removeSlotChangeListener(cid);
+      }
+    };
+  }, [connection, chainId]);
 
   // Cache of accounts
   const [{ accountsCache, emitter, subscribedAccounts }, setState] =
@@ -131,24 +206,26 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
             onError,
             "recent"
           );
-          unstable_batchedUpdates(() => {
-            result.array.forEach((info, i) => {
-              const addr = keys[i];
-              if (addr && !(info instanceof Error)) {
-                accountsCache.set(getCacheKeyOfPublicKey(addr), info);
-                emitter.raiseCacheUpdated(addr, true);
-              }
-            });
-          });
+
+          // unstable_batchedUpdates(() => {
+          //   result.array.forEach((info, i) => {
+          //     const addr = keys[i];
+          //     if (addr && !(info instanceof Error)) {
+          //       accountsCache.set(getCacheKeyOfPublicKey(addr), info);
+          //       emitter.raiseCacheUpdated(addr, true);
+          //     }
+          //   });
+          // });
           return result.array;
         },
         {
           // aggregate all requests over 500ms
           batchScheduleFn: (callback) => setTimeout(callback, batchDurationMs),
           cacheKeyFn: getCacheKeyOfPublicKey,
+          cache: false,
         }
       ),
-    [accountsCache, batchDurationMs, connection, emitter, onError]
+    [batchDurationMs, connection, onError]
   );
 
   const fetchKeys = useCallback(
@@ -245,7 +322,10 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     [getCached]
   );
 
+  useUpdater({ accountStore: accountStoreRef.current, fetchKeys });
+
   return {
+    queryClient: queryClientRef.current,
     loader: accountLoader,
     getCached,
     getDatum,
@@ -255,9 +335,10 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     onCache,
     fetchKeys,
     subscribe,
-
+    accountStore: accountStoreRef.current,
     batchDurationMs,
     refreshIntervalMs,
     onError,
+    // registerParsers,
   };
 };

@@ -18,7 +18,10 @@ export const useParsedAccountsData = <T extends unknown>(
   keys: (PublicKey | null | undefined)[],
   parser: AccountParser<T>
 ): ParsedAccountDatum<T>[] => {
-  const { onError } = useSail();
+  const { onError, queryClient } = useSail();
+
+  // useAccountsData(keys, {select: data =>});
+
   const data = useAccountsData(keys);
   const [parsed, setParsed] = useState<Record<string, ParsedAccountDatum<T>>>(
     keys.reduce(

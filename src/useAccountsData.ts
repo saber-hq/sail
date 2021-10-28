@@ -1,10 +1,23 @@
+import { chainIdToNetwork, networkToChainId } from "@saberhq/token-utils";
+import { useConnectionContext } from "@saberhq/use-solana";
 import type { PublicKey } from "@solana/web3.js";
-import { useEffect, useMemo, useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import shallow from "zustand/shallow";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  notifyManager,
+  QueriesObserver,
+  QueryKey,
+  QueryObserverOptions,
+  QueryOptions,
+  useQuery,
+} from "react-query";
+import invariant from "tiny-invariant";
 
 import type { AccountFetchResult } from ".";
-import { SailCacheRefetchError, useSail } from ".";
+import { useSail } from ".";
+import { useUpdater } from "./accounts/useUpdater";
 import type { AccountDatum } from "./types";
+import { AccountState } from "./accounts/store";
 
 /**
  * Fetches data of the given accounts.
@@ -15,84 +28,53 @@ import type { AccountDatum } from "./types";
  * - null -- account not found or an error occurred while loading the account
  * - undefined -- account key not provided or not yet loaded
  */
+const selectAccounts = (state: AccountState) => state.accounts;
+
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getDatum, onCache, subscribe, fetchKeys, onError } = useSail();
+  const { accountStore } = useSail();
 
-  const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
-    keys.reduce(
-      (acc, key) => (key ? { ...acc, [key.toString()]: getDatum(key) } : acc),
-      {}
-    )
-  );
-
-  const fetchAndSetKeys = useDebouncedCallback(
-    async (
-      fetchKeys: (
-        keys: (PublicKey | null | undefined)[]
-      ) => Promise<AccountFetchResult[]>,
-      keys: (PublicKey | null | undefined)[]
-    ) => {
-      const keysData = await fetchKeys(keys);
-      const nextData = keys.reduce(
-        (cacheState, key, keyIndex) =>
-          key
-            ? {
-                ...cacheState,
-                [key.toString()]: keysData[keyIndex]?.data,
-              }
-            : cacheState,
-        {} as { [cacheKey: string]: AccountDatum }
-      );
-      setData(nextData);
-    },
-    100
-  );
+  const setState = accountStore(useCallback((state) => state.set, []));
+  const accounts = accountStore(selectAccounts);
+  const { network } = useConnectionContext();
+  const chainId = networkToChainId(network);
 
   useEffect(() => {
-    void (async () => {
-      await fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
-        onError(new SailCacheRefetchError(e, keys));
+    setState((state) => {
+      keys.forEach((key) => {
+        if (!key || !chainId) return;
+
+        const k = key.toString();
+        state.listeningKeys[chainId] = state.listeningKeys[chainId] ?? {};
+
+        state.listeningKeys[chainId]![k] =
+          state.listeningKeys[chainId]![k] ?? {};
+
+        state.listeningKeys[chainId]![k]!.slotsPerFetch = 500;
       });
-    })();
-  }, [keys, fetchAndSetKeys, fetchKeys, onError]);
-
-  // subscribe to account changes
-  useEffect(() => {
-    const allKeysUnsubscribe = keys
-      .filter((k): k is PublicKey => !!k)
-      .map(subscribe);
-    return () => {
-      allKeysUnsubscribe.map((fn) => fn());
-    };
-  }, [keys, subscribe]);
-
-  // refresh from the cache whenever the cache is updated
-  useEffect(() => {
-    return onCache((e) => {
-      if (keys.find((key) => key?.equals(e.id))) {
-        void fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
-          onError(new SailCacheRefetchError(e, keys));
-        });
-      }
     });
-  }, [keys, onCache, fetchAndSetKeys, fetchKeys, onError]);
 
-  // unload debounces when the component dismounts
-  useEffect(() => {
     return () => {
-      fetchAndSetKeys.cancel();
+      setState((state) => {
+        keys.forEach((key) => {
+          if (!key || !chainId) return;
+
+          const k = key.toString();
+          state.listeningKeys[chainId] = state.listeningKeys[chainId] ?? {};
+
+          // delete state.listeningKeys[chainId]![k];
+        });
+      });
     };
-  }, [fetchAndSetKeys]);
+  }, [keys, chainId]);
 
   return useMemo(() => {
     return keys.map((key) => {
-      if (key) {
-        return data[key.toString()];
-      }
+      if (!key) return key;
+      const result = accounts[key.toString()];
 
-      return key;
+      return result?.data;
     });
-  }, [data, keys]);
+  }, [accounts]);
 };
