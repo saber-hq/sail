@@ -1,6 +1,6 @@
 {
   "name": "@saberhq/sail",
-  "version": "2.6.2",
+  "version": "2.6.3",
   "description": "Account caching and batched loading for React-based Solana applications.",
   "keywords": [
     "solana",
@@ -86,6 +86,6 @@
   "packageManager": "yarn@3.1.0",
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix",
-    "*.{json,js,jsx,html,css,md}": "prettier --write"
+    "*.{json,js,jsx,html,css,md,yml,yaml}": "prettier --write"
   }
 }
