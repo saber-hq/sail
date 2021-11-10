@@ -30,6 +30,7 @@ export const useAccountsData = (
     }, {})
   );
 
+  // TODO: add cancellation
   const fetchAndSetKeys = useDebouncedCallback(
     async (
       fetchKeys: (
@@ -38,15 +39,15 @@ export const useAccountsData = (
       keys: (PublicKey | null | undefined)[]
     ) => {
       const keysData = await fetchKeys(keys);
-      const nextData = keys.reduce(
-        (cacheState, key, keyIndex) =>
-          key
-            ? {
-                ...cacheState,
-                [getCacheKeyOfPublicKey(key)]: keysData[keyIndex]?.data,
-              }
-            : cacheState,
-        {} as { [cacheKey: string]: AccountDatum }
+      const nextData = keys.reduce<{ [cacheKey: string]: AccountDatum }>(
+        (cacheState, key, keyIndex) => {
+          if (key) {
+            cacheState[getCacheKeyOfPublicKey(key)] = keysData[keyIndex]?.data;
+          }
+
+          return cacheState;
+        },
+        {}
       );
       setData(nextData);
     },
