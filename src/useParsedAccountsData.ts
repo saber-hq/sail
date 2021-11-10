@@ -2,7 +2,7 @@ import type { KeyedAccountInfo, PublicKey } from "@solana/web3.js";
 import zip from "lodash.zip";
 import { useEffect, useMemo, useState } from "react";
 
-import { SailAccountParseError, useSail } from ".";
+import { getCacheKeyOfPublicKey, SailAccountParseError, useSail } from ".";
 import type { ParsedAccountDatum } from "./types";
 import { useAccountsData } from "./useAccountsData";
 
@@ -21,10 +21,13 @@ export const useParsedAccountsData = <T extends unknown>(
   const { onError } = useSail();
   const data = useAccountsData(keys);
   const [parsed, setParsed] = useState<Record<string, ParsedAccountDatum<T>>>(
-    keys.reduce(
-      (acc, k) => (k ? { ...acc, [k.toString()]: undefined } : acc),
-      {}
-    )
+    keys.reduce<Record<string, ParsedAccountDatum<T>>>((acc, k) => {
+      if (k) {
+        acc[getCacheKeyOfPublicKey(k)] = undefined;
+      }
+
+      return acc;
+    }, {})
   );
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export const useParsedAccountsData = <T extends unknown>(
       const nextParsed = { ...prevParsed };
       zip(keys, data).forEach(([key, datum]) => {
         if (datum) {
-          const key = datum.accountId.toString();
+          const key = getCacheKeyOfPublicKey(datum.accountId);
           const prevValue = prevParsed[key];
           if (
             prevValue &&
@@ -54,12 +57,12 @@ export const useParsedAccountsData = <T extends unknown>(
             };
           } catch (e) {
             onError(new SailAccountParseError(e, datum));
-            nextParsed[key.toString()] = null;
+            nextParsed[key] = null;
             return;
           }
         }
         if (key && datum === null) {
-          nextParsed[key.toString()] = null;
+          nextParsed[getCacheKeyOfPublicKey(key)] = null;
         }
       });
       return nextParsed;
@@ -71,7 +74,7 @@ export const useParsedAccountsData = <T extends unknown>(
       if (!k) {
         return k;
       }
-      return parsed[k.toString()];
+      return parsed[getCacheKeyOfPublicKey(k)];
     });
   }, [keys, parsed]);
 };

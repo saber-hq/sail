@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import type { AccountFetchResult } from ".";
-import { SailCacheRefetchError, useSail } from ".";
+import { getCacheKeyOfPublicKey, SailCacheRefetchError, useSail } from ".";
 import type { AccountDatum } from "./types";
 
 /**
@@ -21,10 +21,13 @@ export const useAccountsData = (
   const { getDatum, onCache, subscribe, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
-    keys.reduce(
-      (acc, key) => (key ? { ...acc, [key.toString()]: getDatum(key) } : acc),
-      {}
-    )
+    keys.reduce<{ [cacheKey: string]: AccountDatum }>((acc, key) => {
+      if (key) {
+        acc[getCacheKeyOfPublicKey(key)] = getDatum(key);
+      }
+
+      return acc;
+    }, {})
   );
 
   const fetchAndSetKeys = useDebouncedCallback(
@@ -40,7 +43,7 @@ export const useAccountsData = (
           key
             ? {
                 ...cacheState,
-                [key.toString()]: keysData[keyIndex]?.data,
+                [getCacheKeyOfPublicKey(key)]: keysData[keyIndex]?.data,
               }
             : cacheState,
         {} as { [cacheKey: string]: AccountDatum }
@@ -89,7 +92,7 @@ export const useAccountsData = (
   return useMemo(() => {
     return keys.map((key) => {
       if (key) {
-        return data[key.toString()];
+        return data[getCacheKeyOfPublicKey(key)];
       }
 
       return key;
