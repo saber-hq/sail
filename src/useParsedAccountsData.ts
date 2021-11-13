@@ -14,7 +14,7 @@ export type AccountParser<T> = (info: KeyedAccountInfo) => T;
  * @param parser
  * @returns
  */
-export const useParsedAccountsData = <T extends unknown>(
+export const useParsedAccountsData = <T>(
   keys: (PublicKey | null | undefined)[],
   parser: AccountParser<T>
 ): ParsedAccountDatum<T>[] => {
@@ -83,7 +83,7 @@ export const useParsedAccountsData = <T extends unknown>(
  * Loads the parsed data of a single account.
  * @returns
  */
-export const useParsedAccountData = <T extends unknown>(
+export const useParsedAccountData = <T>(
   key: PublicKey | null | undefined,
   parser: AccountParser<T>
 ): { loading: boolean; data: ParsedAccountDatum<T> } => {

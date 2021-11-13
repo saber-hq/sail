@@ -10,7 +10,7 @@ import { SailGetMultipleAccountsError } from "..";
 export function chunks<T>(array: readonly T[], size: number): T[][] {
   return Array.apply<number, T[], T[][]>(
     0,
-    new Array(Math.ceil(array.length / size))
+    new Array(Math.ceil(array.length / size)) as T[]
   ).map((_, index) => array.slice(index * size, (index + 1) * size));
 }
 

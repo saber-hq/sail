@@ -5,7 +5,8 @@
   "keywords": [
     "solana",
     "blockchain",
-    "react"
+    "react",
+    "saber"
   ],
   "author": "Ian Macalinao <ian@saber.so>",
   "homepage": "https://sail.saber.so",
@@ -39,28 +40,29 @@
     "postpublish": "pinst --enable"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.0.9",
-    "@saberhq/eslint-config-react": "^1.4.1",
-    "@saberhq/solana-contrib": "^1.4.1",
-    "@saberhq/token-utils": "^1.4.1",
-    "@saberhq/use-solana": "^1.4.1",
-    "@solana/spl-token-registry": "^0.2.287",
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@saberhq/eslint-config-react": "^1.7.1",
+    "@saberhq/solana-contrib": "^1.7.1",
+    "@saberhq/token-utils": "^1.7.1",
+    "@saberhq/use-solana": "^1.7.1",
+    "@solana/spl-token-registry": "^0.2.291",
     "@solana/web3.js": "^1.30.2",
     "@types/lodash.chunk": "^4.2.6",
     "@types/lodash.zip": "^4.2.6",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
+    "@types/node": "^16.11.7",
+    "@types/react": "^17.0.34",
+    "@types/react-dom": "^17.0.11",
     "bn.js": "^5.2.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.2.0",
     "eslint-import-resolver-node": "^0.3.6",
-    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-import": "^2.25.3",
     "husky": "^7.0.4",
     "lint-staged": "^11.2.6",
     "pinst": "^2.1.6",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "typedoc": "^0.22.7",
+    "typedoc": "^0.22.8",
     "typescript": "^4.4.4"
   },
   "dependencies": {
@@ -68,10 +70,10 @@
     "eventemitter3": "^4.0.7",
     "lodash.chunk": "^4.2.0",
     "lodash.zip": "^4.2.0",
-    "tiny-invariant": "^1.1.0",
+    "tiny-invariant": "^1.2.0",
     "tslib": "^2.3.1",
     "unstated-next": "^1.1.0",
-    "use-debounce": "^7.0.0"
+    "use-debounce": "^7.0.1"
   },
   "peerDependencies": {
     "@saberhq/solana-contrib": "^1.3.5",
