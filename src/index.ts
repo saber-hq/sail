@@ -1,5 +1,6 @@
 export * from "./accounts";
 export * from "./errors";
+export * from "./hooks";
 export * from "./native";
 export * from "./parsers";
 export * from "./provider";
