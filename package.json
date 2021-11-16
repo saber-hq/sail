@@ -76,9 +76,9 @@
     "use-debounce": "^7.0.1"
   },
   "peerDependencies": {
-    "@saberhq/solana-contrib": "^1.3.5",
-    "@saberhq/token-utils": "^1.3.6",
-    "@saberhq/use-solana": "^1.3.5",
+    "@saberhq/solana-contrib": "^1.7.1",
+    "@saberhq/token-utils": "^1.7.1",
+    "@saberhq/use-solana": "^1.7.1",
     "@solana/web3.js": "^1.29.2",
     "bn.js": "^5.2.0",
     "jsbi": "^3 || ^4",
