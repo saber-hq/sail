@@ -9,6 +9,12 @@ import type {
 import type { TransactionErrorType } from "./categorizeTransactionError";
 import { categorizeTransactionError } from "./categorizeTransactionError";
 
+const extractErrorMessage = (errLike: unknown): string | null => {
+  return "message" in (errLike as { message?: string })
+    ? (errLike as { message?: string }).message ?? null
+    : null;
+};
+
 /**
  * Error originating from Sail.
  */
@@ -30,9 +36,7 @@ export class SailUnknownTXFailError extends SailError {
     public readonly txs: readonly TransactionEnvelope[]
   ) {
     super(
-      `Transaction failed: ${
-        originalError instanceof Error ? originalError.message : "unknown"
-      }`
+      `Transaction failed: ${extractErrorMessage(originalError) ?? "unknown"}`
     );
     this.name = "SailUnknownTXFailError";
     if (originalError instanceof Error) {
@@ -123,7 +127,7 @@ export class SailRefetchAfterTXError extends SailError {
   ) {
     super(
       `Error refetching accounts after transaction: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailRefetchAfterTXError";
@@ -137,7 +141,7 @@ export class SailRefetchSubscriptionsError extends SailError {
   constructor(public readonly originalError: unknown) {
     super(
       `Error refetching subscribed accounts: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailRefetchSubscriptionsError";
@@ -154,7 +158,7 @@ export class SailTransactionSignError extends SailError {
   ) {
     super(
       `Error signing transactions: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailTransactionSignError";
@@ -174,7 +178,7 @@ export class SailCacheRefetchError extends SailError {
   ) {
     super(
       `Error refetching from cache: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailCacheRefetchError";
@@ -191,7 +195,7 @@ export class SailAccountParseError extends SailError {
   ) {
     super(
       `Error parsing account: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailAccountParseError";
@@ -208,7 +212,7 @@ export class SailAccountLoadError extends SailError {
   ) {
     super(
       `Error loading account: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailAccountLoadError";
@@ -230,7 +234,7 @@ export class SailGetMultipleAccountsError extends SailError {
   ) {
     super(
       `GetMultipleAccountsError: ${
-        originalError instanceof Error ? originalError.message : "unknown"
+        extractErrorMessage(originalError) ?? "unknown"
       }`
     );
     this.name = "SailGetMultipleAccountsError";
