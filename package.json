@@ -1,6 +1,6 @@
 {
   "name": "@saberhq/sail",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Account caching and batched loading for React-based Solana applications.",
   "keywords": [
     "solana",
@@ -35,9 +35,7 @@
     "lint:ci": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ts/ src/index.ts",
-    "prepare": "husky install",
-    "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
