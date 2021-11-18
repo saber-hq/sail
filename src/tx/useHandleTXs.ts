@@ -4,12 +4,14 @@ import type {
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
-import type { ConfirmOptions, Transaction } from "@solana/web3.js";
+import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
 import { useCallback } from "react";
+import type { OperationOptions } from "retry";
 import invariant from "tiny-invariant";
 
 import type { UseAccounts } from "..";
 import {
+  extractErrorMessage,
   InsufficientSOLError,
   SailError,
   SailRefetchAfterTXError,
@@ -56,16 +58,29 @@ export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
   waitForConfirmation?: boolean;
 }
 
+export interface HandleTXOptions extends ConfirmOptions {
+  /**
+   * Options to pass in after a refetch has occured.
+   */
+  refetchAfterTX?: OperationOptions & {
+    commitment?: Finality;
+    /**
+     * Delay for the writable accounts to be refetched into the cache after a transaction.
+     */
+    refetchDelayMs?: number;
+  };
+}
+
 export interface UseHandleTXs {
   handleTX: (
     txEnv: TransactionEnvelope,
     msg?: string,
-    confirmOptions?: ConfirmOptions
+    options?: HandleTXOptions
   ) => Promise<HandleTXResponse>;
   handleTXs: (
     txEnv: TransactionEnvelope[],
     msg?: string,
-    confirmOptions?: ConfirmOptions
+    options?: HandleTXOptions
   ) => Promise<HandleTXsResponse>;
 }
 
@@ -82,7 +97,7 @@ export const useHandleTXsInternal = ({
     async (
       txs: TransactionEnvelope[],
       message?: string,
-      confirmOptions?: ConfirmOptions
+      options?: HandleTXOptions
     ): Promise<{
       success: boolean;
       pending: PendingTransaction[];
@@ -119,7 +134,7 @@ export const useHandleTXsInternal = ({
         try {
           signedTXs = await provider.signer.signAll(
             txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
-            confirmOptions
+            options
           );
         } catch (e) {
           const fail = new SailTransactionSignError(e, txs);
@@ -135,10 +150,7 @@ export const useHandleTXsInternal = ({
         const maybePending = await Promise.all(
           signedTXs.map(async (signedTX, i) => {
             try {
-              return await provider.broadcaster.broadcast(
-                signedTX,
-                confirmOptions
-              );
+              return await provider.broadcaster.broadcast(signedTX, options);
             } catch (e) {
               const txEnvelope = txs[i];
               if (!txEnvelope) {
@@ -179,15 +191,29 @@ export const useHandleTXsInternal = ({
         ];
 
         // refetch everything
-        // TODO(igm): this can fail
-        // more importantly, this should be handled server-side
-        // with our own websocket server
         void (async () => {
+          const refetchAfterTX = options?.refetchAfterTX;
           try {
-            // await for the tx to be confirmed
-            await Promise.all(pending.map((p) => p.wait()));
-            // then fetch
-            await refetchMany(writable);
+            // wait for the tx to be confirmed
+            // it is possible that it never gets
+            await Promise.all(
+              pending.map((p) =>
+                p
+                  .wait({
+                    commitment: "confirmed",
+                    minTimeout: 1_000,
+                    ...refetchAfterTX,
+                  })
+                  .catch((err) => {
+                    throw new Error(
+                      `Could not await confirmation of transaction ${
+                        p.signature
+                      }: ${extractErrorMessage(err) ?? "unknown"}`
+                    );
+                  })
+              )
+            );
+            // then fetch, after a delay
             setTimeout(() => {
               void refetchMany(writable).catch((e) => {
                 onError(
@@ -198,7 +224,7 @@ export const useHandleTXsInternal = ({
                   )
                 );
               });
-            }, txRefetchDelayMs);
+            }, refetchAfterTX?.refetchDelayMs ?? txRefetchDelayMs);
           } catch (e) {
             onError(
               new SailRefetchAfterTXError(
@@ -258,7 +284,7 @@ export const useHandleTXsInternal = ({
     async (
       txEnv: TransactionEnvelope,
       message?: string,
-      confirmOptions?: ConfirmOptions
+      options?: HandleTXOptions
     ): Promise<{
       success: boolean;
       pending: PendingTransaction | null;
@@ -267,7 +293,7 @@ export const useHandleTXsInternal = ({
       const { success, pending, errors } = await handleTXs(
         [txEnv],
         message,
-        confirmOptions
+        options
       );
       return { success, pending: pending[0] ?? null, errors };
     },

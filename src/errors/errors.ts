@@ -9,7 +9,12 @@ import type {
 import type { TransactionErrorType } from "./categorizeTransactionError";
 import { categorizeTransactionError } from "./categorizeTransactionError";
 
-const extractErrorMessage = (errLike: unknown): string | null => {
+/**
+ * Extracts the message from an error.
+ * @param errLike Error-like object.
+ * @returns
+ */
+export const extractErrorMessage = (errLike: unknown): string | null => {
   return "message" in (errLike as { message?: string })
     ? (errLike as { message?: string }).message ?? null
     : null;
