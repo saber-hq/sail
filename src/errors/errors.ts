@@ -52,7 +52,13 @@ export class SailError extends Error {
   _isSailError = true;
 
   constructor(
+    /**
+     * Name of the Sail error.
+     */
     public readonly sailErrorName: SailErrorName,
+    /**
+     * The original error thrown, if applicable.
+     */
     public readonly originalError: unknown,
     /**
      * Underlying error message.
