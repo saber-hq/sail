@@ -69,6 +69,7 @@
     "eventemitter3": "^4.0.7",
     "lodash.chunk": "^4.2.0",
     "lodash.zip": "^4.2.0",
+    "retry": "^0.13.1",
     "tiny-invariant": "^1.2.0",
     "tslib": "^2.3.1",
     "unstated-next": "^1.1.0",
