@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["ES2015", "DOM"],
     "outDir": "dist/esm/",
-    "rootDir": "src/"
+    "rootDir": "src/",
+    "noEmit": false
   },
   "include": ["./src"]
 }
