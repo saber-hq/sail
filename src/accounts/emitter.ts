@@ -24,23 +24,23 @@ export class CacheClearEvent {
 }
 
 export class AccountsEmitter {
-  private emitter = new Emitter();
+  private readonly _emitter = new Emitter();
 
   onCache(callback: (args: CacheUpdateEvent) => void): () => void {
-    this.emitter.on(CacheUpdateEvent.type, callback);
+    this._emitter.on(CacheUpdateEvent.type, callback);
 
-    return () => this.emitter.removeListener(CacheUpdateEvent.type, callback);
+    return () => this._emitter.removeListener(CacheUpdateEvent.type, callback);
   }
 
   raiseCacheUpdated(id: PublicKey, isNew: boolean): void {
-    this.emitter.emit(CacheUpdateEvent.type, new CacheUpdateEvent(id, isNew));
+    this._emitter.emit(CacheUpdateEvent.type, new CacheUpdateEvent(id, isNew));
   }
 
   raiseCacheDeleted(id: PublicKey): void {
-    this.emitter.emit(CacheDeleteEvent.type, new CacheDeleteEvent(id));
+    this._emitter.emit(CacheDeleteEvent.type, new CacheDeleteEvent(id));
   }
 
   raiseCacheCleared(): void {
-    this.emitter.emit(CacheClearEvent.type, new CacheClearEvent());
+    this._emitter.emit(CacheClearEvent.type, new CacheClearEvent());
   }
 }

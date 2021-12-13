@@ -29,7 +29,7 @@
     "url": "git+https://github.com/saber-hq/sail.git"
   },
   "scripts": {
-    "build": "tsc && tsc --project tsconfig.esm.json",
+    "build": "tsc && tsc --project tsconfig.cjs.json",
     "clean": "rm -fr dist/",
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings=0",
@@ -39,30 +39,31 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
-    "@saberhq/eslint-config-react": "^1.7.4",
-    "@saberhq/solana-contrib": "^1.7.4",
-    "@saberhq/token-utils": "^1.7.4",
-    "@saberhq/use-solana": "^1.7.4",
-    "@solana/spl-token-registry": "^0.2.375",
-    "@solana/web3.js": "^1.30.2",
+    "@saberhq/eslint-config-react": "^1.10.15",
+    "@saberhq/solana-contrib": "^1.10.15",
+    "@saberhq/token-utils": "^1.10.15",
+    "@saberhq/tsconfig": "^1.10.15",
+    "@saberhq/use-solana": "^1.10.15",
+    "@solana/web3.js": "^1.31.0",
     "@types/lodash.chunk": "^4.2.6",
     "@types/lodash.zip": "^4.2.6",
-    "@types/node": "^16.11.9",
-    "@types/react": "^17.0.36",
+    "@types/node": "^16.11.12",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/retry": "^0.12.1",
+    "@yarnpkg/doctor": "^3.1.0",
     "bn.js": "^5.2.0",
-    "eslint": "^8.3.0",
+    "eslint": "^8.4.1",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-plugin-import": "^2.25.3",
     "husky": "^7.0.4",
     "jsbi": "^4.1.0",
-    "lint-staged": "^12.1.1",
-    "prettier": "^2.4.1",
+    "lint-staged": "^12.1.2",
+    "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "typedoc": "^0.22.9",
-    "typescript": "^4.4.4"
+    "typedoc": "^0.22.10",
+    "typescript": "^4.5.3"
   },
   "dependencies": {
     "dataloader": "^2.0.0",
@@ -85,7 +86,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
-  "packageManager": "yarn@3.1.0",
+  "packageManager": "yarn@3.1.1",
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix",
     "*.{json,js,jsx,html,css,md,yml,yaml}": "prettier --write"
