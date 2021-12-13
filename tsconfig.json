@@ -1,4 +1,5 @@
 {
+  "extends": "@saberhq/tsconfig/tsconfig.lib.json",
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ES2015",

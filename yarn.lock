@@ -258,6 +258,7 @@ __metadata:
     "@saberhq/eslint-config-react": ^1.10.15
     "@saberhq/solana-contrib": ^1.10.15
     "@saberhq/token-utils": ^1.10.15
+    "@saberhq/tsconfig": ^1.10.15
     "@saberhq/use-solana": ^1.10.15
     "@solana/web3.js": ^1.31.0
     "@types/lodash.chunk": ^4.2.6
@@ -330,6 +331,13 @@ __metadata:
     bn.js: ^5.2
     jsbi: ^3 || ^4
   checksum: fb7a62ec7cd1615ebbe46b493a7f953e4df6fbf83eb18477bb73d70aa29cb3793456b39c0a21e913160a4a41cf97f36c01135cd339efcecdcbb6a89e58059000
+  languageName: node
+  linkType: hard
+
+"@saberhq/tsconfig@npm:^1.10.15":
+  version: 1.10.15
+  resolution: "@saberhq/tsconfig@npm:1.10.15"
+  checksum: a2e37f51b9b452787c01edc13fb2e43b591ed63303a4d8fcf5e2bad13030cc1f0d839b2f3c035ef098a611f43abb05a35d5bb33d21b61024dc212b5eef5b7da2
   languageName: node
   linkType: hard
 
