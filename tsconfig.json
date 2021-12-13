@@ -1,28 +1,8 @@
 {
   "extends": "@saberhq/tsconfig/tsconfig.lib.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES2015",
-
-    "strict": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": true,
-
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "preserveConstEnums": true,
-
     "lib": ["ES2015", "DOM"],
-
-    "importHelpers": true,
-    "declaration": true,
-    "declarationMap": true,
-    "inlineSources": true,
-    "sourceMap": true,
-    "outDir": "dist/cjs/",
+    "outDir": "dist/esm/",
     "rootDir": "src/"
   },
   "include": ["./src"]

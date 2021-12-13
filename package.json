@@ -29,7 +29,7 @@
     "url": "git+https://github.com/saber-hq/sail.git"
   },
   "scripts": {
-    "build": "tsc && tsc --project tsconfig.esm.json",
+    "build": "tsc && tsc --project tsconfig.cjs.json",
     "clean": "rm -fr dist/",
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings=0",
