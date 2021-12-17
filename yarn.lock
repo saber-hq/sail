@@ -221,6 +221,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@project-serum/anchor@npm:^0.19.1-beta.1":
+  version: 0.19.1-beta.1
+  resolution: "@project-serum/anchor@npm:0.19.1-beta.1"
+  dependencies:
+    "@project-serum/borsh": ^0.2.2
+    "@solana/web3.js": ^1.17.0
+    base64-js: ^1.5.1
+    bn.js: ^5.1.2
+    bs58: ^4.0.1
+    buffer-layout: ^1.2.2
+    camelcase: ^5.3.1
+    crypto-hash: ^1.3.0
+    eventemitter3: ^4.0.7
+    find: ^0.3.0
+    js-sha256: ^0.9.0
+    pako: ^2.0.3
+    snake-case: ^3.0.4
+    toml: ^3.0.0
+  checksum: fc32f06d9760b2b20e36e9d6cee7ff56ef55ee8106e28a62da5b940923da44874dc0fdd695ebb66f0648f7783509f3c7a275d4561833af1cab77b13507a0dd34
+  languageName: node
+  linkType: hard
+
+"@project-serum/borsh@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@project-serum/borsh@npm:0.2.3"
+  dependencies:
+    bn.js: ^5.1.2
+    buffer-layout: ^1.2.0
+  peerDependencies:
+    "@solana/web3.js": ^1.2.0
+  checksum: c337d788bcfad01a4f4801d78d87be04140116b41a2acd32c3eea6329a014fcc50dafc9772b39fcdf29afca4b20c42d898b0f275a749a451a28be1b13ee37100
+  languageName: node
+  linkType: hard
+
 "@project-serum/sol-wallet-adapter@npm:^0.2.6":
   version: 0.2.6
   resolution: "@project-serum/sol-wallet-adapter@npm:0.2.6"
@@ -237,6 +271,22 @@ __metadata:
   version: 1.1.0
   resolution: "@rushstack/eslint-patch@npm:1.1.0"
   checksum: 4602c23454c8bb03502da12398cb5c4c0bfb3b1772535b418ec94ab8c47824f70e6ff32206a35fe7086042d9516959edea439e2371147b1de7eee50ef03ace65
+  languageName: node
+  linkType: hard
+
+"@saberhq/anchor-contrib@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/anchor-contrib@npm:1.11.2"
+  dependencies:
+    "@saberhq/solana-contrib": ^1.11.2
+    eventemitter3: ^4.0.7
+    lodash.camelcase: ^4.3.0
+    lodash.mapvalues: ^4.6.0
+    tslib: ^2.3.1
+  peerDependencies:
+    "@project-serum/anchor": ^0.17 || ^0.18 || ^0.19
+    "@solana/web3.js": ">=1.29.2"
+  checksum: 65f30c89734becce3a94348bbe21b9f9d9c30cb0843c0da4c192c67e87254f34f563af4b4277dfa8f088eedb86c1b44bbbfca283663a8923b0f8d5614031859d
   languageName: node
   linkType: hard
 
@@ -277,7 +327,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@saberhq/sail@workspace:."
   dependencies:
+    "@project-serum/anchor": ^0.19.1-beta.1
     "@rushstack/eslint-patch": ^1.1.0
+    "@saberhq/anchor-contrib": ^1.11.2
     "@saberhq/eslint-config-react": ^1.11.2
     "@saberhq/solana-contrib": ^1.11.2
     "@saberhq/token-utils": ^1.11.2
@@ -285,6 +337,7 @@ __metadata:
     "@saberhq/use-solana": ^1.11.2
     "@solana/web3.js": ^1.31.0
     "@types/lodash.chunk": ^4.2.6
+    "@types/lodash.mapvalues": ^4.6.6
     "@types/lodash.zip": ^4.2.6
     "@types/node": ^16.11.14
     "@types/react": ^17.0.37
@@ -301,6 +354,7 @@ __metadata:
     jsbi: ^4.1.0
     lint-staged: ^12.1.2
     lodash.chunk: ^4.2.0
+    lodash.mapvalues: ^4.6.0
     lodash.zip: ^4.2.0
     prettier: ^2.5.1
     react: ^17.0.2
@@ -313,6 +367,8 @@ __metadata:
     unstated-next: ^1.1.0
     use-debounce: ^7.0.1
   peerDependencies:
+    "@project-serum/anchor": "*"
+    "@saberhq/anchor-contrib": "*"
     "@saberhq/solana-contrib": ^1.7.1
     "@saberhq/token-utils": ^1.7.1
     "@saberhq/use-solana": ^1.7.1
@@ -499,6 +555,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@solana/web3.js@npm:^1.17.0, @solana/web3.js@npm:^1.31.0":
+  version: 1.31.0
+  resolution: "@solana/web3.js@npm:1.31.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@ethersproject/sha2": ^5.5.0
+    "@solana/buffer-layout": ^3.0.0
+    bn.js: ^5.0.0
+    borsh: ^0.4.0
+    bs58: ^4.0.1
+    buffer: 6.0.1
+    cross-fetch: ^3.1.4
+    jayson: ^3.4.4
+    js-sha3: ^0.8.0
+    rpc-websockets: ^7.4.2
+    secp256k1: ^4.0.2
+    superstruct: ^0.14.2
+    tweetnacl: ^1.0.0
+  checksum: 471cd682772a056e155cc209de2d34cec8552da8cba02ccb9f80d840a39aad3877d549b512f29a91fea5d5d09c56f3cf4d8af5029a0e2dfeea82f705e08a4244
+  languageName: node
+  linkType: hard
+
 "@solana/web3.js@npm:^1.21.0":
   version: 1.29.1
   resolution: "@solana/web3.js@npm:1.29.1"
@@ -518,28 +596,6 @@ __metadata:
     superstruct: ^0.14.2
     tweetnacl: ^1.0.0
   checksum: 2df277d9f55ef3c6675525c36c112c373ffe6aea0a1939493390399d7141918a2b25c99605a4ee5d2ba1c043aeeed5020203320b1dc9f8245db25d1ce277cd8c
-  languageName: node
-  linkType: hard
-
-"@solana/web3.js@npm:^1.31.0":
-  version: 1.31.0
-  resolution: "@solana/web3.js@npm:1.31.0"
-  dependencies:
-    "@babel/runtime": ^7.12.5
-    "@ethersproject/sha2": ^5.5.0
-    "@solana/buffer-layout": ^3.0.0
-    bn.js: ^5.0.0
-    borsh: ^0.4.0
-    bs58: ^4.0.1
-    buffer: 6.0.1
-    cross-fetch: ^3.1.4
-    jayson: ^3.4.4
-    js-sha3: ^0.8.0
-    rpc-websockets: ^7.4.2
-    secp256k1: ^4.0.2
-    superstruct: ^0.14.2
-    tweetnacl: ^1.0.0
-  checksum: 471cd682772a056e155cc209de2d34cec8552da8cba02ccb9f80d840a39aad3877d549b512f29a91fea5d5d09c56f3cf4d8af5029a0e2dfeea82f705e08a4244
   languageName: node
   linkType: hard
 
@@ -652,6 +708,15 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: 18afe616730bc28de1280939923e2433ca70334f409d132917ddb2e513ad4a796053ef6282546be9601bce88eac3fe3ec595137eae87d65a728eca5acaea6066
+  languageName: node
+  linkType: hard
+
+"@types/lodash.mapvalues@npm:^4.6.6":
+  version: 4.6.6
+  resolution: "@types/lodash.mapvalues@npm:4.6.6"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: bd8fe9e99362d142f96b1868633f26d90d6d0602545087cf9cbd8bd011e31aa78291328116d653698f6d0ce3e86e2922583f181cf11507fe6214f00f3b6a9a07
   languageName: node
   linkType: hard
 
@@ -1694,7 +1759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64-js@npm:^1.3.1":
+"base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
@@ -1726,7 +1791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bn.js@npm:^5.0.0, bn.js@npm:^5.1.0, bn.js@npm:^5.2.0":
+"bn.js@npm:^5.0.0, bn.js@npm:^5.1.0, bn.js@npm:^5.1.2, bn.js@npm:^5.2.0":
   version: 5.2.0
   resolution: "bn.js@npm:5.2.0"
   checksum: 6117170393200f68b35a061ecbf55d01dd989302e7b3c798a3012354fa638d124f0b2f79e63f77be5556be80322a09c40339eda6413ba7468524c0b6d4b4cb7a
@@ -1780,7 +1845,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer-layout@npm:^1.2.0":
+"buffer-layout@npm:^1.2.0, buffer-layout@npm:^1.2.2":
   version: 1.2.2
   resolution: "buffer-layout@npm:1.2.2"
   checksum: e5809ba275530bf4e52fd09558b7c2111fbda5b405124f581acf364261d9c154e271800271898cd40473f9bcbb42c31584efb04219bde549d3460ca4bafeaa07
@@ -2113,7 +2178,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-hash@npm:^1.2.2":
+"crypto-hash@npm:^1.2.2, crypto-hash@npm:^1.3.0":
   version: 1.3.0
   resolution: "crypto-hash@npm:1.3.0"
   checksum: a3a507e0d2b18fbd2da8088a1c62d0c53c009a99bbfa6d851cac069734ffa546922fa51bdd776d006459701cdda873463e5059ece3431aca048fd99e7573d138
@@ -2269,6 +2334,16 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"dot-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "dot-case@npm:3.0.4"
+  dependencies:
+    no-case: ^3.0.4
+    tslib: ^2.0.3
+  checksum: a65e3519414856df0228b9f645332f974f2bf5433370f544a681122eab59e66038fc3349b4be1cdc47152779dac71a5864f1ccda2f745e767c46e9c6543b1169
   languageName: node
   linkType: hard
 
@@ -2887,6 +2962,15 @@ __metadata:
   dependencies:
     locate-path: ^2.0.0
   checksum: 43284fe4da09f89011f08e3c32cd38401e786b19226ea440b75386c1b12a4cb738c94969808d53a84f564ede22f732c8409e3cfc3f7fb5b5c32378ad0bbf28bd
+  languageName: node
+  linkType: hard
+
+"find@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "find@npm:0.3.0"
+  dependencies:
+    traverse-chain: ~0.1.0
+  checksum: 1cc321b24e13b11e088e2c951edef125faefdbd6ecab34d92c22a2d121af4a99b2feaee7712ad9ab38226da793702ab59a6c8a6343db63a0ab3901589241ec8c
   languageName: node
   linkType: hard
 
@@ -3604,6 +3688,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-sha256@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "js-sha256@npm:0.9.0"
+  checksum: ffad54b3373f81581e245866abfda50a62c483803a28176dd5c28fd2d313e0bdf830e77dac7ff8afd193c53031618920f3d98daf21cbbe80082753ab639c0365
+  languageName: node
+  linkType: hard
+
 "js-sha3@npm:^0.8.0":
   version: 0.8.0
   resolution: "js-sha3@npm:0.8.0"
@@ -3835,10 +3926,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.camelcase@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "lodash.camelcase@npm:4.3.0"
+  checksum: cb9227612f71b83e42de93eccf1232feeb25e705bdb19ba26c04f91e885bfd3dd5c517c4a97137658190581d3493ea3973072ca010aab7e301046d90740393d1
+  languageName: node
+  linkType: hard
+
 "lodash.chunk@npm:^4.2.0":
   version: 4.2.0
   resolution: "lodash.chunk@npm:4.2.0"
   checksum: 6286c6d06814fbeda502164015c42ef53a9194e6ebaac52ec2b41e83344aefe7bc3d94fdfec525adcd2c66cefdf05dc333b6a1128e4de739797342315c17cbc7
+  languageName: node
+  linkType: hard
+
+"lodash.mapvalues@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.mapvalues@npm:4.6.0"
+  checksum: 0ff1b252fda318fc36e47c296984925e98fbb0fc5a2ecc4ef458f3c739a9476d47e40c95ac653e8314d132aa59c746d4276527b99d6e271940555c6e12d2babd
   languageName: node
   linkType: hard
 
@@ -3883,6 +3988,15 @@ __metadata:
   bin:
     loose-envify: cli.js
   checksum: 6517e24e0cad87ec9888f500c5b5947032cdfe6ef65e1c1936a0c48a524b81e65542c9c3edc91c97d5bddc806ee2a985dbc79be89215d613b1de5db6d1cfe6f4
+  languageName: node
+  linkType: hard
+
+"lower-case@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "lower-case@npm:2.0.2"
+  dependencies:
+    tslib: ^2.0.3
+  checksum: 83a0a5f159ad7614bee8bf976b96275f3954335a84fad2696927f609ddae902802c4f3312d86668722e668bef41400254807e1d3a7f2e8c3eede79691aa1f010
   languageName: node
   linkType: hard
 
@@ -4147,6 +4261,16 @@ __metadata:
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
   checksum: 23ad088b08f898fc9b53011d7bb78ec48e79de7627e01ab5518e806033861bef68d5b0cd0e2205c2f36690ac9571ff6bcb05eb777ced2eeda8d4ac5b44592c3d
+  languageName: node
+  linkType: hard
+
+"no-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "no-case@npm:3.0.4"
+  dependencies:
+    lower-case: ^2.0.2
+    tslib: ^2.0.3
+  checksum: 0b2ebc113dfcf737d48dde49cfebf3ad2d82a8c3188e7100c6f375e30eafbef9e9124aadc3becef237b042fd5eb0aad2fd78669c20972d045bbe7fea8ba0be5c
   languageName: node
   linkType: hard
 
@@ -4466,6 +4590,13 @@ __metadata:
   version: 2.2.0
   resolution: "p-try@npm:2.2.0"
   checksum: f8a8e9a7693659383f06aec604ad5ead237c7a261c18048a6e1b5b85a5f8a067e469aa24f5bc009b991ea3b058a87f5065ef4176793a200d4917349881216cae
+  languageName: node
+  linkType: hard
+
+"pako@npm:^2.0.3":
+  version: 2.0.4
+  resolution: "pako@npm:2.0.4"
+  checksum: 82b9b0b99dd830c9103856a6dbd10f0cb2c8c32b9768184727ea381a99666de9a47a069d2e6efe6acf09336f363956b50835c196ef9311b34b7274d420eb0d88
   languageName: node
   linkType: hard
 
@@ -5135,6 +5266,16 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"snake-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "snake-case@npm:3.0.4"
+  dependencies:
+    dot-case: ^3.0.4
+    tslib: ^2.0.3
+  checksum: 0a7a79900bbb36f8aaa922cf111702a3647ac6165736d5dc96d3ef367efc50465cac70c53cd172c382b022dac72ec91710608e5393de71f76d7142e6fd80e8a3
+  languageName: node
+  linkType: hard
+
 "socks-proxy-agent@npm:^5.0.0":
   version: 5.0.1
   resolution: "socks-proxy-agent@npm:5.0.1"
@@ -5506,10 +5647,24 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"toml@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "toml@npm:3.0.0"
+  checksum: 5d7f1d8413ad7780e9bdecce8ea4c3f5130dd53b0a4f2e90b93340979a137739879d7b9ce2ce05c938b8cc828897fe9e95085197342a1377dd8850bf5125f15f
+  languageName: node
+  linkType: hard
+
 "toposort@npm:^2.0.2":
   version: 2.0.2
   resolution: "toposort@npm:2.0.2"
   checksum: d64c74b570391c9432873f48e231b439ee56bc49f7cb9780b505cfdf5cb832f808d0bae072515d93834dd6bceca5bb34448b5b4b408335e4d4716eaf68195dcb
+  languageName: node
+  linkType: hard
+
+"traverse-chain@npm:~0.1.0":
+  version: 0.1.0
+  resolution: "traverse-chain@npm:0.1.0"
+  checksum: dea79231a429a3dd80a829ff83e8914b6d0032d55dd0971f69d5273e95155869fca400dd9e22f0d91c3b0dda9668aaeeb694f525d7e5a55ca7f695cc149088a2
   languageName: node
   linkType: hard
 
@@ -5539,7 +5694,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.3.1":
+"tslib@npm:^2.0.3, tslib@npm:^2.3.1":
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9

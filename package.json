@@ -38,7 +38,9 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@project-serum/anchor": "^0.19.1-beta.1",
     "@rushstack/eslint-patch": "^1.1.0",
+    "@saberhq/anchor-contrib": "^1.11.2",
     "@saberhq/eslint-config-react": "^1.11.2",
     "@saberhq/solana-contrib": "^1.11.2",
     "@saberhq/token-utils": "^1.11.2",
@@ -46,6 +48,7 @@
     "@saberhq/use-solana": "^1.11.2",
     "@solana/web3.js": "^1.31.0",
     "@types/lodash.chunk": "^4.2.6",
+    "@types/lodash.mapvalues": "^4.6.6",
     "@types/lodash.zip": "^4.2.6",
     "@types/node": "^16.11.14",
     "@types/react": "^17.0.37",
@@ -69,6 +72,7 @@
     "dataloader": "^2.0.0",
     "eventemitter3": "^4.0.7",
     "lodash.chunk": "^4.2.0",
+    "lodash.mapvalues": "^4.6.0",
     "lodash.zip": "^4.2.0",
     "retry": "^0.13.1",
     "tiny-invariant": "^1.2.0",
@@ -77,6 +81,8 @@
     "use-debounce": "^7.0.1"
   },
   "peerDependencies": {
+    "@project-serum/anchor": "*",
+    "@saberhq/anchor-contrib": "*",
     "@saberhq/solana-contrib": "^1.7.1",
     "@saberhq/token-utils": "^1.7.1",
     "@saberhq/use-solana": "^1.7.1",
