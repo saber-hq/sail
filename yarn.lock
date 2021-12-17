@@ -125,15 +125,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ledgerhq/devices@npm:^6.11.2":
-  version: 6.11.2
-  resolution: "@ledgerhq/devices@npm:6.11.2"
+"@ledgerhq/devices@npm:^6.20.0":
+  version: 6.20.0
+  resolution: "@ledgerhq/devices@npm:6.20.0"
   dependencies:
     "@ledgerhq/errors": ^6.10.0
     "@ledgerhq/logs": ^6.10.0
     rxjs: 6
     semver: ^7.3.5
-  checksum: e120a795018e5ec9dffd27110a370f14bdaf9fed3d40d117c571c0aad2dbb13187b6aa3905d4b466c393a308782aefc505557f6d8dc8de71ba52ec8d912b0a3d
+  checksum: 67246ffe6d6b95e3ec2f6ce2f02eeb138397911f7018c1055ec8ed103e9790b4f825754e2f0e64f554e90f698fec05e2c80abf2bf3ec3c0eecc490acf4c21ad7
   languageName: node
   linkType: hard
 
@@ -144,26 +144,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport-webusb@npm:^6.11.2":
-  version: 6.11.2
-  resolution: "@ledgerhq/hw-transport-webusb@npm:6.11.2"
+"@ledgerhq/hw-transport-webusb@npm:^6.20.0":
+  version: 6.20.0
+  resolution: "@ledgerhq/hw-transport-webusb@npm:6.20.0"
   dependencies:
-    "@ledgerhq/devices": ^6.11.2
+    "@ledgerhq/devices": ^6.20.0
     "@ledgerhq/errors": ^6.10.0
-    "@ledgerhq/hw-transport": ^6.11.2
+    "@ledgerhq/hw-transport": ^6.20.0
     "@ledgerhq/logs": ^6.10.0
-  checksum: 5e7435d791bad315f06c1a0c68082684c5ae1477531286b9eab76e6500d7959cf2d507e5544a5d949ff52d364b96c2b4209bf7f3d20ee7dfcc50b2f9a8d5d71a
+  checksum: 428544f11aee3e57c0160924e5b1b5d925e27f4090226d1f3a571a8520bf6e85fa8d3eabcec94f3665a05cf14ca08924b8f2273018b5cf2823c3b43fc3c99909
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport@npm:^6.11.2":
-  version: 6.11.2
-  resolution: "@ledgerhq/hw-transport@npm:6.11.2"
+"@ledgerhq/hw-transport@npm:^6.20.0":
+  version: 6.20.0
+  resolution: "@ledgerhq/hw-transport@npm:6.20.0"
   dependencies:
-    "@ledgerhq/devices": ^6.11.2
+    "@ledgerhq/devices": ^6.20.0
     "@ledgerhq/errors": ^6.10.0
     events: ^3.3.0
-  checksum: 3fdb57e3a73bd096046b2a0a35e354ce9a6d6c5602a6eb1cf4266ecd334379af756fb6bbcf57af2ead07abf21b3be42b8085bdf24ae809e15e4c53953f004d9e
+  checksum: 89ecfeba2b2e179a665325603d74c7aa85042d1268bbb6f0cd023e15510cda468a3f162ba9140134fe1c1f24832765fbe5a99f396caaa67b2a5914ea02ab07c4
   languageName: node
   linkType: hard
 
@@ -221,7 +221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@project-serum/sol-wallet-adapter@npm:^0.2.5, @project-serum/sol-wallet-adapter@npm:^0.2.6":
+"@project-serum/sol-wallet-adapter@npm:^0.2.6":
   version: 0.2.6
   resolution: "@project-serum/sol-wallet-adapter@npm:0.2.6"
   dependencies:
@@ -240,26 +240,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config-react@npm:^1.10.15":
-  version: 1.10.15
-  resolution: "@saberhq/eslint-config-react@npm:1.10.15"
+"@saberhq/eslint-config-react@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/eslint-config-react@npm:1.11.2"
   dependencies:
-    "@saberhq/eslint-config": ^1.10.15
+    "@saberhq/eslint-config": ^1.11.2
     eslint-plugin-jsx-a11y: ^6.5.1
     eslint-plugin-react: ^7.27.1
     eslint-plugin-react-hooks: ^4.3.0
   peerDependencies:
     eslint: ">=7"
-  checksum: 16a803aecfcb086e1e38b55c57f9b200133e59e9bdec50c1312f39ea262073da3704adc829e497a995650ae097e4b26a18f1e06e38307e4064b2bc9667896933
+  checksum: f9245aa03e1e07772d8a6eb67007c8a8545f36456edacdb830631cd773ea3b1ce81233171c1e761ecb70404bc620247570583d739bb4ba4111a6d6743c7f2b83
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config@npm:^1.10.15":
-  version: 1.10.15
-  resolution: "@saberhq/eslint-config@npm:1.10.15"
+"@saberhq/eslint-config@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/eslint-config@npm:1.11.2"
   dependencies:
-    "@typescript-eslint/eslint-plugin": ^5.6.0
-    "@typescript-eslint/parser": ^5.6.0
+    "@typescript-eslint/eslint-plugin": ^5.7.0
+    "@typescript-eslint/parser": ^5.7.0
     eslint-config-prettier: ^8.3.0
     eslint-import-resolver-node: ^0.3.6
     eslint-plugin-import: ^2.25.3
@@ -269,7 +269,7 @@ __metadata:
     prettier: ^2.5.1
   peerDependencies:
     eslint: ">=7"
-  checksum: ae257a121a5db562d854a509269b0b7a576f2e8c98bfbf0be2178f4a723053e19721e5c38575dd70144e47e0e1275f1c68cb75acee9d0adfc7fb77e37300aefb
+  checksum: 51383fed4054be56563adbdd95e9cbf0fcc0cc94bc10aa62da36eb2e59c6fc9092a7be59532c2c7974e727429c89b1684f0899c404d8eb38a0011e5fc798bcac
   languageName: node
   linkType: hard
 
@@ -278,15 +278,15 @@ __metadata:
   resolution: "@saberhq/sail@workspace:."
   dependencies:
     "@rushstack/eslint-patch": ^1.1.0
-    "@saberhq/eslint-config-react": ^1.10.15
-    "@saberhq/solana-contrib": ^1.10.15
-    "@saberhq/token-utils": ^1.10.15
-    "@saberhq/tsconfig": ^1.10.15
-    "@saberhq/use-solana": ^1.10.15
+    "@saberhq/eslint-config-react": ^1.11.2
+    "@saberhq/solana-contrib": ^1.11.2
+    "@saberhq/token-utils": ^1.11.2
+    "@saberhq/tsconfig": ^1.11.2
+    "@saberhq/use-solana": ^1.11.2
     "@solana/web3.js": ^1.31.0
     "@types/lodash.chunk": ^4.2.6
     "@types/lodash.zip": ^4.2.6
-    "@types/node": ^16.11.12
+    "@types/node": ^16.11.14
     "@types/react": ^17.0.37
     "@types/react-dom": ^17.0.11
     "@types/retry": ^0.12.1
@@ -309,7 +309,7 @@ __metadata:
     tiny-invariant: ^1.2.0
     tslib: ^2.3.1
     typedoc: ^0.22.10
-    typescript: ^4.5.3
+    typescript: ^4.5.4
     unstated-next: ^1.1.0
     use-debounce: ^7.0.1
   peerDependencies:
@@ -324,9 +324,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@saberhq/solana-contrib@npm:^1.10.15":
-  version: 1.10.15
-  resolution: "@saberhq/solana-contrib@npm:1.10.15"
+"@saberhq/solana-contrib@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/solana-contrib@npm:1.11.2"
   dependencies:
     "@types/promise-retry": ^1.1.3
     "@types/retry": ^0.12.1
@@ -336,47 +336,48 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     "@solana/web3.js": ^1.29.2
-  checksum: 2fc04e626b699258ba79ceef884a6d370ff38b3baa3305b310d6da29a061b71fb30b06bd89c29ef0ee501239e8ff88f05e205a5cd90bcd2e85b137430e0f4211
+  checksum: 977b3d8883a171e4246d918f69f026a22d282cf8d88f72a27a1c3ecd79585c24bd8019f23e9cdb4b715f146bdd9a7252883f6162c833ad3f76f79840a9e48a5d
   languageName: node
   linkType: hard
 
-"@saberhq/token-utils@npm:^1.10.15":
-  version: 1.10.15
-  resolution: "@saberhq/token-utils@npm:1.10.15"
+"@saberhq/token-utils@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/token-utils@npm:1.11.2"
   dependencies:
-    "@saberhq/solana-contrib": ^1.10.15
-    "@solana/buffer-layout": ^3.0.0
+    "@saberhq/solana-contrib": ^1.11.2
+    "@solana/buffer-layout": ^4.0.0
     "@solana/spl-token": ^0.1.8
-    "@ubeswap/token-math": ^4.3.1
+    "@ubeswap/token-math": ^4.4.1
     tiny-invariant: ^1.2.0
     tslib: ^2.3.1
   peerDependencies:
     "@solana/web3.js": ^1.29.2
     bn.js: ^5.2
     jsbi: ^3 || ^4
-  checksum: fb7a62ec7cd1615ebbe46b493a7f953e4df6fbf83eb18477bb73d70aa29cb3793456b39c0a21e913160a4a41cf97f36c01135cd339efcecdcbb6a89e58059000
+  checksum: 1c2d59ea350dc0cb32916cfe0db2319e97e85101e7b0c64d4b5cc045026c0834f19d9ee661fea0e10088df7c009e1e9b3d0b40be9a7e86157cfcdd2ff11ffc79
   languageName: node
   linkType: hard
 
-"@saberhq/tsconfig@npm:^1.10.15":
-  version: 1.10.15
-  resolution: "@saberhq/tsconfig@npm:1.10.15"
-  checksum: a2e37f51b9b452787c01edc13fb2e43b591ed63303a4d8fcf5e2bad13030cc1f0d839b2f3c035ef098a611f43abb05a35d5bb33d21b61024dc212b5eef5b7da2
+"@saberhq/tsconfig@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/tsconfig@npm:1.11.2"
+  checksum: db5ce63d7f937f55977f1cb279898f92a72429be0a10fd7ec5d3ecb830bf455a610292f5c0ff2ccf6a51be5a1bfb9bdaf2c61bb9564d163003e6eca1d057c24b
   languageName: node
   linkType: hard
 
-"@saberhq/use-solana@npm:^1.10.15":
-  version: 1.10.15
-  resolution: "@saberhq/use-solana@npm:1.10.15"
+"@saberhq/use-solana@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@saberhq/use-solana@npm:1.11.2"
   dependencies:
-    "@ledgerhq/hw-transport": ^6.11.2
-    "@ledgerhq/hw-transport-webusb": ^6.11.2
-    "@project-serum/sol-wallet-adapter": ^0.2.6
-    "@saberhq/solana-contrib": ^1.10.15
-    "@solana/wallet-adapter-base": ^0.7.1
-    "@solana/wallet-adapter-coin98": ^0.3.0
-    "@solana/wallet-adapter-phantom": ^0.7.0
-    "@solana/wallet-adapter-sollet": ^0.8.0
+    "@ledgerhq/hw-transport": ^6.20.0
+    "@ledgerhq/hw-transport-webusb": ^6.20.0
+    "@saberhq/solana-contrib": ^1.11.2
+    "@solana/wallet-adapter-base": ^0.8.1
+    "@solana/wallet-adapter-coin98": ^0.4.0
+    "@solana/wallet-adapter-phantom": ^0.8.0
+    "@solana/wallet-adapter-slope": ^0.4.0
+    "@solana/wallet-adapter-solflare": ^0.5.0
+    "@solana/wallet-adapter-sollet": ^0.9.2
     bs58: ^4.0.1
     eventemitter3: ^4.0.7
     fast-json-stable-stringify: ^2.1.0
@@ -386,7 +387,7 @@ __metadata:
   peerDependencies:
     "@solana/web3.js": ^1.29.2
     react: ^17.0.2
-  checksum: d4dc0b1cd59b938b7e6a4ea768ecb38441ad5813979143c22a1743a049889a620927c5d68d523d89cb2f89e92e9aac682f127a58a18f54a3ffde86b4ebf72c50
+  checksum: bb98629f6507faa7604dbf6ca52e07e74fce02784cfc6fcff5925ae600c23f0b3cb2a8d5ded52a989bded2f066f5b81ccd9f30b9a5f2bbe63171b20bfe4ccbcb
   languageName: node
   linkType: hard
 
@@ -406,6 +407,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@solana/buffer-layout@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@solana/buffer-layout@npm:4.0.0"
+  dependencies:
+    buffer: ~6.0.3
+  checksum: f244e9c42425477ded1fb5295252d7cb093cd591a14552e89271000ad5c01a5b5c0f2f83c7253d640414b600d4b31d95e9f3fcaec6d8280d3d6cb7f3d0a88565
+  languageName: node
+  linkType: hard
+
 "@solana/spl-token@npm:^0.1.8":
   version: 0.1.8
   resolution: "@solana/spl-token@npm:0.1.8"
@@ -420,49 +430,72 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@solana/wallet-adapter-base@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@solana/wallet-adapter-base@npm:0.7.1"
+"@solana/wallet-adapter-base@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "@solana/wallet-adapter-base@npm:0.8.1"
   dependencies:
     eventemitter3: ^4.0.7
   peerDependencies:
     "@solana/web3.js": ^1.20.0
-  checksum: 69464e4a247d257ef2833dedf6a78a6a7754ae8e88e4c2cdb9585a4ff6d84e3e1d9c4a2c109292db42196928fdc4978e139017e090cb63d2bbe3b379560f9f5f
+  checksum: 015de74ca61df49715b005703a7371da3a9fb4e0ce2581973ef96431ee8fb61fc587d7b2a72e446620bb85a0024a77a4751a2ebcb39babc4a43165fabcfe4c40
   languageName: node
   linkType: hard
 
-"@solana/wallet-adapter-coin98@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@solana/wallet-adapter-coin98@npm:0.3.0"
+"@solana/wallet-adapter-coin98@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@solana/wallet-adapter-coin98@npm:0.4.0"
   dependencies:
     "@types/bs58": ^4.0.1
     bs58: ^4.0.1
   peerDependencies:
-    "@solana/wallet-adapter-base": ^0.7.0
+    "@solana/wallet-adapter-base": ^0.8.0
     "@solana/web3.js": ^1.20.0
-  checksum: 603ea255184d0dc82e19cb227a7515b6f3f9566df0515e840d88a60fc8abf1df714017697ba6ea6f904dc606590e1ddfbfcef16e3aa5c1c9be90b1c156158737
+  checksum: 3f3f44cd961ffbabfd020d205c11a508a1e5624bd471b315a1a1c032cc44394bf0fd083049e8d3fe0e2af2baa0a01f6f7a4a46fdd13d89bc2b3c0e9b4ed7c7be
   languageName: node
   linkType: hard
 
-"@solana/wallet-adapter-phantom@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "@solana/wallet-adapter-phantom@npm:0.7.0"
-  peerDependencies:
-    "@solana/wallet-adapter-base": ^0.7.0
-    "@solana/web3.js": ^1.20.0
-  checksum: 3e1b79e8740384ac24ec98777b3f33df38857f85ad714d50e2e6728b4c8dd2a8b96847cc5e5ea4a11640b6b6aca5f55a8fa3909648966fba780cd4fc2686b64b
-  languageName: node
-  linkType: hard
-
-"@solana/wallet-adapter-sollet@npm:^0.8.0":
+"@solana/wallet-adapter-phantom@npm:^0.8.0":
   version: 0.8.0
-  resolution: "@solana/wallet-adapter-sollet@npm:0.8.0"
-  dependencies:
-    "@project-serum/sol-wallet-adapter": ^0.2.5
+  resolution: "@solana/wallet-adapter-phantom@npm:0.8.0"
   peerDependencies:
-    "@solana/wallet-adapter-base": ^0.7.0
+    "@solana/wallet-adapter-base": ^0.8.0
     "@solana/web3.js": ^1.20.0
-  checksum: 5d8dabfa3e0b0169d17a0abfd39c2e6a6246a96f5962c0a594345008c311bff4a23512a811b6644a388f525784500934f61685fc10020d7943e30f343cb1cc3f
+  checksum: 8066065be93db60d6e6f1d8ce9c8f3a9235332a71bf2071ae1e7f68258d67afc925ff19488650ecdd7637b5ad2a32f8bbfd5235a3fd30aaed499fa1f9df2b4b7
+  languageName: node
+  linkType: hard
+
+"@solana/wallet-adapter-slope@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@solana/wallet-adapter-slope@npm:0.4.0"
+  dependencies:
+    "@types/bs58": ^4.0.1
+    bs58: ^4.0.1
+  peerDependencies:
+    "@solana/wallet-adapter-base": ^0.8.0
+    "@solana/web3.js": ^1.20.0
+  checksum: ccc65c9727183557e0ac850a97498f454116e9ad6d8191d084d5980c7bcb4e81218e1c43e640ca3d7159fc05513575b05dd88f52208f90a1ed552b45b15fcaff
+  languageName: node
+  linkType: hard
+
+"@solana/wallet-adapter-solflare@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@solana/wallet-adapter-solflare@npm:0.5.0"
+  peerDependencies:
+    "@solana/wallet-adapter-base": ^0.8.0
+    "@solana/web3.js": ^1.20.0
+  checksum: 3e566c6095464735920d1a8ac7672a5c2f61084738a30e41558626b1be7f775f7ddd5a06171969f459cc1d4161c618e7adb099cddddd8e4b9b232d4043baccbe
+  languageName: node
+  linkType: hard
+
+"@solana/wallet-adapter-sollet@npm:^0.9.2":
+  version: 0.9.2
+  resolution: "@solana/wallet-adapter-sollet@npm:0.9.2"
+  dependencies:
+    "@project-serum/sol-wallet-adapter": ^0.2.6
+  peerDependencies:
+    "@solana/wallet-adapter-base": ^0.8.1
+    "@solana/web3.js": ^1.20.0
+  checksum: d794c3fe24d8721da08424e3a8c82f151191b21d24766cab9e2f1034eeb91b66bdad99fbb4678b875f5c0b41db590f162b9f92510c4273e2b038a6cb9b99feee
   languageName: node
   linkType: hard
 
@@ -673,10 +706,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.11.12":
-  version: 16.11.12
-  resolution: "@types/node@npm:16.11.12"
-  checksum: a3feb346d61a56f5a137c29bb8c63cfa3cc02e184b9dffdc18ef1528dcce55596e570575215a2e39e6ce69343eeb2a5ba71c271938f1dc8db4cc393902855412
+"@types/node@npm:^16.11.14":
+  version: 16.11.14
+  resolution: "@types/node@npm:16.11.14"
+  checksum: 0bd4333fb4e56532db7f5174732268b18089913ddbb0e97957228e64f9fe3babf9923c77ce6f07d3d354445cfbb8d31b95c1f8be3c0f7426308bd8b93d3aaa02
   languageName: node
   linkType: hard
 
@@ -787,12 +820,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:5.6.0"
+"@typescript-eslint/eslint-plugin@npm:^5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:5.7.0"
   dependencies:
-    "@typescript-eslint/experimental-utils": 5.6.0
-    "@typescript-eslint/scope-manager": 5.6.0
+    "@typescript-eslint/experimental-utils": 5.7.0
+    "@typescript-eslint/scope-manager": 5.7.0
     debug: ^4.3.2
     functional-red-black-tree: ^1.0.1
     ignore: ^5.1.8
@@ -805,66 +838,66 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: aeae8c2de535cad6032c0b27fbb86baccd07788319efd5a97d828bc03a85eae5e635aff794a1d7a2b3ee2a84d6d6d7e68c42438fee62af42fead89f381df7bca
+  checksum: e3674ee680e5dffecdb5d243d6c958ea8003021919d1b2068a3bebfde8e5303b3cecbc28cd144e1bacececb638b3d90fd3e16cd9e1f2e397c0eac8f148b9d3ac
   languageName: node
   linkType: hard
 
-"@typescript-eslint/experimental-utils@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/experimental-utils@npm:5.6.0"
+"@typescript-eslint/experimental-utils@npm:5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/experimental-utils@npm:5.7.0"
   dependencies:
     "@types/json-schema": ^7.0.9
-    "@typescript-eslint/scope-manager": 5.6.0
-    "@typescript-eslint/types": 5.6.0
-    "@typescript-eslint/typescript-estree": 5.6.0
+    "@typescript-eslint/scope-manager": 5.7.0
+    "@typescript-eslint/types": 5.7.0
+    "@typescript-eslint/typescript-estree": 5.7.0
     eslint-scope: ^5.1.1
     eslint-utils: ^3.0.0
   peerDependencies:
     eslint: "*"
-  checksum: f708f38be41a3cb4c8c2c8573a660ce7de88f50becf53bea6679fcc8a56ba73c59f2e1a94f5a7773c8cccaf0c2e4dda679564c67764c989f8137594d6589aa4c
+  checksum: 5e9ca434d834059632bf6f227c9d7f13f143f5a42d8518df6e54db242e971bae09038d9abcc5ff3debab8ecf17c742544ff66778f6bcbc90e94d92ee358d8315
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/parser@npm:5.6.0"
+"@typescript-eslint/parser@npm:^5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/parser@npm:5.7.0"
   dependencies:
-    "@typescript-eslint/scope-manager": 5.6.0
-    "@typescript-eslint/types": 5.6.0
-    "@typescript-eslint/typescript-estree": 5.6.0
+    "@typescript-eslint/scope-manager": 5.7.0
+    "@typescript-eslint/types": 5.7.0
+    "@typescript-eslint/typescript-estree": 5.7.0
     debug: ^4.3.2
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 7d703cfe6b0a33b35139f509bcc16065f234a11603244cee4f55e193112d93ed9cd4a6db4bcf57c6b766e8a4d602b4f2400cb8d52ea02b3fc2cdfb64e5b88a3e
+  checksum: c57f9ab2001d3fd61776eb8ae7f05d0f5beed9d78fdc1bedaf24bf5f17049b909cbcea79ad58d0059000e29716b04d536ff1522c29441d1865229a3490a95bb2
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/scope-manager@npm:5.6.0"
+"@typescript-eslint/scope-manager@npm:5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/scope-manager@npm:5.7.0"
   dependencies:
-    "@typescript-eslint/types": 5.6.0
-    "@typescript-eslint/visitor-keys": 5.6.0
-  checksum: 6fea574f6e911eb25258e75fc738a36099678ba96cd447d18da28209bfa5326ba4e97aa7f254ccd0415aec15ea70d0b6fb860dd985d4f9042df57d4a227ae9d1
+    "@typescript-eslint/types": 5.7.0
+    "@typescript-eslint/visitor-keys": 5.7.0
+  checksum: 8323e9787cb21c2e6c3de6bef2eb56e7e37c04f9c19413ad54964545dacc27a59ce6c19d660f4a20c0c6a368eee264d231436e9e8f221ed551abdcaf78596e12
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/types@npm:5.6.0"
-  checksum: 63abd287a265cb1bed06067117c11bf1c69c5db1a14ea59e13564dcd9d513ae2dac67969541f21381500139d40bbea67b269c32607d3204ab24ea8900c449293
+"@typescript-eslint/types@npm:5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/types@npm:5.7.0"
+  checksum: 4573250e59ea9e0b163c3e05e44ffb4b1ba4cdcfd6081c1f0b532e4c4bbbc5eb34ff4286c81c815115a1a1690cc8b1ad7b3ed79f3798773bf494b6ed82d0396b
   languageName: node
   linkType: hard
 
-"@typescript-eslint/typescript-estree@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/typescript-estree@npm:5.6.0"
+"@typescript-eslint/typescript-estree@npm:5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/typescript-estree@npm:5.7.0"
   dependencies:
-    "@typescript-eslint/types": 5.6.0
-    "@typescript-eslint/visitor-keys": 5.6.0
+    "@typescript-eslint/types": 5.7.0
+    "@typescript-eslint/visitor-keys": 5.7.0
     debug: ^4.3.2
     globby: ^11.0.4
     is-glob: ^4.0.3
@@ -873,33 +906,33 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: eb5cc53ddad6fe7772677798bcb682e859ac82674cf0adcdd7105814ddecdbb9d58a4a27f87caa68eb9f40dcc5ce1b0ce87db3cf50deffa5f7fa6c354c8bee68
+  checksum: 0a63186e7b89dc3a1607d2b838ee7b44b4471654f3e77d62687242e5cb9d2a2385312f438dcfdcb70dadcb3638a141e1660483f7bb5d2cf3563cc9a43b0b2d94
   languageName: node
   linkType: hard
 
-"@typescript-eslint/visitor-keys@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@typescript-eslint/visitor-keys@npm:5.6.0"
+"@typescript-eslint/visitor-keys@npm:5.7.0":
+  version: 5.7.0
+  resolution: "@typescript-eslint/visitor-keys@npm:5.7.0"
   dependencies:
-    "@typescript-eslint/types": 5.6.0
+    "@typescript-eslint/types": 5.7.0
     eslint-visitor-keys: ^3.0.0
-  checksum: c1d9e2596ff4f03b52857a77ff373ca82e66c1883ea818f28c3a18e5c4877c4ac6367874f4681223e9134bcebd6560f95b9a3d12c411060d567a17d10113e9e5
+  checksum: 59f7468c37cfcb92eb0de15b7ece47dd64a56c4d03d13167140c980399a4f12f20c1df52534f486cefc46bab65e717689b81decb327d2677063c47c0a26ae875
   languageName: node
   linkType: hard
 
-"@ubeswap/token-math@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "@ubeswap/token-math@npm:4.3.1"
+"@ubeswap/token-math@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "@ubeswap/token-math@npm:4.4.1"
   dependencies:
     big.js: ^6.1.1
-    decimal.js-light: ^2.5.0
+    decimal.js-light: ^2.5.1
     tiny-invariant: ^1.2.0
     toformat: ^2.0.0
     tslib: ^2.3.1
   peerDependencies:
     bn.js: ^5.2.0
     jsbi: ^3 || ^4
-  checksum: aa84ebd73d94c5cd6b92660ae2cdd6fe29c9c525fcf04c0c697a1dc4c64df0bb8f94ff1b6f57389e615e7d5d1b6ce751f9bae1e1d16e33e798e2917be8ca91fc
+  checksum: a6e0b5af506a6b630ecc1586bd333090ce0dae40a071afdca6274caefd8ada3603fb772cae73c1088ca006acb8444bdbe612565446ce17d98ee4eeb613a83a30
   languageName: node
   linkType: hard
 
@@ -2138,7 +2171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decimal.js-light@npm:^2.5.0":
+"decimal.js-light@npm:^2.5.1":
   version: 2.5.1
   resolution: "decimal.js-light@npm:2.5.1"
   checksum: f5a2c7eac1c4541c8ab8a5c8abea64fc1761cefc7794bd5f8afd57a8a78d1b51785e0c4e4f85f4895a043eaa90ddca1edc3981d1263eb6ddce60f32bf5fe66c9
@@ -5592,7 +5625,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.4.2, typescript@npm:^4.5.3":
+"typescript@npm:^4.4.2":
   version: 4.5.3
   resolution: "typescript@npm:4.5.3"
   bin:
@@ -5602,13 +5635,33 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.3#~builtin<compat/typescript>":
+"typescript@npm:^4.5.4":
+  version: 4.5.4
+  resolution: "typescript@npm:4.5.4"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 59f3243f9cd6fe3161e6150ff6bf795fc843b4234a655dbd938a310515e0d61afd1ac942799e7415e4334255e41c2c49b7dd5d9fd38a17acd25a6779ca7e0961
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>":
   version: 4.5.3
   resolution: "typescript@patch:typescript@npm%3A4.5.3#~builtin<compat/typescript>::version=4.5.3&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 3c3a664dfb66e7c45d3823cc1a4038dc506415041f39249ed3af1799a64b3065448549d9e9ba509c94335d1e2dfbe311a4b9e36574e87d248f9381d541cb8626
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
+  version: 4.5.4
+  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 2e488dde7d2c4a2fa2e79cf2470600f8ce81bc0563c276b72df8ff412d74456ae532ba824650ae936ce207440c79720ddcfaa25e3cb4477572b8534fa4e34d49
   languageName: node
   linkType: hard
 
