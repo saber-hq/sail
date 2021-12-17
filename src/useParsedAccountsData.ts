@@ -30,9 +30,9 @@ export const makeParsersFromCoder = <M>(parsers: AccountParsers<M>) => {
 export const makeParserHooks = <M>(parsers: AccountParsers<M>) => {
   const sailParsers = makeParsersFromCoder(parsers);
   return mapValues(sailParsers, (parser) => ({
-    useAccount: (key: PublicKey | null | undefined) =>
+    useSingleData: (key: PublicKey | null | undefined) =>
       useParsedAccountData(key, parser),
-    useAccounts: (keys: (PublicKey | null | undefined)[]) =>
+    useData: (keys: (PublicKey | null | undefined)[]) =>
       useParsedAccountsData(keys, parser),
   }));
 };
