@@ -337,7 +337,7 @@ __metadata:
     "@saberhq/use-solana": ^1.11.2
     "@solana/web3.js": ^1.31.0
     "@types/lodash.chunk": ^4.2.6
-    "@types/lodash.mapvalues": ^4
+    "@types/lodash.mapvalues": ^4.6.6
     "@types/lodash.zip": ^4.2.6
     "@types/node": ^16.11.14
     "@types/react": ^17.0.37
@@ -711,7 +711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.mapvalues@npm:^4":
+"@types/lodash.mapvalues@npm:^4.6.6":
   version: 4.6.6
   resolution: "@types/lodash.mapvalues@npm:4.6.6"
   dependencies:
