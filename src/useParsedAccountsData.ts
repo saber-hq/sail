@@ -22,19 +22,33 @@ export const makeParsersFromCoder = <M>(parsers: AccountParsers<M>) => {
   );
 };
 
+export type ParserHooks<T> = {
+  useSingleData: (key: PublicKey | null | undefined) => {
+    loading: boolean;
+    data: ParsedAccountDatum<T>;
+  };
+  useData: (keys: (PublicKey | null | undefined)[]) => ParsedAccountDatum<T>[];
+};
+
 /**
  * Makes hooks for parsers.
  * @param parsers
  * @returns
  */
-export const makeParserHooks = <M>(parsers: AccountParsers<M>) => {
+export const makeParserHooks = <M>(
+  parsers: AccountParsers<M>
+): {
+  [K in keyof M]: ParserHooks<M[K]>;
+} => {
   const sailParsers = makeParsersFromCoder(parsers);
   return mapValues(sailParsers, (parser) => ({
     useSingleData: (key: PublicKey | null | undefined) =>
       useParsedAccountData(key, parser),
     useData: (keys: (PublicKey | null | undefined)[]) =>
       useParsedAccountsData(keys, parser),
-  }));
+  })) as {
+    [K in keyof M]: ParserHooks<M[K]>;
+  };
 };
 
 /**
