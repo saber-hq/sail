@@ -97,7 +97,10 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    */
   getCached: (key: PublicKey) => AccountInfo<Buffer> | null | undefined;
   /**
-   * Gets an AccountDatum from a key.
+   * Gets an AccountDatum from the cache.
+   *
+   * If the AccountInfo has never been fetched, this returns undefined.
+   * If the AccountInfo has been fetched but wasn't found, this returns null.
    */
   getDatum: (key: PublicKey | null | undefined) => AccountDatum;
 }
@@ -227,20 +230,17 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
 
   const getDatum = useCallback(
     (k: PublicKey | null | undefined) => {
-      if (k) {
-        const accountInfo = getCached(k);
-        if (accountInfo) {
-          return {
-            accountId: k,
-            accountInfo,
-          };
-        }
-        if (accountInfo === null) {
-          // Cache hit but null entry in cache
-          return null;
-        }
+      if (!k) {
+        return k;
       }
-      return k === undefined ? undefined : null;
+      const accountInfo = getCached(k);
+      if (accountInfo) {
+        return {
+          accountId: k,
+          accountInfo,
+        };
+      }
+      return accountInfo;
     },
     [getCached]
   );
