@@ -3,6 +3,7 @@ import type {
   PendingTransaction,
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
+import { generateUncheckedInspectLink } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
 import { useCallback } from "react";
@@ -19,6 +20,11 @@ import {
   SailTransactionSignError,
   SailUnknownTXFailError,
 } from "../errors";
+
+const DEBUG_MODE =
+  !!process.env.REACT_APP_LOCAL_PUBKEY ||
+  !!process.env.LOCAL_PUBKEY ||
+  !!process.env.DEBUG_MODE;
 
 export interface HandleTXResponse {
   success: boolean;
@@ -110,6 +116,20 @@ export const useHandleTXsInternal = ({
         };
       }
 
+      if (DEBUG_MODE) {
+        const txTable = await Promise.all(
+          txs.map(async (tx) => {
+            return await tx.simulateTable(options);
+          })
+        );
+        txs.forEach((tx, i) => {
+          const table = txTable[i];
+          if (network !== "localnet") {
+            console.debug(generateUncheckedInspectLink(network, tx.build()));
+          }
+          console.debug(table);
+        });
+      }
       try {
         const firstTX = txs[0];
         invariant(firstTX, "firstTX");
