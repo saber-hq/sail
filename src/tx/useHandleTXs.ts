@@ -74,11 +74,6 @@ export interface HandleTXOptions extends ConfirmOptions {
      */
     refetchDelayMs?: number;
   };
-
-  /**
-   * Option to confirm transaction with an `onSignature` subscription.
-   */
-  confirmOnSignature: boolean;
 }
 
 export interface UseHandleTXs {
