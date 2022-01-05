@@ -3,6 +3,7 @@ import type {
   PendingTransaction,
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
+import { generateUncheckedInspectLink } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
 import { useCallback } from "react";
@@ -19,6 +20,10 @@ import {
   SailTransactionSignError,
   SailUnknownTXFailError,
 } from "../errors";
+
+const DEBUG_MODE =
+  (!!process.env.REACT_APP_LOCAL_PUBKEY || !!process.env.LOCAL_PUBKEY) ??
+  !!process.env.DEBUG_MODE;
 
 export interface HandleTXResponse {
   success: boolean;
@@ -69,6 +74,11 @@ export interface HandleTXOptions extends ConfirmOptions {
      */
     refetchDelayMs?: number;
   };
+
+  /**
+   * Option to confirm transaction with an `onSignature` subscription.
+   */
+  confirmOnSignature: boolean;
 }
 
 export interface UseHandleTXs {
@@ -108,6 +118,16 @@ export const useHandleTXsInternal = ({
           success: true,
           pending: [],
         };
+      }
+
+      if (DEBUG_MODE) {
+        txs.forEach((tx, i) => {
+          console.debug(`Tx: ${i}`);
+          if (network !== "localnet") {
+            generateUncheckedInspectLink(network, tx.build());
+          }
+          tx.simulateTable(options);
+        });
       }
 
       try {
