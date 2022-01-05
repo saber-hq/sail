@@ -119,7 +119,7 @@ export const useHandleTXsInternal = ({
       if (DEBUG_MODE) {
         const txTable = await Promise.all(
           txs.map(async (tx) => {
-            return await tx.simulateTable(options);
+            return await tx.simulateTable({ verifySigners: false, ...options });
           })
         );
         txs.forEach((tx, i) => {
