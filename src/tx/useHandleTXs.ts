@@ -116,15 +116,19 @@ export const useHandleTXsInternal = ({
       }
 
       if (DEBUG_MODE) {
-        txs.forEach(async (tx, i) => {
-          console.debug("tx:", i);
+        const txTable = await Promise.all(
+          txs.map(async (tx) => {
+            return await tx.simulateTable(options);
+          })
+        );
+        txs.forEach((tx, i) => {
+          const table = txTable[i];
           if (network !== "localnet") {
             console.debug(generateUncheckedInspectLink(network, tx.build()));
           }
-          console.debug(await tx.simulateTable(options));
+          console.debug(table);
         });
       }
-
       try {
         const firstTX = txs[0];
         invariant(firstTX, "firstTX");
