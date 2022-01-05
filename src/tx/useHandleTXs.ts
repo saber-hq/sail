@@ -116,13 +116,14 @@ export const useHandleTXsInternal = ({
       }
 
       if (DEBUG_MODE) {
-        txs.forEach((tx, i) => {
-          console.debug(`Tx: ${i}`);
-          if (network !== "localnet") {
-            generateUncheckedInspectLink(network, tx.build());
-          }
-          tx.simulateTable(options);
-        });
+        await Promise.all(
+          txs.map(async (tx, i) => {
+            if (network !== "localnet") {
+              generateUncheckedInspectLink(network, tx.build());
+            }
+            return await tx.simulateTable(options);
+          })
+        );
       }
 
       try {
