@@ -22,7 +22,8 @@ import {
 } from "../errors";
 
 const DEBUG_MODE =
-  (!!process.env.REACT_APP_LOCAL_PUBKEY || !!process.env.LOCAL_PUBKEY) ??
+  !!process.env.REACT_APP_LOCAL_PUBKEY ||
+  !!process.env.LOCAL_PUBKEY ||
   !!process.env.DEBUG_MODE;
 
 export interface HandleTXResponse {
