@@ -1,4 +1,5 @@
-import type {
+import {
+  buildStubbedTransaction,
   Network,
   PendingTransaction,
   TransactionEnvelope,
@@ -125,7 +126,12 @@ export const useHandleTXsInternal = ({
         txs.forEach((tx, i) => {
           const table = txTable[i];
           if (network !== "localnet") {
-            console.debug(generateUncheckedInspectLink(network, tx.build()));
+            console.debug(
+              generateUncheckedInspectLink(
+                network,
+                buildStubbedTransaction(network, tx.instructions)
+              )
+            );
           }
           console.debug(table);
         });
