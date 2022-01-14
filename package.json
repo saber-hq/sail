@@ -1,6 +1,6 @@
 {
   "name": "@saberhq/sail",
-  "version": "2.9.7",
+  "version": "2.9.8",
   "description": "Account caching and batched loading for React-based Solana applications.",
   "keywords": [
     "solana",
