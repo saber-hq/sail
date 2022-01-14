@@ -1,10 +1,8 @@
-import {
-  buildStubbedTransaction,
+import type {
   Network,
   PendingTransaction,
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
-import { generateUncheckedInspectLink } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
 import { useCallback } from "react";
@@ -126,12 +124,7 @@ export const useHandleTXsInternal = ({
         txs.forEach((tx, i) => {
           const table = txTable[i];
           if (network !== "localnet") {
-            console.debug(
-              generateUncheckedInspectLink(
-                network,
-                buildStubbedTransaction(network, tx.instructions)
-              )
-            );
+            console.debug(tx.generateInspectLink(network));
           }
           console.debug(table);
         });
