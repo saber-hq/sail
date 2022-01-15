@@ -19,6 +19,7 @@ export type SailErrorName = `Sail${
   | "CacheRefetch"
   | "AccountParse"
   | "AccountLoad"
+  | "SignAndConfirm"
   | "GetMultipleAccounts"}Error`;
 
 export const ERROR_TITLES: { [N in SailErrorName]: string } = {
@@ -32,6 +33,7 @@ export const ERROR_TITLES: { [N in SailErrorName]: string } = {
   SailAccountParseError: "Error parsing account",
   SailAccountLoadError: "Error loading account",
   SailGetMultipleAccountsError: "Error fetching multiple accounts",
+  SailSignAndConfirmError: "Error signing and confirming transactions",
 };
 
 /**
@@ -237,5 +239,14 @@ export class SailGetMultipleAccountsError extends SailError {
     originalError: unknown
   ) {
     super("SailGetMultipleAccountsError", originalError);
+  }
+}
+
+/**
+ * Callback called whenever getMultipleAccounts fails.
+ */
+export class SailSignAndConfirmError extends SailError {
+  constructor(readonly errors: SailError[] | undefined) {
+    super("SailSignAndConfirmError", errors);
   }
 }

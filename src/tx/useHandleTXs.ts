@@ -25,6 +25,9 @@ const DEBUG_MODE =
   !!process.env.LOCAL_PUBKEY ||
   !!process.env.DEBUG_MODE;
 
+/**
+ * Response when transactions are handled.
+ */
 export interface HandleTXResponse {
   success: boolean;
   pending: PendingTransaction | null;
@@ -76,23 +79,33 @@ export interface HandleTXOptions extends ConfirmOptions {
   };
 }
 
+/**
+ * Function which signs and sends a {@link TransactionEnvelope}.
+ */
+export type HandleTX = (
+  txEnv: TransactionEnvelope,
+  msg?: string,
+  options?: HandleTXOptions
+) => Promise<HandleTXResponse>;
+
+/**
+ * Function which signs and sends a set of {@link TransactionEnvelope}.
+ */
+export type HandleTXs = (
+  txEnv: TransactionEnvelope[],
+  msg?: string,
+  options?: HandleTXOptions
+) => Promise<HandleTXsResponse>;
 export interface UseHandleTXs {
   /**
    * Signs and sends a transaction using the provider on the {@link TransactionEnvelope}.
    */
-  handleTX: (
-    txEnv: TransactionEnvelope,
-    msg?: string,
-    options?: HandleTXOptions
-  ) => Promise<HandleTXResponse>;
+  handleTX: HandleTX;
   /**
    * Signs and sends multiple transactions using the provider on the first {@link TransactionEnvelope}.
+   * These transactions are only sent if all of them are signed.
    */
-  handleTXs: (
-    txEnv: TransactionEnvelope[],
-    msg?: string,
-    options?: HandleTXOptions
-  ) => Promise<HandleTXsResponse>;
+  handleTXs: HandleTXs;
 }
 
 export const useHandleTXsInternal = ({
@@ -261,12 +274,13 @@ export const useHandleTXsInternal = ({
           }
         })();
 
+        onTxSend?.({ network, pending, message });
+
         if (waitForConfirmation) {
           // await for the tx to be confirmed
           await Promise.all(pending.map((p) => p.wait()));
         }
 
-        onTxSend?.({ network, pending, message });
         return {
           success: true,
           pending,
