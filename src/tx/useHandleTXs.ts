@@ -77,11 +77,17 @@ export interface HandleTXOptions extends ConfirmOptions {
 }
 
 export interface UseHandleTXs {
+  /**
+   * Signs and sends a transaction using the provider on the {@link TransactionEnvelope}.
+   */
   handleTX: (
     txEnv: TransactionEnvelope,
     msg?: string,
     options?: HandleTXOptions
   ) => Promise<HandleTXResponse>;
+  /**
+   * Signs and sends multiple transactions using the provider on the first {@link TransactionEnvelope}.
+   */
   handleTXs: (
     txEnv: TransactionEnvelope[],
     msg?: string,
