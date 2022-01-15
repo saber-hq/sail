@@ -8,13 +8,22 @@ import { SailSignAndConfirmError } from "../errors/errors";
 import { useSail } from "../provider";
 import type { HandleTXOptions } from "./useHandleTXs";
 
+/**
+ * Transaction handler helpers.
+ */
 interface TXHandlers {
+  /**
+   * Signs and confirms a transaction before returning.
+   */
   signAndConfirmTX: (
     txEnv: TransactionEnvelope,
     msg?: string,
     options?: HandleTXOptions
   ) => Promise<TransactionReceipt>;
 
+  /**
+   * Signs and confirms multiple transactions before returning.
+   */
   signAndConfirmTXs: (
     txEnvs: TransactionEnvelope[],
     msg?: string,
@@ -34,7 +43,7 @@ export const useTXHandlers = (): TXHandlers => {
       if (!pending || !success) {
         throw new SailSignAndConfirmError(errors);
       }
-      return await pending.wait();
+      return await pending.wait({ useWebsocket: true });
     },
     [handleTX]
   );
@@ -53,7 +62,9 @@ export const useTXHandlers = (): TXHandlers => {
       if (!pending || !success) {
         throw new SailSignAndConfirmError(errors);
       }
-      return await Promise.all(pending.map((p) => p.wait()));
+      return await Promise.all(
+        pending.map((p) => p.wait({ useWebsocket: true }))
+      );
     },
     [handleTXs]
   );
