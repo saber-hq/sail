@@ -145,7 +145,9 @@ export class SailTransactionError extends SailError {
     const parts = [this.tx.debugStr];
     if (this.network !== "localnet") {
       parts.push(
-        `View on Solana Explorer: ${this.tx.generateInspectLink(this.network)}`
+        `Inspect transaction details: ${this.tx.generateInspectLink(
+          this.network
+        )}`
       );
     }
     return parts.join("\n");
