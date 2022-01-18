@@ -75,7 +75,6 @@ export const useParsedAccounts = <T>(
         parser.programID.toString(),
         parser.name,
         datum?.accountId.toString(),
-        datum?.accountInfo.data.toString(),
       ],
       queryFn: () => {
         if (!datum) {
