@@ -4,9 +4,10 @@ import mapValues from "lodash.mapvalues";
 import zip from "lodash.zip";
 import { useEffect, useMemo, useState } from "react";
 
-import { getCacheKeyOfPublicKey, SailAccountParseError, useSail } from ".";
-import type { ParsedAccountDatum } from "./types";
-import { useAccountsData } from "./useAccountsData";
+import type { ParserHooks } from "..";
+import { getCacheKeyOfPublicKey, SailAccountParseError, useSail } from "..";
+import type { ParsedAccountDatum } from "../types";
+import { useAccountsData } from "../useAccountsData";
 
 export type AccountParser<T> = (info: KeyedAccountInfo) => T;
 
@@ -20,14 +21,6 @@ export const makeParsersFromCoder = <M>(parsers: AccountParsers<M>) => {
     parsers,
     (p) => (info: KeyedAccountInfo) => p(info.accountInfo.data)
   );
-};
-
-export type ParserHooks<T> = {
-  useSingleData: (key: PublicKey | null | undefined) => {
-    loading: boolean;
-    data: ParsedAccountDatum<T>;
-  };
-  useData: (keys: (PublicKey | null | undefined)[]) => ParsedAccountDatum<T>[];
 };
 
 /**
