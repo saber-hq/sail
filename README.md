@@ -7,10 +7,31 @@
 
 A React library for Solana account management and transaction handling.
 
+## Setup
+
+Run:
+
+```bash
+yarn add @saberhq/sail react-query
+```
+
 ## Usage
+
+You will need to first [set up React Query](https://react-query.tanstack.com/installation).
+
+Then:
 
 ```typescript
 import { SailProvider } from "@saberhq/sail";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-const MyApp = <SailProvider>{/* stuff */}</SailProvider>;
+const queryClient = new QueryClient();
+
+const MyApp: React.FC = () => (
+  <QueryClientProvider client={queryClient}>
+    <SailProvider initialState={{ onTxSend, onSailError }}>
+      {/* stuff */}
+    </SailProvider>
+  </QueryClientProvider>
+);
 ```

@@ -3,8 +3,8 @@ import { useConnectedWallet, useConnectionContext } from "@saberhq/use-solana";
 import type { AccountInfo } from "@solana/web3.js";
 import { useCallback, useMemo } from "react";
 
-import type { AccountParser } from "./useParsedAccountsData";
-import { useParsedAccountData } from "./useParsedAccountsData";
+import type { AccountParser } from "./parsers/useParsedAccountsData";
+import { useParsedAccountData } from "./parsers/useParsedAccountsData";
 
 /**
  * Uses the data of the raw SOL account.

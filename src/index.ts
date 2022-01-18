@@ -8,5 +8,4 @@ export * from "./tx";
 export * from "./types";
 export * from "./useAccountData";
 export * from "./useAccountsData";
-export * from "./useParsedAccountsData";
 export * from "./utils";

@@ -6,6 +6,7 @@ import type {
   TransactionSignature,
 } from "@solana/web3.js";
 
+import type { ProgramAccountParser } from "../parsers/programAccounts";
 import type { TransactionErrorType } from "./categorizeTransactionError";
 import { categorizeTransactionError } from "./categorizeTransactionError";
 
@@ -18,6 +19,7 @@ export type SailErrorName = `Sail${
   | "TransactionSign"
   | "CacheRefetch"
   | "AccountParse"
+  | "ProgramAccountParse"
   | "AccountLoad"
   | "SignAndConfirm"
   | "GetMultipleAccounts"}Error`;
@@ -31,6 +33,7 @@ export const ERROR_TITLES: { [N in SailErrorName]: string } = {
   SailTransactionSignError: "Error signing transactions",
   SailCacheRefetchError: "Error refetching from cache",
   SailAccountParseError: "Error parsing account",
+  SailProgramAccountParseError: "Error parsing program account",
   SailAccountLoadError: "Error loading account",
   SailGetMultipleAccountsError: "Error fetching multiple accounts",
   SailSignAndConfirmError: "Error signing and confirming transactions",
@@ -215,6 +218,19 @@ export class SailCacheRefetchError extends SailError {
 export class SailAccountParseError extends SailError {
   constructor(originalError: unknown, readonly data: KeyedAccountInfo) {
     super("SailAccountParseError", originalError);
+  }
+}
+
+/**
+ * Thrown if there is an error parsing an account.
+ */
+export class SailProgramAccountParseError extends SailError {
+  constructor(
+    originalError: unknown,
+    readonly data: KeyedAccountInfo,
+    readonly parser: ProgramAccountParser<unknown>
+  ) {
+    super("SailProgramAccountParseError", originalError);
   }
 }
 
