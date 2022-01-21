@@ -76,6 +76,10 @@ export interface HandleTXOptions extends ConfirmOptions {
      * Delay for the writable accounts to be refetched into the cache after a transaction.
      */
     refetchDelayMs?: number;
+    /**
+     * Whether or not to use websockets for awaiting confirmation. Defaults to `false`.
+     */
+    useWebsocket?: boolean;
   };
 }
 
