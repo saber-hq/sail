@@ -20,7 +20,7 @@ export const getMultipleAccounts = async (
   connection: Connection,
   keys: readonly PublicKey[],
   onGetMultipleAccountsError: (err: SailGetMultipleAccountsError) => void,
-  commitment: Commitment = "recent"
+  commitment: Commitment = "finalized"
 ): Promise<{
   keys: readonly PublicKey[];
   array: readonly (AccountInfo<Buffer> | null | SailGetMultipleAccountsError)[];
