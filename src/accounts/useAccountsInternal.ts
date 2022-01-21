@@ -132,7 +132,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
             connection,
             keys,
             onError,
-            "finalized"
+            "confirmed"
           );
           unstable_batchedUpdates(() => {
             result.array.forEach((info, i) => {
