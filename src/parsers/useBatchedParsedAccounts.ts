@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQuery } from "react-query";
 
-import { fetchKeysMaybe, serializeKeys } from "..";
+import { fetchKeysMaybe, serializeKeys, useAccountsSubscribe } from "..";
 import { useSail } from "../provider";
 import type { ProgramAccountParser } from "./programAccounts";
 
@@ -61,6 +61,8 @@ export const useBatchedParsedAccounts = <T>(
     },
     options
   );
+
+  useAccountsSubscribe(keys);
 
   // refresh from the cache whenever the cache is updated
   const { refetch } = query;

@@ -4,7 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import type { FetchKeysFn } from ".";
-import { getCacheKeyOfPublicKey, SailCacheRefetchError, useSail } from ".";
+import {
+  getCacheKeyOfPublicKey,
+  SailCacheRefetchError,
+  useAccountsSubscribe,
+  useSail,
+} from ".";
 import type { AccountDatum } from "./types";
 
 /**
@@ -19,7 +24,7 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getDatum, onCache, subscribe, fetchKeys, onError } = useSail();
+  const { getDatum, onCache, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
     keys.reduce<{ [cacheKey: string]: AccountDatum }>((acc, key) => {
@@ -61,15 +66,7 @@ export const useAccountsData = (
     })();
   }, [keys, fetchAndSetKeys, fetchKeys, onError]);
 
-  // subscribe to account changes
-  useEffect(() => {
-    const allKeysUnsubscribe = keys
-      .filter((k): k is PublicKey => !!k)
-      .map(subscribe);
-    return () => {
-      allKeysUnsubscribe.map((fn) => fn());
-    };
-  }, [keys, subscribe]);
+  useAccountsSubscribe(keys);
 
   // refresh from the cache whenever the cache is updated
   useEffect(() => {
