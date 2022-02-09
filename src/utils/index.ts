@@ -10,7 +10,7 @@ export const accountsEqual = (a: AccountDatum, b: AccountDatum): boolean => {
 };
 
 export const serializeKeys = (
-  keys: readonly (PublicKey | null | undefined)[]
+  keys: readonly (PublicKey | string | null | undefined)[]
 ): (string | null | undefined)[] => {
   return keys.map((k) => (k ? k.toString() : k));
 };

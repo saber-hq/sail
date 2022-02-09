@@ -1,20 +1,13 @@
 import type { ProgramAccount } from "@project-serum/anchor";
 import type { PublicKey } from "@solana/web3.js";
-import mapValues from "lodash.mapvalues";
 import { useMemo } from "react";
-import type { UseQueryResult } from "react-query";
+import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQueries } from "react-query";
 import invariant from "tiny-invariant";
 
 import { SailProgramAccountParseError } from "..";
 import { useAccountsData } from "../useAccountsData";
-import type {
-  ProgramAccountParser,
-  ProgramAccountParsers,
-} from "./programAccounts";
-import { makeProgramAccountParsers } from "./programAccounts";
-import type { BatchParsedAccountQueryResult } from "./useBatchedParsedAccounts";
-import { useBatchedParsedAccounts } from "./useBatchedParsedAccounts";
+import type { ProgramAccountParser } from "./programAccounts";
 
 /**
  * Result of a parsed account query.
@@ -22,63 +15,6 @@ import { useBatchedParsedAccounts } from "./useBatchedParsedAccounts";
 export type ParsedAccountQueryResult<T> = UseQueryResult<
   ProgramAccount<T> | null | undefined
 >;
-
-/**
- * React hooks for program account parsers.
- */
-export type ProgramParserHooks<T> = {
-  /**
-   * Uses the data of a single key.
-   */
-  useSingleData: (
-    key: PublicKey | null | undefined
-  ) => ParsedAccountQueryResult<T>;
-  /**
-   * Uses the data of multiple keys, batched into a single call.
-   */
-  useBatchedData: (
-    keys: (PublicKey | null | undefined)[]
-  ) => BatchParsedAccountQueryResult<T>;
-  /**
-   * Uses the data of multiple keys.
-   */
-  useData: (
-    keys: (PublicKey | null | undefined)[]
-  ) => ParsedAccountQueryResult<T>[];
-};
-
-/**
- * Makes hooks for parsers.
- * @param parsers
- * @returns
- */
-export const makeProgramParserHooks = <M>(
-  parsers: ProgramAccountParsers<M>
-): {
-  [K in keyof M]: ProgramParserHooks<M[K]>;
-} => {
-  const sailParsers: { [K in keyof M]: ProgramAccountParser<M[K]> } =
-    makeProgramAccountParsers(parsers);
-  return mapValues(
-    sailParsers,
-    <K extends keyof M>(
-      parser: ProgramAccountParser<M[K]>
-    ): ProgramParserHooks<M[K]> => ({
-      useSingleData: (
-        key: PublicKey | null | undefined
-      ): ParsedAccountQueryResult<M[K]> => useParsedAccount(key, parser),
-      useData: (
-        keys: (PublicKey | null | undefined)[]
-      ): ParsedAccountQueryResult<M[K]>[] => useParsedAccounts(keys, parser),
-      useBatchedData: (
-        keys: (PublicKey | null | undefined)[]
-      ): BatchParsedAccountQueryResult<M[K]> =>
-        useBatchedParsedAccounts(keys, parser),
-    })
-  ) as {
-    [K in keyof M]: ProgramParserHooks<M[K]>;
-  };
-};
 
 /**
  * Parses accounts with the given parser.
@@ -91,7 +27,16 @@ export const makeProgramParserHooks = <M>(
  */
 export const useParsedAccounts = <T>(
   keys: (PublicKey | null | undefined)[],
-  parser: ProgramAccountParser<T>
+  parser: ProgramAccountParser<T>,
+  options: Omit<
+    UseQueryOptions<
+      ProgramAccount<T> | null | undefined,
+      unknown,
+      unknown,
+      (string | undefined)[]
+    >,
+    "queryFn" | "queryKey"
+  > = {}
 ): ParsedAccountQueryResult<T>[] => {
   const data = useAccountsData(keys);
   return useQueries(
@@ -114,6 +59,7 @@ export const useParsedAccounts = <T>(
         }
       },
       notifyOnChangeProps: ["data" as const],
+      ...options,
     }))
   );
 };
@@ -124,10 +70,19 @@ export const useParsedAccounts = <T>(
  */
 export const useParsedAccount = <T>(
   key: PublicKey | null | undefined,
-  parser: ProgramAccountParser<T>
+  parser: ProgramAccountParser<T>,
+  options: Omit<
+    UseQueryOptions<
+      ProgramAccount<T> | null | undefined,
+      unknown,
+      unknown,
+      (string | undefined)[]
+    >,
+    "queryFn" | "queryKey"
+  > = {}
 ): ParsedAccountQueryResult<T> => {
   const theKey = useMemo(() => [key], [key]);
-  const [data] = useParsedAccounts(theKey, parser);
+  const [data] = useParsedAccounts(theKey, parser, options);
   invariant(data);
   return data;
 };

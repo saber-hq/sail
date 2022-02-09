@@ -4,7 +4,7 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@saberhq/token-utils";
 
-import { makeProgramParserHooks } from "./useParsedAccount";
+import { makeProgramParserHooks } from "./makeProgramParserHooks";
 
 export const {
   Mint: { useSingleData: useTokenMint, useData: useTokenMints },

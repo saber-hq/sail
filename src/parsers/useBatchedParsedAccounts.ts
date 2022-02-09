@@ -1,11 +1,10 @@
-import { exists } from "@saberhq/solana-contrib";
 import type { ProgramAccount } from "@saberhq/token-utils";
 import type { PublicKey } from "@solana/web3.js";
-import type { UseQueryResult } from "react-query";
+import { useEffect } from "react";
+import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQuery } from "react-query";
-import invariant from "tiny-invariant";
 
-import { serializeKeys } from "..";
+import { fetchKeysMaybe, serializeKeys } from "..";
 import { useSail } from "../provider";
 import type { ProgramAccountParser } from "./programAccounts";
 
@@ -13,8 +12,14 @@ import type { ProgramAccountParser } from "./programAccounts";
  * Result of a parsed account query.
  */
 export type BatchParsedAccountQueryResult<T> = UseQueryResult<
-  readonly (ProgramAccount<T> | null | undefined)[]
+  BatchedParsedAccountQueryData<T>
 >;
+
+export type BatchedParsedAccountQueryData<T> = readonly (
+  | ProgramAccount<T>
+  | null
+  | undefined
+)[];
 
 /**
  * Parses accounts with the given parser, fetching them in batch.
@@ -25,37 +30,47 @@ export type BatchParsedAccountQueryResult<T> = UseQueryResult<
  */
 export const useBatchedParsedAccounts = <T>(
   keys: (PublicKey | null | undefined)[],
-  parser: ProgramAccountParser<T>
+  parser: ProgramAccountParser<T>,
+  options: Omit<
+    UseQueryOptions<BatchedParsedAccountQueryData<T>>,
+    "queryFn" | "queryKey"
+  > = {}
 ): BatchParsedAccountQueryResult<T> => {
-  const { fetchKeys } = useSail();
+  const { fetchKeys, onBatchCache } = useSail();
+
   const query = useQuery(
     ["batchedParsedAccounts", ...serializeKeys(keys)],
     async (): Promise<readonly (ProgramAccount<T> | null | undefined)[]> => {
-      const keysWithIndex = keys.map((k, i) => [k, i] as const);
-      const nonEmptyKeysWithIndex = keysWithIndex.filter(
-        (key): key is readonly [PublicKey, number] => exists(key[0])
+      const accountsData = await fetchKeysMaybe(fetchKeys, keys);
+      return accountsData.map(
+        (result): ProgramAccount<T> | null | undefined => {
+          if (!result) {
+            return result;
+          }
+          const data = result.data;
+          if (!data) {
+            return null;
+          }
+          const parsed = parser.parse(data.accountInfo.data);
+          return {
+            publicKey: data.accountId,
+            account: parsed,
+          };
+        }
       );
-      const nonEmptyKeys = nonEmptyKeysWithIndex.map((n) => n[0]);
-      const accountsData = await fetchKeys(nonEmptyKeys);
-      const result = accountsData.map(({ data }): ProgramAccount<T> | null => {
-        if (!data) {
-          return null;
-        }
-        const parsed = parser.parse(data.accountInfo.data);
-        return {
-          publicKey: data.accountId,
-          account: parsed,
-        };
-      });
-      return keysWithIndex.map(([key, index]) => {
-        const found = nonEmptyKeysWithIndex.findIndex((k) => k[1] === index);
-        if (found !== -1) {
-          return result[found];
-        }
-        invariant(!key, "key should be empty");
-        return key;
-      });
-    }
+    },
+    options
   );
+
+  // refresh from the cache whenever the cache is updated
+  const { refetch } = query;
+  useEffect(() => {
+    return onBatchCache((e) => {
+      if (keys.find((key) => key && e.hasKey(key))) {
+        void refetch();
+      }
+    });
+  }, [keys, fetchKeys, onBatchCache, refetch]);
+
   return query;
 };
