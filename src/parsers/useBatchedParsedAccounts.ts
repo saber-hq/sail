@@ -15,6 +15,9 @@ export type BatchParsedAccountQueryResult<T> = UseQueryResult<
   BatchedParsedAccountQueryData<T>
 >;
 
+/**
+ * Data resulting from a batch query.
+ */
 export type BatchedParsedAccountQueryData<T> = readonly (
   | ProgramAccount<T>
   | null
