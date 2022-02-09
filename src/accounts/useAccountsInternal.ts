@@ -80,7 +80,9 @@ export const fetchKeysMaybe = async (
   const nonEmptyKeys = nonEmptyKeysWithIndex.map((n) => n[0]);
   const accountsData = await fetchKeys(nonEmptyKeys);
   return keysWithIndex.map(([key, index]) => {
-    const found = nonEmptyKeysWithIndex.findIndex((k) => k[1] === index);
+    const found = nonEmptyKeysWithIndex.findIndex(
+      ([_, otherIndex]) => otherIndex === index
+    );
     if (found !== -1) {
       return accountsData[found];
     }

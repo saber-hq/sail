@@ -58,6 +58,8 @@ export const usePubkeysMemo = (
         } catch (e) {
           return null;
         }
+      } else {
+        return k;
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

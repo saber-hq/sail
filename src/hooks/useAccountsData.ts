@@ -1,10 +1,10 @@
-import { exists } from "@saberhq/solana-contrib";
 import type { PublicKey } from "@solana/web3.js";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import type { FetchKeysFn } from "..";
 import {
+  fetchKeysMaybe,
   getCacheKeyOfPublicKey,
   SailCacheRefetchError,
   useAccountsSubscribe,
@@ -42,17 +42,19 @@ export const useAccountsData = (
       fetchKeys: FetchKeysFn,
       keys: readonly (PublicKey | null | undefined)[]
     ) => {
-      const keysData = await fetchKeys(keys.filter(exists));
-      const nextData = keys.reduce<{ [cacheKey: string]: AccountDatum }>(
-        (cacheState, key, keyIndex) => {
-          if (key) {
-            cacheState[getCacheKeyOfPublicKey(key)] = keysData[keyIndex]?.data;
-          }
+      const keysData = await fetchKeysMaybe(fetchKeys, keys);
 
-          return cacheState;
-        },
-        {}
-      );
+      const nextData: Record<string, AccountDatum> = {};
+      keys.forEach((key, keyIndex) => {
+        if (key) {
+          const keyData = keysData[keyIndex];
+          if (keyData) {
+            nextData[getCacheKeyOfPublicKey(key)] = keyData.data;
+          } else {
+            nextData[getCacheKeyOfPublicKey(key)] = keyData;
+          }
+        }
+      });
       setData(nextData);
     },
     100
