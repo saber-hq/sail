@@ -42,14 +42,6 @@ export class CacheUpdateEvent {
   }
 }
 
-export class CacheDeleteEvent {
-  static type = "CacheUpdate";
-  id: PublicKey;
-  constructor(id: PublicKey) {
-    this.id = id;
-  }
-}
-
 export class CacheClearEvent {
   static type = "CacheDelete";
 }
@@ -57,16 +49,18 @@ export class CacheClearEvent {
 export class AccountsEmitter {
   private readonly _emitter = new Emitter();
 
-  onBatchCache(callback: (args: CacheBatchUpdateEvent) => void): () => void {
+  onBatchCache = (
+    callback: (args: CacheBatchUpdateEvent) => void
+  ): (() => void) => {
     this._emitter.on(CacheBatchUpdateEvent.type, callback);
     return () =>
       this._emitter.removeListener(CacheBatchUpdateEvent.type, callback);
-  }
+  };
 
-  onCache(callback: (args: CacheUpdateEvent) => void): () => void {
+  onCache = (callback: (args: CacheUpdateEvent) => void): (() => void) => {
     this._emitter.on(CacheUpdateEvent.type, callback);
     return () => this._emitter.removeListener(CacheUpdateEvent.type, callback);
-  }
+  };
 
   raiseBatchCacheUpdated(ids: ReadonlySet<string>): void {
     this._emitter.emit(
@@ -77,10 +71,6 @@ export class AccountsEmitter {
 
   raiseCacheUpdated(id: PublicKey, isNew: boolean): void {
     this._emitter.emit(CacheUpdateEvent.type, new CacheUpdateEvent(id, isNew));
-  }
-
-  raiseCacheDeleted(id: PublicKey): void {
-    this._emitter.emit(CacheDeleteEvent.type, new CacheDeleteEvent(id));
   }
 
   raiseCacheCleared(): void {

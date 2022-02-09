@@ -203,12 +203,9 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     [accountLoader]
   );
 
-  const onCache = useMemo(() => emitter.onCache.bind(emitter), [emitter]);
+  const onCache = emitter.onCache;
 
-  const onBatchCache = useMemo(
-    () => emitter.onBatchCache.bind(emitter),
-    [emitter]
-  );
+  const onBatchCache = emitter.onBatchCache;
 
   const refetch = useCallback(
     async (key: PublicKey) => {
@@ -299,8 +296,10 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     refetch,
     refetchMany,
     refetchAllSubscriptions,
+
     onCache,
     onBatchCache,
+
     fetchKeys,
     subscribe,
 
