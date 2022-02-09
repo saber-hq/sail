@@ -24,7 +24,7 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getDatum, onCache, fetchKeys, onError } = useSail();
+  const { getDatum, onBatchCache, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
     keys.reduce<{ [cacheKey: string]: AccountDatum }>((acc, key) => {
@@ -70,14 +70,14 @@ export const useAccountsData = (
 
   // refresh from the cache whenever the cache is updated
   useEffect(() => {
-    return onCache((e) => {
-      if (keys.find((key) => key?.equals(e.id))) {
+    return onBatchCache((e) => {
+      if (keys.find((key) => key && e.hasKey(key))) {
         void fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
           onError(new SailCacheRefetchError(e, keys));
         });
       }
     });
-  }, [keys, onCache, fetchAndSetKeys, fetchKeys, onError]);
+  }, [keys, fetchAndSetKeys, fetchKeys, onError, onBatchCache]);
 
   // unload debounces when the component dismounts
   useEffect(() => {
