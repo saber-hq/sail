@@ -10,7 +10,7 @@ import invariant from "tiny-invariant";
 import type { AccountFetchResult, SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
-import type { CacheBatchUpdateEvent, CacheUpdateEvent } from "./emitter";
+import type { CacheBatchUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
 import { getMultipleAccounts } from "./fetchers";
 import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
@@ -111,11 +111,6 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
   refetchAllSubscriptions: () => Promise<void>;
 
   /**
-   * Registers a callback to be called whenever an item is cached.
-   */
-  onCache: (cb: (args: CacheUpdateEvent) => void) => void;
-
-  /**
    * Registers a callback to be called whenever a batch of items is cached.
    */
   onBatchCache: (cb: (args: CacheBatchUpdateEvent) => void) => void;
@@ -179,7 +174,6 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
               if (addr && !(info instanceof Error)) {
                 const cacheKey = getCacheKeyOfPublicKey(addr);
                 accountsCache.set(cacheKey, info);
-                emitter.raiseCacheUpdated(addr, true);
                 batch.add(cacheKey);
               }
             });
@@ -202,8 +196,6 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     },
     [accountLoader]
   );
-
-  const onCache = emitter.onCache;
 
   const onBatchCache = emitter.onBatchCache;
 
@@ -258,7 +250,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
 
   const refetchAllSubscriptions = useCallback(async () => {
     const keysToFetch = [...subscribedAccounts.keys()].map((keyStr) => {
-      return new PublicKey(Buffer.from(keyStr, "base64"));
+      return new PublicKey(keyStr);
     });
     await refetchMany(keysToFetch);
   }, [refetchMany, subscribedAccounts]);
@@ -297,7 +289,6 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     refetchMany,
     refetchAllSubscriptions,
 
-    onCache,
     onBatchCache,
 
     fetchKeys,
