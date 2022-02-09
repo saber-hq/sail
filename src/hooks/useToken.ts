@@ -15,7 +15,7 @@ const normalizeMint = (
   if (!mint) {
     return mint;
   }
-  // default pubkey is null
+  // default pubkey is treated as null
   if (mint.equals(PublicKey.default)) {
     return null;
   }
@@ -41,6 +41,7 @@ const makeCertifiedTokenQuery = (
     const info = (await resp.json()) as TokenInfo;
     return new Token(info);
   },
+  // these should never be stale, since token mints are immutable (other than supply)
   staleTime: Infinity,
 });
 
@@ -101,6 +102,7 @@ const makeTokenQuery = ({
     });
   },
   enabled: loadedToken !== undefined,
+  // these should never be stale, since token mints are immutable (other than supply)
   staleTime: Infinity,
 });
 
