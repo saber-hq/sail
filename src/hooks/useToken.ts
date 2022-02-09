@@ -44,6 +44,11 @@ const makeCertifiedTokenQuery = (
   staleTime: Infinity,
 });
 
+/**
+ * Loads multiple tokens from the Certified Token List.
+ * @param mint
+ * @returns
+ */
 export const useCertifiedTokens = (mints: (string | null | undefined)[]) => {
   const { network } = useSolana();
   return useQueries(
@@ -51,6 +56,11 @@ export const useCertifiedTokens = (mints: (string | null | undefined)[]) => {
   );
 };
 
+/**
+ * Loads a token from the Certified Token List.
+ * @param mint
+ * @returns
+ */
 export const useCertifiedToken = (mint: string | null | undefined) => {
   const { network } = useSolana();
   return useQuery(makeCertifiedTokenQuery(network, mint));
