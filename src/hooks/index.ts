@@ -1,3 +1,5 @@
+export * from "./useAccountData";
+export * from "./useAccountsData";
 export * from "./useAccountsSubscribe";
 export * from "./useKeypair";
 export * from "./usePubkey";

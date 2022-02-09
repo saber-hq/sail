@@ -6,7 +6,7 @@ import { useQueries } from "react-query";
 import invariant from "tiny-invariant";
 
 import { SailProgramAccountParseError } from "..";
-import { useAccountsData } from "../useAccountsData";
+import { useAccountsData } from "../hooks/useAccountsData";
 import type { ProgramAccountParser } from "./programAccounts";
 
 /**

@@ -3,14 +3,14 @@ import type { PublicKey } from "@solana/web3.js";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-import type { FetchKeysFn } from ".";
+import type { FetchKeysFn } from "..";
 import {
   getCacheKeyOfPublicKey,
   SailCacheRefetchError,
   useAccountsSubscribe,
   useSail,
-} from ".";
-import type { AccountDatum } from "./types";
+} from "..";
+import type { AccountDatum } from "../types";
 
 /**
  * Fetches data of the given accounts.
