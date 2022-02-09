@@ -1,5 +1,3 @@
-import type { AccountFetchResult } from "@saberhq/sail";
-import { useSail } from "@saberhq/sail";
 import type { Network } from "@saberhq/solana-contrib";
 import type { TokenInfo } from "@saberhq/token-utils";
 import { deserializeMint, networkToChainId, Token } from "@saberhq/token-utils";
@@ -8,6 +6,13 @@ import { PublicKey } from "@solana/web3.js";
 import { useMemo } from "react";
 import type { UseQueryOptions } from "react-query";
 import { useQueries, useQuery } from "react-query";
+
+import { useSail } from "../provider";
+import type { AccountFetchResult } from "../types";
+import { usePubkey } from "./usePubkey";
+
+const makeCertifiedTokenInfoURL = (chainId: number, address: string) =>
+  `https://cdn.jsdelivr.net/gh/CLBExchange/certified-token-list/${chainId}/${address}.json`;
 
 const normalizeMint = (
   mint: PublicKey | null | undefined
@@ -32,9 +37,7 @@ const makeCertifiedTokenQuery = (
       return address;
     }
     const chainId = networkToChainId(network);
-    const resp = await fetch(
-      `https://cdn.jsdelivr.net/gh/CLBExchange/certified-token-list/${chainId}/${address}.json`
-    );
+    const resp = await fetch(makeCertifiedTokenInfoURL(chainId, address));
     if (resp.status === 404) {
       return null;
     }
@@ -143,7 +146,8 @@ export const useTokens = (mints: (PublicKey | null | undefined)[]) => {
  * @param mint
  * @returns
  */
-export const useToken = (mint?: PublicKey | null) => {
+export const useToken = (mintRaw?: PublicKey | string | null) => {
+  const mint = usePubkey(mintRaw);
   const { network } = useSolana();
   const { fetchKeys } = useSail();
   const certifiedToken = useCertifiedToken(
