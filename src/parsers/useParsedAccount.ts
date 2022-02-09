@@ -13,6 +13,8 @@ import type {
   ProgramAccountParsers,
 } from "./programAccounts";
 import { makeProgramAccountParsers } from "./programAccounts";
+import type { BatchParsedAccountQueryResult } from "./useBatchedParsedAccounts";
+import { useBatchedParsedAccounts } from "./useBatchedParsedAccounts";
 
 /**
  * Result of a parsed account query.
@@ -25,9 +27,21 @@ export type ParsedAccountQueryResult<T> = UseQueryResult<
  * React hooks for program account parsers.
  */
 export type ProgramParserHooks<T> = {
+  /**
+   * Uses the data of a single key.
+   */
   useSingleData: (
     key: PublicKey | null | undefined
   ) => ParsedAccountQueryResult<T>;
+  /**
+   * Uses the data of multiple keys, batched into a single call.
+   */
+  useBatchedData: (
+    keys: (PublicKey | null | undefined)[]
+  ) => BatchParsedAccountQueryResult<T>;
+  /**
+   * Uses the data of multiple keys.
+   */
   useData: (
     keys: (PublicKey | null | undefined)[]
   ) => ParsedAccountQueryResult<T>[];
@@ -43,13 +57,25 @@ export const makeProgramParserHooks = <M>(
 ): {
   [K in keyof M]: ProgramParserHooks<M[K]>;
 } => {
-  const sailParsers = makeProgramAccountParsers(parsers);
-  return mapValues(sailParsers, (parser) => ({
-    useSingleData: (key: PublicKey | null | undefined) =>
-      useParsedAccount(key, parser),
-    useData: (keys: (PublicKey | null | undefined)[]) =>
-      useParsedAccounts(keys, parser),
-  })) as {
+  const sailParsers: { [K in keyof M]: ProgramAccountParser<M[K]> } =
+    makeProgramAccountParsers(parsers);
+  return mapValues(
+    sailParsers,
+    <K extends keyof M>(
+      parser: ProgramAccountParser<M[K]>
+    ): ProgramParserHooks<M[K]> => ({
+      useSingleData: (
+        key: PublicKey | null | undefined
+      ): ParsedAccountQueryResult<M[K]> => useParsedAccount(key, parser),
+      useData: (
+        keys: (PublicKey | null | undefined)[]
+      ): ParsedAccountQueryResult<M[K]>[] => useParsedAccounts(keys, parser),
+      useBatchedData: (
+        keys: (PublicKey | null | undefined)[]
+      ): BatchParsedAccountQueryResult<M[K]> =>
+        useBatchedParsedAccounts(keys, parser),
+    })
+  ) as {
     [K in keyof M]: ProgramParserHooks<M[K]>;
   };
 };

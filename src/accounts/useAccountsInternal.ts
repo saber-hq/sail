@@ -19,7 +19,7 @@ import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
  * @returns
  */
 export const getCacheKeyOfPublicKey = (pubkey: PublicKey): string =>
-  pubkey.toBuffer().toString("base64");
+  pubkey.toBuffer().toString();
 
 export type AccountLoader = DataLoader<
   PublicKey,
@@ -54,6 +54,13 @@ export interface UseAccountsArgs {
   onError: (err: SailError) => void;
 }
 
+/**
+ * Function signature for fetching keys.
+ */
+export type FetchKeysFn = (
+  keys: readonly PublicKey[]
+) => Promise<AccountFetchResult[]>;
+
 export interface UseAccounts extends Required<UseAccountsArgs> {
   /**
    * The loader. Usually should not be used directly.
@@ -83,9 +90,7 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
   /**
    * Fetches the data associated with the given keys, via the AccountLoader.
    */
-  fetchKeys: (
-    keys: (PublicKey | null | undefined)[]
-  ) => Promise<AccountFetchResult[]>;
+  fetchKeys: FetchKeysFn;
 
   /**
    * Causes a key to be refetched periodically.
@@ -155,7 +160,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   );
 
   const fetchKeys = useCallback(
-    async (keys: (PublicKey | null | undefined)[]) => {
+    async (keys: readonly PublicKey[]) => {
       return await fetchKeysUsingLoader(accountLoader, keys);
     },
     [accountLoader]

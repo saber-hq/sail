@@ -1,3 +1,4 @@
+import { exists } from "@saberhq/solana-contrib";
 import type { PublicKey } from "@solana/web3.js";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -33,10 +34,8 @@ export const useAccountsData = (
   // TODO: add cancellation
   const fetchAndSetKeys = useDebouncedCallback(
     async (
-      fetchKeys: (
-        keys: (PublicKey | null | undefined)[]
-      ) => Promise<AccountFetchResult[]>,
-      keys: (PublicKey | null | undefined)[]
+      fetchKeys: (keys: readonly PublicKey[]) => Promise<AccountFetchResult[]>,
+      keys: readonly PublicKey[]
     ) => {
       const keysData = await fetchKeys(keys);
       const nextData = keys.reduce<{ [cacheKey: string]: AccountDatum }>(
@@ -56,7 +55,7 @@ export const useAccountsData = (
 
   useEffect(() => {
     void (async () => {
-      await fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
+      await fetchAndSetKeys(fetchKeys, keys.filter(exists))?.catch((e) => {
         onError(new SailCacheRefetchError(e, keys));
       });
     })();
@@ -76,7 +75,7 @@ export const useAccountsData = (
   useEffect(() => {
     return onCache((e) => {
       if (keys.find((key) => key?.equals(e.id))) {
-        void fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
+        void fetchAndSetKeys(fetchKeys, keys.filter(exists))?.catch((e) => {
           onError(new SailCacheRefetchError(e, keys));
         });
       }

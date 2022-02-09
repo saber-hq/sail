@@ -7,8 +7,8 @@ import { useMemo } from "react";
 import type { UseQueryOptions } from "react-query";
 import { useQueries, useQuery } from "react-query";
 
+import type { FetchKeysFn } from "..";
 import { useSail } from "../provider";
-import type { AccountFetchResult } from "../types";
 import { usePubkey } from "./usePubkey";
 
 const makeCertifiedTokenInfoURL = (chainId: number, address: string) =>
@@ -79,9 +79,7 @@ const makeTokenQuery = ({
   network: Network;
   address: PublicKey | null | undefined;
   loadedToken: Token | null | undefined;
-  fetchKeys: (
-    keys: (PublicKey | null | undefined)[]
-  ) => Promise<AccountFetchResult[]>;
+  fetchKeys: FetchKeysFn;
 }): UseQueryOptions<Token | null | undefined> => ({
   queryKey: ["tokenInfo", network, address],
   queryFn: async (): Promise<Token | null | undefined> => {
