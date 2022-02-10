@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { ParserHooks } from "..";
 import { getCacheKeyOfPublicKey, SailAccountParseError, useSail } from "..";
+import { useAccountsData } from "../hooks/useAccountsData";
 import type { ParsedAccountDatum } from "../types";
-import { useAccountsData } from "../useAccountsData";
 
 export type AccountParser<T> = (info: KeyedAccountInfo) => T;
 

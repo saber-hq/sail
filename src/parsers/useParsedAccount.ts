@@ -1,18 +1,13 @@
 import type { ProgramAccount } from "@project-serum/anchor";
 import type { PublicKey } from "@solana/web3.js";
-import mapValues from "lodash.mapvalues";
 import { useMemo } from "react";
-import type { UseQueryResult } from "react-query";
+import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQueries } from "react-query";
 import invariant from "tiny-invariant";
 
 import { SailProgramAccountParseError } from "..";
-import { useAccountsData } from "../useAccountsData";
-import type {
-  ProgramAccountParser,
-  ProgramAccountParsers,
-} from "./programAccounts";
-import { makeProgramAccountParsers } from "./programAccounts";
+import { useAccountsData } from "../hooks/useAccountsData";
+import type { ProgramAccountParser } from "./programAccounts";
 
 /**
  * Result of a parsed account query.
@@ -20,39 +15,6 @@ import { makeProgramAccountParsers } from "./programAccounts";
 export type ParsedAccountQueryResult<T> = UseQueryResult<
   ProgramAccount<T> | null | undefined
 >;
-
-/**
- * React hooks for program account parsers.
- */
-export type ProgramParserHooks<T> = {
-  useSingleData: (
-    key: PublicKey | null | undefined
-  ) => ParsedAccountQueryResult<T>;
-  useData: (
-    keys: (PublicKey | null | undefined)[]
-  ) => ParsedAccountQueryResult<T>[];
-};
-
-/**
- * Makes hooks for parsers.
- * @param parsers
- * @returns
- */
-export const makeProgramParserHooks = <M>(
-  parsers: ProgramAccountParsers<M>
-): {
-  [K in keyof M]: ProgramParserHooks<M[K]>;
-} => {
-  const sailParsers = makeProgramAccountParsers(parsers);
-  return mapValues(sailParsers, (parser) => ({
-    useSingleData: (key: PublicKey | null | undefined) =>
-      useParsedAccount(key, parser),
-    useData: (keys: (PublicKey | null | undefined)[]) =>
-      useParsedAccounts(keys, parser),
-  })) as {
-    [K in keyof M]: ProgramParserHooks<M[K]>;
-  };
-};
 
 /**
  * Parses accounts with the given parser.
@@ -65,7 +27,16 @@ export const makeProgramParserHooks = <M>(
  */
 export const useParsedAccounts = <T>(
   keys: (PublicKey | null | undefined)[],
-  parser: ProgramAccountParser<T>
+  parser: ProgramAccountParser<T>,
+  options: Omit<
+    UseQueryOptions<
+      ProgramAccount<T> | null | undefined,
+      unknown,
+      unknown,
+      (string | undefined)[]
+    >,
+    "queryFn" | "queryKey"
+  > = {}
 ): ParsedAccountQueryResult<T>[] => {
   const data = useAccountsData(keys);
   return useQueries(
@@ -88,6 +59,7 @@ export const useParsedAccounts = <T>(
         }
       },
       notifyOnChangeProps: ["data" as const],
+      ...options,
     }))
   );
 };
@@ -98,10 +70,19 @@ export const useParsedAccounts = <T>(
  */
 export const useParsedAccount = <T>(
   key: PublicKey | null | undefined,
-  parser: ProgramAccountParser<T>
+  parser: ProgramAccountParser<T>,
+  options: Omit<
+    UseQueryOptions<
+      ProgramAccount<T> | null | undefined,
+      unknown,
+      unknown,
+      (string | undefined)[]
+    >,
+    "queryFn" | "queryKey"
+  > = {}
 ): ParsedAccountQueryResult<T> => {
   const theKey = useMemo(() => [key], [key]);
-  const [data] = useParsedAccounts(theKey, parser);
+  const [data] = useParsedAccounts(theKey, parser, options);
   invariant(data);
   return data;
 };

@@ -1,14 +1,16 @@
+import { exists } from "@saberhq/solana-contrib";
 import { useConnectionContext } from "@saberhq/use-solana";
 import type { AccountInfo } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
+import invariant from "tiny-invariant";
 
 import type { AccountFetchResult, SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
-import type { CacheUpdateEvent } from "./emitter";
+import type { CacheBatchUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
 import { getMultipleAccounts } from "./fetchers";
 import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
@@ -19,7 +21,7 @@ import { fetchKeysUsingLoader } from "./fetchKeysUsingLoader";
  * @returns
  */
 export const getCacheKeyOfPublicKey = (pubkey: PublicKey): string =>
-  pubkey.toBuffer().toString("base64");
+  pubkey.toString();
 
 export type AccountLoader = DataLoader<
   PublicKey,
@@ -54,6 +56,41 @@ export interface UseAccountsArgs {
   onError: (err: SailError) => void;
 }
 
+/**
+ * Function signature for fetching keys.
+ */
+export type FetchKeysFn = (
+  keys: readonly PublicKey[]
+) => Promise<AccountFetchResult[]>;
+
+/**
+ * Fetches keys, passing through null/undefined values.
+ * @param fetchKeys
+ * @param keys
+ * @returns
+ */
+export const fetchKeysMaybe = async (
+  fetchKeys: FetchKeysFn,
+  keys: readonly (PublicKey | null | undefined)[]
+): Promise<(AccountFetchResult | null | undefined)[]> => {
+  const keysWithIndex = keys.map((k, i) => [k, i] as const);
+  const nonEmptyKeysWithIndex = keysWithIndex.filter(
+    (key): key is readonly [PublicKey, number] => exists(key[0])
+  );
+  const nonEmptyKeys = nonEmptyKeysWithIndex.map((n) => n[0]);
+  const accountsData = await fetchKeys(nonEmptyKeys);
+  return keysWithIndex.map(([key, index]) => {
+    const found = nonEmptyKeysWithIndex.findIndex(
+      ([_, otherIndex]) => otherIndex === index
+    );
+    if (found !== -1) {
+      return accountsData[found];
+    }
+    invariant(!key, "key should be empty");
+    return key;
+  });
+};
+
 export interface UseAccounts extends Required<UseAccountsArgs> {
   /**
    * The loader. Usually should not be used directly.
@@ -76,16 +113,14 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
   refetchAllSubscriptions: () => Promise<void>;
 
   /**
-   * Registers a callback to be called whenever an item is cached.
+   * Registers a callback to be called whenever a batch of items is cached.
    */
-  onCache: (cb: (args: CacheUpdateEvent) => void) => void;
+  onBatchCache: (cb: (args: CacheBatchUpdateEvent) => void) => void;
 
   /**
    * Fetches the data associated with the given keys, via the AccountLoader.
    */
-  fetchKeys: (
-    keys: (PublicKey | null | undefined)[]
-  ) => Promise<AccountFetchResult[]>;
+  fetchKeys: FetchKeysFn;
 
   /**
    * Causes a key to be refetched periodically.
@@ -135,13 +170,16 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
             "confirmed"
           );
           unstable_batchedUpdates(() => {
+            const batch = new Set<string>();
             result.array.forEach((info, i) => {
               const addr = keys[i];
               if (addr && !(info instanceof Error)) {
-                accountsCache.set(getCacheKeyOfPublicKey(addr), info);
-                emitter.raiseCacheUpdated(addr, true);
+                const cacheKey = getCacheKeyOfPublicKey(addr);
+                accountsCache.set(cacheKey, info);
+                batch.add(cacheKey);
               }
             });
+            emitter.raiseBatchCacheUpdated(batch);
           });
           return result.array;
         },
@@ -155,13 +193,13 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   );
 
   const fetchKeys = useCallback(
-    async (keys: (PublicKey | null | undefined)[]) => {
+    async (keys: readonly PublicKey[]) => {
       return await fetchKeysUsingLoader(accountLoader, keys);
     },
     [accountLoader]
   );
 
-  const onCache = useMemo(() => emitter.onCache.bind(emitter), [emitter]);
+  const onBatchCache = emitter.onBatchCache;
 
   const refetch = useCallback(
     async (key: PublicKey) => {
@@ -214,7 +252,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
 
   const refetchAllSubscriptions = useCallback(async () => {
     const keysToFetch = [...subscribedAccounts.keys()].map((keyStr) => {
-      return new PublicKey(Buffer.from(keyStr, "base64"));
+      return new PublicKey(keyStr);
     });
     await refetchMany(keysToFetch);
   }, [refetchMany, subscribedAccounts]);
@@ -252,7 +290,9 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     refetch,
     refetchMany,
     refetchAllSubscriptions,
-    onCache,
+
+    onBatchCache,
+
     fetchKeys,
     subscribe,
 

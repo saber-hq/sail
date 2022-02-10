@@ -38,11 +38,11 @@ export interface ProgramAccountParsers<M> {
  * @param parsers
  * @returns
  */
-export const makeProgramAccountParsers = <M>({
+export const makeProgramAccountParsers = <M, A extends keyof M>({
   address,
   accountParsers,
 }: ProgramAccountParsers<M>): {
-  [K in keyof M]: ProgramAccountParser<M[K]>;
+  [K in A]: ProgramAccountParser<M[K]>;
 } => {
   return mapValues(
     accountParsers,

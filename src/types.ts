@@ -13,7 +13,7 @@ export type AccountDatum = KeyedAccountInfo | null | undefined;
  * Result of the fetching of an account.
  */
 export interface AccountFetchResult {
-  data: AccountDatum;
+  data: KeyedAccountInfo | null;
   error?: SailAccountLoadError;
 }
 

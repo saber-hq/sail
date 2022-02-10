@@ -2,9 +2,15 @@ import type { PublicKey } from "@solana/web3.js";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-import type { AccountFetchResult } from ".";
-import { getCacheKeyOfPublicKey, SailCacheRefetchError, useSail } from ".";
-import type { AccountDatum } from "./types";
+import type { FetchKeysFn } from "..";
+import {
+  fetchKeysMaybe,
+  getCacheKeyOfPublicKey,
+  SailCacheRefetchError,
+  useAccountsSubscribe,
+  useSail,
+} from "..";
+import type { AccountDatum } from "../types";
 
 /**
  * Fetches data of the given accounts.
@@ -18,7 +24,7 @@ import type { AccountDatum } from "./types";
 export const useAccountsData = (
   keys: (PublicKey | null | undefined)[]
 ): readonly AccountDatum[] => {
-  const { getDatum, onCache, subscribe, fetchKeys, onError } = useSail();
+  const { getDatum, onBatchCache, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
     keys.reduce<{ [cacheKey: string]: AccountDatum }>((acc, key) => {
@@ -33,22 +39,22 @@ export const useAccountsData = (
   // TODO: add cancellation
   const fetchAndSetKeys = useDebouncedCallback(
     async (
-      fetchKeys: (
-        keys: (PublicKey | null | undefined)[]
-      ) => Promise<AccountFetchResult[]>,
-      keys: (PublicKey | null | undefined)[]
+      fetchKeys: FetchKeysFn,
+      keys: readonly (PublicKey | null | undefined)[]
     ) => {
-      const keysData = await fetchKeys(keys);
-      const nextData = keys.reduce<{ [cacheKey: string]: AccountDatum }>(
-        (cacheState, key, keyIndex) => {
-          if (key) {
-            cacheState[getCacheKeyOfPublicKey(key)] = keysData[keyIndex]?.data;
-          }
+      const keysData = await fetchKeysMaybe(fetchKeys, keys);
 
-          return cacheState;
-        },
-        {}
-      );
+      const nextData: Record<string, AccountDatum> = {};
+      keys.forEach((key, keyIndex) => {
+        if (key) {
+          const keyData = keysData[keyIndex];
+          if (keyData) {
+            nextData[getCacheKeyOfPublicKey(key)] = keyData.data;
+          } else {
+            nextData[getCacheKeyOfPublicKey(key)] = keyData;
+          }
+        }
+      });
       setData(nextData);
     },
     100
@@ -62,26 +68,18 @@ export const useAccountsData = (
     })();
   }, [keys, fetchAndSetKeys, fetchKeys, onError]);
 
-  // subscribe to account changes
-  useEffect(() => {
-    const allKeysUnsubscribe = keys
-      .filter((k): k is PublicKey => !!k)
-      .map(subscribe);
-    return () => {
-      allKeysUnsubscribe.map((fn) => fn());
-    };
-  }, [keys, subscribe]);
+  useAccountsSubscribe(keys);
 
   // refresh from the cache whenever the cache is updated
   useEffect(() => {
-    return onCache((e) => {
-      if (keys.find((key) => key?.equals(e.id))) {
+    return onBatchCache((e) => {
+      if (keys.find((key) => key && e.hasKey(key))) {
         void fetchAndSetKeys(fetchKeys, keys)?.catch((e) => {
           onError(new SailCacheRefetchError(e, keys));
         });
       }
     });
-  }, [keys, onCache, fetchAndSetKeys, fetchKeys, onError]);
+  }, [keys, fetchAndSetKeys, fetchKeys, onError, onBatchCache]);
 
   // unload debounces when the component dismounts
   useEffect(() => {

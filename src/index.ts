@@ -6,6 +6,4 @@ export * from "./parsers";
 export * from "./provider";
 export * from "./tx";
 export * from "./types";
-export * from "./useAccountData";
-export * from "./useAccountsData";
 export * from "./utils";
