@@ -23,12 +23,7 @@ export type ProgramParserHooks<T> = {
   useSingleData: (
     key: PublicKey | null | undefined,
     options?: Omit<
-      UseQueryOptions<
-        ProgramAccount<T> | null | undefined,
-        unknown,
-        unknown,
-        (string | undefined)[]
-      >,
+      UseQueryOptions<ProgramAccount<T> | null | undefined>,
       "queryFn" | "queryKey"
     >
   ) => ParsedAccountQueryResult<T>;
@@ -38,12 +33,7 @@ export type ProgramParserHooks<T> = {
   useData: (
     keys: (PublicKey | null | undefined)[],
     options?: Omit<
-      UseQueryOptions<
-        ProgramAccount<T> | null | undefined,
-        unknown,
-        unknown,
-        (string | undefined)[]
-      >,
+      UseQueryOptions<ProgramAccount<T> | null | undefined>,
       "queryFn" | "queryKey"
     >
   ) => ParsedAccountQueryResult<T>[];
@@ -78,24 +68,14 @@ export const makeProgramParserHooks = <M, A extends keyof M>(
       useSingleData: (
         key: PublicKey | null | undefined,
         options?: Omit<
-          UseQueryOptions<
-            ProgramAccount<T> | null | undefined,
-            unknown,
-            unknown,
-            (string | undefined)[]
-          >,
+          UseQueryOptions<ProgramAccount<T> | null | undefined>,
           "queryFn" | "queryKey"
         >
       ): ParsedAccountQueryResult<T> => useParsedAccount(key, parser, options),
       useData: (
         keys: (PublicKey | null | undefined)[],
         options?: Omit<
-          UseQueryOptions<
-            ProgramAccount<T> | null | undefined,
-            unknown,
-            unknown,
-            (string | undefined)[]
-          >,
+          UseQueryOptions<ProgramAccount<T> | null | undefined>,
           "queryFn" | "queryKey"
         >
       ): ParsedAccountQueryResult<T>[] =>
