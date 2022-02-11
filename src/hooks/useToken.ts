@@ -32,12 +32,14 @@ const makeCertifiedTokenQuery = (
   address: string | null | undefined
 ): UseQueryOptions<Token | null | undefined> => ({
   queryKey: ["sail/certifiedTokenInfo", network, address],
-  queryFn: async (): Promise<Token | null | undefined> => {
+  queryFn: async ({ signal }): Promise<Token | null | undefined> => {
     if (address === null || address === undefined) {
       return address;
     }
     const chainId = networkToChainId(network);
-    const resp = await fetch(makeCertifiedTokenInfoURL(chainId, address));
+    const resp = await fetch(makeCertifiedTokenInfoURL(chainId, address), {
+      signal,
+    });
     if (resp.status === 404) {
       return null;
     }
@@ -86,13 +88,14 @@ export const makeTokenQuery = ({
   fetchKeys: FetchKeysFn;
 }): UseQueryOptions<Token | null | undefined> => ({
   queryKey: ["sail/tokenInfo", network, address],
-  queryFn: async (): Promise<Token | null | undefined> => {
+  queryFn: async ({ signal }): Promise<Token | null | undefined> => {
     if (address === null || address === undefined) {
       return address;
     }
     const chainId = networkToChainId(network);
     const resp = await fetch(
-      makeCertifiedTokenInfoURL(chainId, address.toString())
+      makeCertifiedTokenInfoURL(chainId, address.toString()),
+      { signal }
     );
     if (resp.status !== 404) {
       const info = (await resp.json()) as TokenInfo;
