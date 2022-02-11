@@ -31,7 +31,7 @@ const makeCertifiedTokenQuery = (
   network: Network,
   address: string | null | undefined
 ): UseQueryOptions<Token | null | undefined> => ({
-  queryKey: ["certifiedTokenInfo", network, address],
+  queryKey: ["sail/certifiedTokenInfo", network, address],
   queryFn: async (): Promise<Token | null | undefined> => {
     if (address === null || address === undefined) {
       return address;
@@ -70,24 +70,33 @@ export const useCertifiedToken = (mint: string | null | undefined) => {
   return useQuery(makeCertifiedTokenQuery(network, mint));
 };
 
-const makeTokenQuery = ({
+/**
+ * Constructs a query to load a token from the Certified Token List, or from the blockchain if
+ * it cannot be found.
+ *
+ * @returns Token query
+ */
+export const makeTokenQuery = ({
   network,
   address,
-  loadedToken,
   fetchKeys,
 }: {
   network: Network;
   address: PublicKey | null | undefined;
-  loadedToken: Token | null | undefined;
   fetchKeys: FetchKeysFn;
 }): UseQueryOptions<Token | null | undefined> => ({
-  queryKey: ["tokenInfo", network, address],
+  queryKey: ["sail/tokenInfo", network, address],
   queryFn: async (): Promise<Token | null | undefined> => {
     if (address === null || address === undefined) {
       return address;
     }
-    if (loadedToken) {
-      return loadedToken;
+    const chainId = networkToChainId(network);
+    const resp = await fetch(
+      makeCertifiedTokenInfoURL(chainId, address.toString())
+    );
+    if (resp.status !== 404) {
+      const info = (await resp.json()) as TokenInfo;
+      return new Token(info);
     }
     const [tokenData] = await fetchKeys([address]);
     if (!tokenData) {
@@ -102,7 +111,6 @@ const makeTokenQuery = ({
       chainId: networkToChainId(network),
     });
   },
-  enabled: loadedToken !== undefined,
   // these should never be stale, since token mints are immutable (other than supply)
   staleTime: Infinity,
 });
@@ -118,21 +126,11 @@ export const useTokens = (mints: (PublicKey | null | undefined)[]) => {
   const normalizedMints = useMemo(() => {
     return mints?.map(normalizeMint) ?? [];
   }, [mints]);
-  const certifiedTokens = useCertifiedTokens(
-    useMemo(
-      () => normalizedMints.map((mint) => (mint ? mint.toString() : mint)),
-      [normalizedMints]
-    )
-  );
   return useQueries(
-    mints?.map((mint) => {
-      const loadedToken = mint
-        ? certifiedTokens.find((c) => c.data?.mintAccount.equals(mint))?.data
-        : mint;
+    normalizedMints?.map((mint) => {
       return makeTokenQuery({
         network,
         address: mint,
-        loadedToken,
         fetchKeys,
       });
     })
@@ -140,7 +138,8 @@ export const useTokens = (mints: (PublicKey | null | undefined)[]) => {
 };
 
 /**
- * Uses and loads one token.
+ * Uses and loads a single token.
+ *
  * @param mint
  * @returns
  */
@@ -148,15 +147,14 @@ export const useToken = (mintRaw?: PublicKey | string | null) => {
   const mint = usePubkey(mintRaw);
   const { network } = useSolana();
   const { fetchKeys } = useSail();
-  const certifiedToken = useCertifiedToken(
-    mint ? normalizeMint(mint)?.toString() : mint
+  const normalizedMint = useMemo(
+    () => (mint ? normalizeMint(mint) : mint),
+    [mint]
   );
-  const loadedToken = mint ? certifiedToken.data : mint;
   return useQuery(
     makeTokenQuery({
       network,
-      address: mint,
-      loadedToken,
+      address: normalizedMint,
       fetchKeys,
     })
   );

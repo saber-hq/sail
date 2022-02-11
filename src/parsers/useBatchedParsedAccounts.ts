@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQuery } from "react-query";
 
+import type { FetchKeysFn } from "..";
 import { fetchKeysMaybe, serializeKeys, useAccountsSubscribe } from "..";
 import { useSail } from "../provider";
 import type { ProgramAccountParser } from "./programAccounts";
@@ -24,6 +25,39 @@ export type BatchedParsedAccountQueryData<T> = readonly (
   | undefined
 )[];
 
+export const makeBatchedParsedAccountQuery = <T>(
+  keys: (PublicKey | null | undefined)[],
+  fetchKeys: FetchKeysFn,
+  parser: ProgramAccountParser<T>,
+  options: Omit<
+    UseQueryOptions<BatchedParsedAccountQueryData<T>>,
+    "queryFn" | "queryKey"
+  > = {}
+): UseQueryOptions<BatchedParsedAccountQueryData<T>> => ({
+  queryKey: ["sail/batchedParsedAccounts", ...serializeKeys(keys)],
+  queryFn: async (): Promise<
+    readonly (ProgramAccount<T> | null | undefined)[]
+  > => {
+    const accountsData = await fetchKeysMaybe(fetchKeys, keys);
+    return accountsData.map((result): ProgramAccount<T> | null | undefined => {
+      if (!result) {
+        return result;
+      }
+      const data = result.data;
+      if (!data) {
+        return null;
+      }
+      const parsed = parser.parse(data.accountInfo.data);
+      return {
+        publicKey: data.accountId,
+        account: parsed,
+      };
+    });
+  },
+  staleTime: Infinity,
+  ...options,
+});
+
 /**
  * Parses accounts with the given parser, fetching them in batch.
  *
@@ -42,27 +76,7 @@ export const useBatchedParsedAccounts = <T>(
   const { fetchKeys, onBatchCache } = useSail();
 
   const query = useQuery(
-    ["batchedParsedAccounts", ...serializeKeys(keys)],
-    async (): Promise<readonly (ProgramAccount<T> | null | undefined)[]> => {
-      const accountsData = await fetchKeysMaybe(fetchKeys, keys);
-      return accountsData.map(
-        (result): ProgramAccount<T> | null | undefined => {
-          if (!result) {
-            return result;
-          }
-          const data = result.data;
-          if (!data) {
-            return null;
-          }
-          const parsed = parser.parse(data.accountInfo.data);
-          return {
-            publicKey: data.accountId,
-            account: parsed,
-          };
-        }
-      );
-    },
-    options
+    makeBatchedParsedAccountQuery(keys, fetchKeys, parser, options)
   );
 
   useAccountsSubscribe(keys);
