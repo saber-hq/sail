@@ -8,6 +8,7 @@ import type { UseQueryOptions } from "react-query";
 import { useQueries, useQuery } from "react-query";
 
 import type { FetchKeysFn } from "..";
+import { fetchNullable } from "..";
 import { useSail } from "../provider";
 import { usePubkey } from "./usePubkey";
 
@@ -37,13 +38,13 @@ const makeCertifiedTokenQuery = (
       return address;
     }
     const chainId = networkToChainId(network);
-    const resp = await fetch(makeCertifiedTokenInfoURL(chainId, address), {
-      signal,
-    });
-    if (resp.status === 404) {
+    const info = await fetchNullable<TokenInfo>(
+      makeCertifiedTokenInfoURL(chainId, address),
+      signal
+    );
+    if (info === null) {
       return null;
     }
-    const info = (await resp.json()) as TokenInfo;
     return new Token(info);
   },
   // these should never be stale, since token mints are immutable (other than supply)
@@ -93,12 +94,11 @@ export const makeTokenQuery = ({
       return address;
     }
     const chainId = networkToChainId(network);
-    const resp = await fetch(
+    const info = await fetchNullable<TokenInfo>(
       makeCertifiedTokenInfoURL(chainId, address.toString()),
-      { signal }
+      signal
     );
-    if (resp.status !== 404) {
-      const info = (await resp.json()) as TokenInfo;
+    if (info !== null) {
       return new Token(info);
     }
     const [tokenData] = await fetchKeys([address]);
