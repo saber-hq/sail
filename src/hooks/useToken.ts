@@ -118,6 +118,10 @@ export const makeBatchedTokensQuery = ({
       })
     );
 
+    if (signal?.aborted) {
+      throw new Error("Query aborted");
+    }
+
     const tokenDatas = await fetchKeys(addressesToFetch.map((a) => a.key));
     tokenDatas.forEach((tokenData, i) => {
       const index = addressesToFetch[i]?.index;
