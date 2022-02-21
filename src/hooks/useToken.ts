@@ -8,7 +8,7 @@ import type { UseQueryOptions } from "react-query";
 import { useQueries, useQuery } from "react-query";
 
 import type { FetchKeysFn } from "..";
-import { fetchNullable } from "..";
+import { fetchNullableWithSessionCache } from "..";
 import { useSail } from "../provider";
 import { usePubkey } from "./usePubkey";
 
@@ -38,7 +38,7 @@ const makeCertifiedTokenQuery = (
       return address;
     }
     const chainId = networkToChainId(network);
-    const info = await fetchNullable<TokenInfo>(
+    const info = await fetchNullableWithSessionCache<TokenInfo>(
       makeCertifiedTokenInfoURL(chainId, address),
       signal
     );
@@ -79,6 +79,75 @@ export const useCertifiedToken = (mint: string | null | undefined) => {
  *
  * @returns Token query
  */
+export const makeBatchedTokensQuery = ({
+  network,
+  addresses,
+  fetchKeys,
+}: {
+  network: Network;
+  addresses: readonly (PublicKey | null | undefined)[];
+  fetchKeys: FetchKeysFn;
+}): UseQueryOptions<readonly (Token | null | undefined)[]> => ({
+  queryKey: [
+    "sail/batchedTokens",
+    network,
+    ...addresses.map((address) => address?.toString()),
+  ],
+  queryFn: async ({
+    signal,
+  }): Promise<readonly (Token | null | undefined)[]> => {
+    const addressesToFetch: {
+      key: PublicKey;
+      index: number;
+    }[] = [];
+
+    const data = await Promise.all(
+      addresses.map(async (address, i) => {
+        if (address === null || address === undefined) {
+          return address;
+        }
+        const chainId = networkToChainId(network);
+        const info = await fetchNullableWithSessionCache<TokenInfo>(
+          makeCertifiedTokenInfoURL(chainId, address.toString()),
+          signal
+        );
+        if (info !== null) {
+          return new Token(info);
+        }
+        addressesToFetch.push({ key: address, index: i });
+      })
+    );
+
+    const tokenDatas = await fetchKeys(addressesToFetch.map((a) => a.key));
+    tokenDatas.forEach((tokenData, i) => {
+      const index = addressesToFetch[i]?.index;
+      if (index === undefined) {
+        return;
+      }
+      if (!tokenData || !tokenData.data) {
+        data[index] = null;
+        return;
+      }
+      const raw = tokenData.data.accountInfo.data;
+      const parsed = deserializeMint(raw);
+      const token = Token.fromMint(tokenData.data.accountId, parsed.decimals, {
+        chainId: networkToChainId(network),
+      });
+      data[index] = token;
+    });
+
+    return data;
+  },
+  // these should never be stale, since token mints are immutable (other than supply)
+  staleTime: Infinity,
+});
+
+/**
+ * Constructs a query to load a token from the Certified Token List, or from the blockchain if
+ * it cannot be found.
+ *
+ * @returns Token query
+ */
 export const makeTokenQuery = ({
   network,
   address,
@@ -94,7 +163,7 @@ export const makeTokenQuery = ({
       return address;
     }
     const chainId = networkToChainId(network);
-    const info = await fetchNullable<TokenInfo>(
+    const info = await fetchNullableWithSessionCache<TokenInfo>(
       makeCertifiedTokenInfoURL(chainId, address.toString()),
       signal
     );
@@ -136,6 +205,28 @@ export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
         address: mint,
         fetchKeys,
       });
+    })
+  );
+};
+
+/**
+ * Uses and loads a series of mints as {@link Token}s using a batched call.
+ * @param mints
+ * @returns
+ */
+export const useBatchedTokens = (
+  mints?: readonly (PublicKey | null | undefined)[]
+) => {
+  const { network } = useSolana();
+  const { fetchKeys } = useSail();
+  const normalizedMints = useMemo(() => {
+    return mints?.map(normalizeMint) ?? [];
+  }, [mints]);
+  return useQuery(
+    makeBatchedTokensQuery({
+      network,
+      addresses: normalizedMints,
+      fetchKeys,
     })
   );
 };
