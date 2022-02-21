@@ -87,7 +87,7 @@ export const makeTokenQuery = ({
   address: PublicKey | null | undefined;
   fetchKeys: FetchKeysFn;
 }): UseQueryOptions<Token | null | undefined> => ({
-  queryKey: ["sail/tokenInfo", network, address],
+  queryKey: ["sail/tokenInfo", network, address?.toString()],
   queryFn: async ({ signal }): Promise<Token | null | undefined> => {
     if (address === null || address === undefined) {
       return address;
