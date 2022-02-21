@@ -130,7 +130,7 @@ export const useTokens = (mints: (PublicKey | null | undefined)[]) => {
     return mints?.map(normalizeMint) ?? [];
   }, [mints]);
   return useQueries(
-    normalizedMints?.map((mint) => {
+    normalizedMints.map((mint) => {
       return makeTokenQuery({
         network,
         address: mint,
