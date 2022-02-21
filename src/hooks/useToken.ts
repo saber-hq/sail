@@ -123,7 +123,7 @@ export const makeTokenQuery = ({
  * @param mints
  * @returns
  */
-export const useTokens = (mints: (PublicKey | null | undefined)[]) => {
+export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
   const { network } = useSolana();
   const { fetchKeys } = useSail();
   const normalizedMints = useMemo(() => {
