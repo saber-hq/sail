@@ -40,6 +40,12 @@ export interface HandleTXsResponse {
   errors?: readonly SailError[];
 }
 
+/**
+ * Generates a random identifier for a handled transaction.
+ * @returns string
+ */
+const genRandomBundleID = (): string => `bundle-${Math.random()}`;
+
 export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
   /**
    * Delay for the writable accounts to be refetched into the cache after a transaction.
@@ -50,6 +56,10 @@ export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
    * Called right before a {@link TransactionEnvelope} is sent.
    */
   onBeforeTxSend?: (args: {
+    /**
+     * Unique identifier for the bundle of transactions.
+     */
+    bundleID: string;
     /**
      * The {@link Network} this transaction is taking place on.
      */
@@ -68,6 +78,10 @@ export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
    * Called whenever a {@link TransactionEnvelope} is sent.
    */
   onTxSend?: (args: {
+    /**
+     * Unique identifier for the bundle of transactions.
+     */
+    bundleID: string;
     /**
      * The {@link Network} this transaction is taking place on.
      */
@@ -185,7 +199,8 @@ export const useHandleTXsInternal = ({
         });
       }
 
-      onBeforeTxSend?.({ network, txs, message });
+      const bundleID = genRandomBundleID();
+      onBeforeTxSend?.({ bundleID, network, txs, message });
 
       try {
         const firstTX = txs[0];
@@ -313,7 +328,7 @@ export const useHandleTXsInternal = ({
           }
         })();
 
-        onTxSend?.({ network, txs, pending, message });
+        onTxSend?.({ bundleID, network, txs, pending, message });
 
         if (waitForConfirmation) {
           // await for the tx to be confirmed
