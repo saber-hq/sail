@@ -396,7 +396,7 @@ __metadata:
     "@saberhq/solana-contrib": ^1.12
     "@saberhq/token-utils": ^1.12
     "@saberhq/use-solana": ^1.12
-    "@solana/web3.js": ^1.29.2
+    "@solana/web3.js": ^1.36
     bn.js: ^5.2.0
     jsbi: ^3 || ^4
     react: ^17.0.2
