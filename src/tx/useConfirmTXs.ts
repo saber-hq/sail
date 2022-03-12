@@ -25,10 +25,10 @@ interface TXHandlers {
    * Signs and confirms multiple transactions before returning.
    */
   signAndConfirmTXs: (
-    txEnvs: TransactionEnvelope[],
+    txEnvs: readonly TransactionEnvelope[],
     msg?: string,
     options?: HandleTXOptions
-  ) => Promise<TransactionReceipt[]>;
+  ) => Promise<readonly TransactionReceipt[]>;
 }
 
 export const useTXHandlers = (): TXHandlers => {
@@ -50,10 +50,10 @@ export const useTXHandlers = (): TXHandlers => {
 
   const signAndConfirmTXs = useCallback(
     async (
-      txEnvs: TransactionEnvelope[],
+      txEnvs: readonly TransactionEnvelope[],
       msg?: string,
       options?: HandleTXOptions
-    ): Promise<TransactionReceipt[]> => {
+    ): Promise<readonly TransactionReceipt[]> => {
       const { pending, success, errors } = await handleTXs(
         txEnvs,
         msg,

@@ -264,7 +264,7 @@ export class SailGetMultipleAccountsError extends SailError {
  * Callback called whenever getMultipleAccounts fails.
  */
 export class SailSignAndConfirmError extends SailError {
-  constructor(readonly errors: SailError[] | undefined) {
+  constructor(readonly errors: readonly SailError[] | undefined) {
     super("SailSignAndConfirmError", errors);
   }
 }

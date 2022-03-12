@@ -31,13 +31,13 @@ const DEBUG_MODE =
 export interface HandleTXResponse {
   success: boolean;
   pending: PendingTransaction | null;
-  errors?: SailError[];
+  errors?: readonly SailError[];
 }
 
 export interface HandleTXsResponse {
   success: boolean;
-  pending: PendingTransaction[];
-  errors?: SailError[];
+  pending: readonly PendingTransaction[];
+  errors?: readonly SailError[];
 }
 
 export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
@@ -96,7 +96,7 @@ export type HandleTX = (
  * Function which signs and sends a set of {@link TransactionEnvelope}.
  */
 export type HandleTXs = (
-  txEnv: TransactionEnvelope[],
+  txEnv: readonly TransactionEnvelope[],
   msg?: string,
   options?: HandleTXOptions
 ) => Promise<HandleTXsResponse>;
@@ -123,12 +123,12 @@ export const useHandleTXsInternal = ({
 
   const handleTXs = useCallback(
     async (
-      txs: TransactionEnvelope[],
+      txs: readonly TransactionEnvelope[],
       message?: string,
       options?: HandleTXOptions
     ): Promise<{
       success: boolean;
-      pending: PendingTransaction[];
+      pending: readonly PendingTransaction[];
       errors?: SailError[];
     }> => {
       if (txs.length === 0) {
@@ -331,7 +331,7 @@ export const useHandleTXsInternal = ({
     ): Promise<{
       success: boolean;
       pending: PendingTransaction | null;
-      errors?: SailError[];
+      errors?: readonly SailError[];
     }> => {
       const { success, pending, errors } = await handleTXs(
         [txEnv],
