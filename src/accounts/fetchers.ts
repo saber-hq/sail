@@ -44,10 +44,7 @@ export const getMultipleAccounts = async (
         try {
           return {
             keys: chunk,
-            array: (await connection.getMultipleAccountsInfo(
-              chunk,
-              commitment
-            )) as (AccountInfo<Buffer> | null)[],
+            array: await connection.getMultipleAccountsInfo(chunk, commitment),
           };
         } catch (e) {
           const error = new SailGetMultipleAccountsError(chunk, commitment, e);
