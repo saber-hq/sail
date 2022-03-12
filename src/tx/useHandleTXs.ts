@@ -47,11 +47,42 @@ export interface UseHandleTXsArgs extends Pick<UseAccounts, "refetchMany"> {
   txRefetchDelayMs?: number;
 
   /**
-   * Called whenever a Transaction is sent.
+   * Called right before a {@link TransactionEnvelope} is sent.
+   */
+  onBeforeTxSend?: (args: {
+    /**
+     * The {@link Network} this transaction is taking place on.
+     */
+    network: Network;
+    /**
+     * The {@link TransactionEnvelope}s about to be sent.
+     */
+    txs: readonly TransactionEnvelope[];
+    /**
+     * Message identifying the transaction.
+     */
+    message?: string;
+  }) => void;
+
+  /**
+   * Called whenever a {@link TransactionEnvelope} is sent.
    */
   onTxSend?: (args: {
+    /**
+     * The {@link Network} this transaction is taking place on.
+     */
     network: Network;
-    pending: PendingTransaction[];
+    /**
+     * The {@link TransactionEnvelope}s that were sent.
+     */
+    txs: readonly TransactionEnvelope[];
+    /**
+     * Pending transactions.
+     */
+    pending: readonly PendingTransaction[];
+    /**
+     * Message identifying the transaction.
+     */
     message?: string;
   }) => void;
 
@@ -114,6 +145,7 @@ export interface UseHandleTXs {
 
 export const useHandleTXsInternal = ({
   refetchMany,
+  onBeforeTxSend,
   onTxSend,
   onError,
   txRefetchDelayMs = 1_000,
@@ -152,6 +184,9 @@ export const useHandleTXsInternal = ({
           console.debug(table);
         });
       }
+
+      onBeforeTxSend?.({ network, txs, message });
+
       try {
         const firstTX = txs[0];
         invariant(firstTX, "firstTX");
@@ -278,7 +313,7 @@ export const useHandleTXsInternal = ({
           }
         })();
 
-        onTxSend?.({ network, pending, message });
+        onTxSend?.({ network, txs, pending, message });
 
         if (waitForConfirmation) {
           // await for the tx to be confirmed
@@ -315,6 +350,7 @@ export const useHandleTXsInternal = ({
     },
     [
       network,
+      onBeforeTxSend,
       onError,
       onTxSend,
       refetchMany,
