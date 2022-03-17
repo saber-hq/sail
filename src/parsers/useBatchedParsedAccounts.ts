@@ -26,14 +26,21 @@ export type BatchParsedAccountQueryResult<T> = UseQueryResult<
 /**
  * Data resulting from a batch query.
  */
-export type BatchedParsedAccountQueryData<T> = readonly (
-  | ProgramAccount<T>
+export type BatchedParsedAccountQueryKeys =
+  | readonly (PublicKey | null | undefined)[]
   | null
-  | undefined
-)[];
+  | undefined;
+
+/**
+ * Data resulting from a batch query.
+ */
+export type BatchedParsedAccountQueryData<T> =
+  | readonly (ProgramAccount<T> | null | undefined)[]
+  | null
+  | undefined;
 
 export const makeBatchedParsedAccountQuery = <T>(
-  keys: (PublicKey | null | undefined)[],
+  keys: BatchedParsedAccountQueryKeys,
   network: Network,
   fetchKeys: FetchKeysFn,
   parser: ProgramAccountParser<T>,
@@ -42,10 +49,17 @@ export const makeBatchedParsedAccountQuery = <T>(
     "queryFn" | "queryKey"
   > = {}
 ): UseQueryOptions<BatchedParsedAccountQueryData<T>> => ({
-  queryKey: ["sail/batchedParsedAccounts", network, ...serializeKeys(keys)],
+  queryKey: [
+    "sail/batchedParsedAccounts",
+    network,
+    ...(keys ? serializeKeys(keys) : keys === null ? ["null"] : ["undefined"]),
+  ],
   queryFn: async (): Promise<
-    readonly (ProgramAccount<T> | null | undefined)[]
+    readonly (ProgramAccount<T> | null | undefined)[] | null | undefined
   > => {
+    if (!keys) {
+      return keys;
+    }
     const accountsData = await fetchKeysMaybe(fetchKeys, keys);
     return accountsData.map((result): ProgramAccount<T> | null | undefined => {
       if (!result) {
@@ -79,7 +93,7 @@ export const makeBatchedParsedAccountQuery = <T>(
  * @returns
  */
 export const useBatchedParsedAccounts = <T>(
-  keys: (PublicKey | null | undefined)[],
+  keys: BatchedParsedAccountQueryKeys,
   parser: ProgramAccountParser<T>,
   options: Omit<
     UseQueryOptions<BatchedParsedAccountQueryData<T>>,
@@ -98,6 +112,9 @@ export const useBatchedParsedAccounts = <T>(
   // refresh from the cache whenever the cache is updated
   const { refetch } = query;
   useEffect(() => {
+    if (!keys) {
+      return;
+    }
     return onBatchCache((e) => {
       if (keys.find((key) => key && e.hasKey(key))) {
         void refetch();

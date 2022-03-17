@@ -9,11 +9,14 @@ import { useSail } from "../provider";
  * This is for advanced users only.
  */
 export const useAccountsSubscribe = (
-  keys: (PublicKey | null | undefined)[]
+  keys: readonly (PublicKey | null | undefined)[] | null | undefined
 ) => {
   const { subscribe } = useSail();
   // subscribe to account changes
   useEffect(() => {
+    if (!keys) {
+      return;
+    }
     const allKeysUnsubscribe = keys
       .filter((k): k is PublicKey => !!k)
       .map(subscribe);

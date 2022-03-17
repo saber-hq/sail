@@ -8,7 +8,11 @@ import type {
   ProgramAccountParsers,
 } from "./programAccounts";
 import { makeProgramAccountParsers } from "./programAccounts";
-import type { BatchParsedAccountQueryResult } from "./useBatchedParsedAccounts";
+import type {
+  BatchedParsedAccountQueryData,
+  BatchedParsedAccountQueryKeys,
+  BatchParsedAccountQueryResult,
+} from "./useBatchedParsedAccounts";
 import { useBatchedParsedAccounts } from "./useBatchedParsedAccounts";
 import type { ParsedAccountQueryResult } from "./useParsedAccount";
 import { useParsedAccount, useParsedAccounts } from "./useParsedAccount";
@@ -41,9 +45,9 @@ export type ProgramParserHooks<T> = {
    * Uses the data of multiple keys, batched into a single call.
    */
   useBatchedData: (
-    keys: (PublicKey | null | undefined)[],
+    keys: BatchedParsedAccountQueryKeys,
     options?: Omit<
-      UseQueryOptions<readonly (ProgramAccount<T> | null | undefined)[]>,
+      UseQueryOptions<BatchedParsedAccountQueryData<T>>,
       "queryFn" | "queryKey"
     >
   ) => BatchParsedAccountQueryResult<T>;
@@ -81,9 +85,9 @@ export const makeProgramParserHooks = <M, A extends keyof M>(
       ): ParsedAccountQueryResult<T>[] =>
         useParsedAccounts<T>(keys, parser, options),
       useBatchedData: (
-        keys: (PublicKey | null | undefined)[],
+        keys: BatchedParsedAccountQueryKeys,
         options?: Omit<
-          UseQueryOptions<readonly (ProgramAccount<T> | null | undefined)[]>,
+          UseQueryOptions<BatchedParsedAccountQueryData<T>>,
           "queryFn" | "queryKey"
         >
       ): BatchParsedAccountQueryResult<T> =>
