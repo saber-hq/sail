@@ -54,9 +54,7 @@ export const makeBatchedParsedAccountQuery = <T>(
     network,
     ...(keys ? serializeKeys(keys) : keys === null ? ["null"] : ["undefined"]),
   ],
-  queryFn: async (): Promise<
-    readonly (ProgramAccount<T> | null | undefined)[] | null | undefined
-  > => {
+  queryFn: async (): Promise<BatchedParsedAccountQueryData<T>> => {
     if (!keys) {
       return keys;
     }

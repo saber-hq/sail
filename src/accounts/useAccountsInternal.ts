@@ -5,7 +5,6 @@ import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import invariant from "tiny-invariant";
 
 import type { AccountFetchResult, SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
@@ -79,16 +78,16 @@ export const fetchKeysMaybe = async (
   );
   const nonEmptyKeys = nonEmptyKeysWithIndex.map((n) => n[0]);
   const accountsData = await fetchKeys(nonEmptyKeys);
-  return keysWithIndex.map(([key, index]) => {
-    const found = nonEmptyKeysWithIndex.findIndex(
-      ([_, otherIndex]) => otherIndex === index
-    );
-    if (found !== -1) {
-      return accountsData[found];
-    }
-    invariant(!key, "key should be empty");
-    return key;
+
+  const result: (AccountFetchResult | null | undefined)[] = keys.slice() as (
+    | AccountFetchResult
+    | null
+    | undefined
+  )[];
+  nonEmptyKeysWithIndex.forEach(([_, originalIndex], i) => {
+    result[originalIndex] = accountsData[i];
   });
+  return result;
 };
 
 export interface UseAccounts extends Required<UseAccountsArgs> {
