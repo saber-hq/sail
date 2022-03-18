@@ -130,6 +130,10 @@ export interface HandleTXOptions extends ConfirmOptions {
      */
     useWebsocket?: boolean;
   };
+  /**
+   * Whether or not to handle the TX envelope in debug mode.
+   */
+  debugMode?: boolean;
 }
 
 /**
@@ -179,7 +183,7 @@ export const useHandleTXsInternal = ({
     ): Promise<{
       success: boolean;
       pending: readonly PendingTransaction[];
-      errors?: SailError[];
+      errors?: readonly SailError[];
     }> => {
       if (txs.length === 0) {
         return {
@@ -188,7 +192,7 @@ export const useHandleTXsInternal = ({
         };
       }
 
-      if (DEBUG_MODE) {
+      if (options?.debugMode ?? DEBUG_MODE) {
         const txTable = await Promise.all(
           txs.map(async (tx) => {
             return await tx.simulateTable({ verifySigners: false, ...options });
