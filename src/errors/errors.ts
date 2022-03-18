@@ -87,6 +87,18 @@ export class SailError extends Error {
   get title(): string {
     return ERROR_TITLES[this.sailErrorName];
   }
+
+  /**
+   * Returns the value as a {@link SailError}, or null if it isn't.
+   * @param e
+   * @returns
+   */
+  static tryInto = (e: unknown): SailError | null => {
+    return e instanceof SailError ||
+      ("_isSailError" in (e as SailError) && (e as SailError)._isSailError)
+      ? (e as SailError)
+      : null;
+  };
 }
 
 /**

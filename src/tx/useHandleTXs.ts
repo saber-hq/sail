@@ -349,10 +349,7 @@ export const useHandleTXsInternal = ({
         });
 
         const sailError: SailError =
-          e instanceof SailError ||
-          ("_isSailError" in (e as SailError) && (e as SailError)._isSailError)
-            ? (e as SailError)
-            : new SailUnknownTXFailError(e, network, txs);
+          SailError.tryInto(e) ?? new SailUnknownTXFailError(e, network, txs);
         onError(sailError);
         return { success: false, pending: [], errors: [sailError] };
       }
