@@ -5,6 +5,7 @@ import type {
 } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import type { OperationOptions } from "retry";
 import invariant from "tiny-invariant";
@@ -116,6 +117,9 @@ export interface HandleTXOptions extends ConfirmOptions {
    * Options to pass in after a refetch has occured.
    */
   refetchAfterTX?: OperationOptions & {
+    /**
+     * Commitment of the confirmed transaction to fetch.
+     */
     commitment?: Finality;
     /**
      * Delay for the writable accounts to be refetched into the cache after a transaction.
@@ -279,8 +283,8 @@ export const useHandleTXsInternal = ({
 
         // get the unique writable keys for every transaction
         const writable = [
-          ...new Set([...txs.flatMap((tx) => tx.writableKeys)]),
-        ];
+          ...new Set([...txs.flatMap((tx) => tx.writableKeys.toString())]),
+        ].map((key) => new PublicKey(key));
 
         // refetch everything
         void (async () => {
