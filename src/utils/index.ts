@@ -1,4 +1,5 @@
-import type { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
+import uniq from "lodash.uniq";
 
 import type { AccountDatum } from "../types";
 
@@ -17,3 +18,13 @@ export const serializeKeys = (
 ): (string | null | undefined)[] => {
   return keys.map((k) => (k ? k.toString() : k));
 };
+
+/**
+ * Generates a list of unique {@link PublicKey}s.
+ * @param keys
+ * @returns
+ */
+export const uniqKeys = (
+  keys: readonly (PublicKey | string)[]
+): readonly PublicKey[] =>
+  uniq(keys.map((key) => key.toString())).map((key) => new PublicKey(key));

@@ -104,7 +104,7 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    * Refetches multiple accounts.
    */
   refetchMany: (
-    keys: PublicKey[]
+    keys: readonly PublicKey[]
   ) => Promise<(AccountInfo<Buffer> | Error | null)[]>;
   /**
    * Refetches all accounts that are being subscribed to.
@@ -209,7 +209,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   );
 
   const refetchMany = useCallback(
-    async (keys: PublicKey[]) => {
+    async (keys: readonly PublicKey[]) => {
       keys.forEach((key) => {
         accountLoader.clear(key);
       });

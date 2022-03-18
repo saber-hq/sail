@@ -5,12 +5,12 @@ import type {
 } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
-import { PublicKey } from "@solana/web3.js";
 import { useCallback } from "react";
 import type { OperationOptions } from "retry";
 import invariant from "tiny-invariant";
 
 import type { UseAccounts } from "..";
+import { uniqKeys } from "..";
 import {
   extractErrorMessage,
   InsufficientSOLError,
@@ -282,9 +282,7 @@ export const useHandleTXsInternal = ({
         }
 
         // get the unique writable keys for every transaction
-        const writable = [
-          ...new Set([...txs.flatMap((tx) => tx.writableKeys.toString())]),
-        ].map((key) => new PublicKey(key));
+        const writable = uniqKeys(txs.flatMap((tx) => tx.writableKeys));
 
         // refetch everything
         void (async () => {
@@ -312,23 +310,11 @@ export const useHandleTXsInternal = ({
             // then fetch, after a delay
             setTimeout(() => {
               void refetchMany(writable).catch((e) => {
-                onError(
-                  new SailRefetchAfterTXError(
-                    e,
-                    writable,
-                    pending.map((p) => p.signature)
-                  )
-                );
+                onError(new SailRefetchAfterTXError(e, writable, pending));
               });
             }, refetchAfterTX?.refetchDelayMs ?? txRefetchDelayMs);
           } catch (e) {
-            onError(
-              new SailRefetchAfterTXError(
-                e,
-                writable,
-                pending.map((p) => p.signature)
-              )
-            );
+            onError(new SailRefetchAfterTXError(e, writable, pending));
           }
         })();
 

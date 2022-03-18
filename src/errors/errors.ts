@@ -1,4 +1,8 @@
-import type { Network, TransactionEnvelope } from "@saberhq/solana-contrib";
+import type {
+  Network,
+  PendingTransaction,
+  TransactionEnvelope,
+} from "@saberhq/solana-contrib";
 import type {
   Commitment,
   KeyedAccountInfo,
@@ -173,9 +177,16 @@ export class SailRefetchAfterTXError extends SailError {
   constructor(
     originalError: unknown,
     readonly writable: readonly PublicKey[],
-    readonly txSigs: readonly TransactionSignature[]
+    readonly txs: readonly PendingTransaction[]
   ) {
     super("SailRefetchAfterTXError", originalError);
+  }
+
+  /**
+   * List of {@link TransactionSignature}s.
+   */
+  get txSigs(): readonly TransactionSignature[] {
+    return this.txs.map((tx) => tx.signature);
   }
 }
 

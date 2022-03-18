@@ -361,6 +361,7 @@ __metadata:
     "@solana/web3.js": ^1.36.0
     "@types/lodash.chunk": ^4.2.6
     "@types/lodash.mapvalues": ^4.6.6
+    "@types/lodash.uniq": ^4
     "@types/lodash.zip": ^4.2.6
     "@types/node": ^17.0.21
     "@types/react": ^17.0.40
@@ -378,6 +379,7 @@ __metadata:
     lint-staged: ^12.3.5
     lodash.chunk: ^4.2.0
     lodash.mapvalues: ^4.6.0
+    lodash.uniq: ^4.5.0
     lodash.zip: ^4.2.0
     prettier: ^2.5.1
     react: ^17.0.2
@@ -830,6 +832,15 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: bd8fe9e99362d142f96b1868633f26d90d6d0602545087cf9cbd8bd011e31aa78291328116d653698f6d0ce3e86e2922583f181cf11507fe6214f00f3b6a9a07
+  languageName: node
+  linkType: hard
+
+"@types/lodash.uniq@npm:^4":
+  version: 4.5.6
+  resolution: "@types/lodash.uniq@npm:4.5.6"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: cbc8d8f19d249dc708ec9cd2d618aa3ca50c21d6e66692579fcb0ef0153c4add918c5d9075686f66d140fa276ae5043eed64e09477a80be3720f9104410fdcab
   languageName: node
   linkType: hard
 
@@ -4159,6 +4170,13 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: ad580b4bdbb7ca1f7abf7e1bce63a9a0b98e370cf40194b03380a46b4ed799c9573029599caebc1b14e3f24b111aef72b96674a56cfa105e0f5ac70546cdc005
+  languageName: node
+  linkType: hard
+
+"lodash.uniq@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.uniq@npm:4.5.0"
+  checksum: a4779b57a8d0f3c441af13d9afe7ecff22dd1b8ce1129849f71d9bbc8e8ee4e46dfb4b7c28f7ad3d67481edd6e51126e4e2a6ee276e25906d10f7140187c392d
   languageName: node
   linkType: hard
 
