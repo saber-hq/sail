@@ -2,6 +2,7 @@ import type { PublicKey } from "@solana/web3.js";
 
 import type { AccountDatum } from "../types";
 
+export * from "./falsy";
 export * from "./fetchNullable";
 
 export const accountsEqual = (a: AccountDatum, b: AccountDatum): boolean => {
