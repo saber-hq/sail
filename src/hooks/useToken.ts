@@ -8,7 +8,8 @@ import type { UseQueryOptions } from "react-query";
 import { useQueries, useQuery } from "react-query";
 
 import type { FetchKeysFn } from "..";
-import { fetchNullableWithSessionCache } from "..";
+import { fetchNullableWithSessionCache, mapSome } from "..";
+import type { BatchedParsedAccountQueryKeys } from "../parsers";
 import { useSail } from "../provider";
 import { usePubkey } from "./usePubkey";
 
@@ -85,21 +86,29 @@ export const makeBatchedTokensQuery = ({
   fetchKeys,
 }: {
   network: Network;
-  addresses: readonly (PublicKey | null | undefined)[];
+  addresses: BatchedParsedAccountQueryKeys;
   fetchKeys: FetchKeysFn;
-}): UseQueryOptions<readonly (Token | null | undefined)[]> => ({
+}): UseQueryOptions<
+  readonly (Token | null | undefined)[] | null | undefined
+> => ({
   queryKey: [
     "sail/batchedTokens",
     network,
-    ...addresses.map((address) => address?.toString()),
+    ...(mapSome(addresses, (a) => a.map((address) => address?.toString())) ?? [
+      addresses,
+    ]),
   ],
   queryFn: async ({
     signal,
-  }): Promise<readonly (Token | null | undefined)[]> => {
+  }): Promise<readonly (Token | null | undefined)[] | null | undefined> => {
     const addressesToFetch: {
       key: PublicKey;
       index: number;
     }[] = [];
+
+    if (!addresses) {
+      return addresses;
+    }
 
     const data = await Promise.all(
       addresses.map(async (address, i) => {
@@ -218,13 +227,11 @@ export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
  * @param mints
  * @returns
  */
-export const useBatchedTokens = (
-  mints?: readonly (PublicKey | null | undefined)[]
-) => {
+export const useBatchedTokens = (mints: BatchedParsedAccountQueryKeys) => {
   const { network } = useSolana();
   const { fetchKeys } = useSail();
   const normalizedMints = useMemo(() => {
-    return mints?.map(normalizeMint) ?? [];
+    return mapSome(mints, (m) => m.map(normalizeMint));
   }, [mints]);
   return useQuery(
     makeBatchedTokensQuery({
