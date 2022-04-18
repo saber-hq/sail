@@ -4,7 +4,6 @@ import type { AccountInfo } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import type { AccountFetchResult, SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
@@ -168,18 +167,16 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
             onError,
             "confirmed"
           );
-          unstable_batchedUpdates(() => {
-            const batch = new Set<string>();
-            result.array.forEach((info, i) => {
-              const addr = keys[i];
-              if (addr && !(info instanceof Error)) {
-                const cacheKey = getCacheKeyOfPublicKey(addr);
-                accountsCache.set(cacheKey, info);
-                batch.add(cacheKey);
-              }
-            });
-            emitter.raiseBatchCacheUpdated(batch);
+          const batch = new Set<string>();
+          result.array.forEach((info, i) => {
+            const addr = keys[i];
+            if (addr && !(info instanceof Error)) {
+              const cacheKey = getCacheKeyOfPublicKey(addr);
+              accountsCache.set(cacheKey, info);
+              batch.add(cacheKey);
+            }
           });
+          emitter.raiseBatchCacheUpdated(batch);
           return result.array;
         },
         {
