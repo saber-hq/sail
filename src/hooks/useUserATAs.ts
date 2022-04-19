@@ -58,7 +58,7 @@ const useUserATAsArray = (
             return null;
           }
           return await getATAAddress({
-            mint: token?.mintAccount,
+            mint: token.mintAccount,
             owner,
           });
         })
