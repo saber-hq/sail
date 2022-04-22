@@ -11,6 +11,7 @@ import type { FetchKeysFn } from "..";
 import { fetchNullableWithSessionCache, mapSome } from "..";
 import type { BatchedParsedAccountQueryKeys } from "../parsers";
 import { useSail } from "../provider";
+import { makeListMemoKey } from "../utils";
 import { usePubkey } from "./usePubkey";
 
 const makeCertifiedTokenInfoURL = (chainId: number, address: string) =>
@@ -210,7 +211,8 @@ export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
   const { fetchKeys } = useSail();
   const normalizedMints = useMemo(() => {
     return mints?.map(normalizeMint) ?? [];
-  }, [mints]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [makeListMemoKey(mints)]);
   return useQueries(
     normalizedMints.map((mint) => {
       return makeTokenQuery({
