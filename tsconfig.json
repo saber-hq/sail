@@ -1,7 +1,7 @@
 {
   "extends": "@saberhq/tsconfig/tsconfig.lib.json",
   "compilerOptions": {
-    "lib": ["ES2015", "DOM"],
+    "lib": ["ES2019", "DOM"],
     "outDir": "dist/esm/",
     "rootDir": "src/",
     "noEmit": false

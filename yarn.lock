@@ -413,11 +413,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saberhq/anchor-contrib@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/anchor-contrib@npm:1.12.61"
+"@saberhq/anchor-contrib@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/anchor-contrib@npm:1.12.64"
   dependencies:
-    "@saberhq/solana-contrib": ^1.12.61
+    "@saberhq/solana-contrib": ^1.12.64
     eventemitter3: ^4.0.7
     lodash.camelcase: ^4.3.0
     lodash.mapvalues: ^4.6.0
@@ -426,30 +426,30 @@ __metadata:
     "@project-serum/anchor": ^0.22 || ^0.23 || ^0.24
     "@solana/web3.js": ^1.37
     bn.js: ^4 || ^5
-  checksum: 824bd7120381ac6b1d7ac00d65587fe25fc3573b34177ed3c82c52fb09555431f52162a6d27a7d5db55bad173dd49857bcf1bef424cb45a281572095fd2e5caa
+  checksum: 85b0bc9e4d4ce763b00986bc5713e8f15440ccbdf768ed869c6921f645f1bb6440c3218e35c1c2e1608afbd432924e1e47482ca348190c109dd78ce2267ac2cc
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config-react@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/eslint-config-react@npm:1.12.61"
+"@saberhq/eslint-config-react@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/eslint-config-react@npm:1.12.64"
   dependencies:
-    "@saberhq/eslint-config": ^1.12.61
+    "@saberhq/eslint-config": ^1.12.64
     eslint-plugin-jsx-a11y: ^6.5.1
     eslint-plugin-react: ^7.29.4
     eslint-plugin-react-hooks: ^4.4.0
   peerDependencies:
     eslint: ">=7"
-  checksum: 933eed754eaf2f70027f644780d1de5be4e1525ad199feb85717b690c8a5430865eabb170f71ee2cc56934fe460cd3e775cf28eff1c44afbc1dac09c10e9683e
+  checksum: 82c3d14951d2405bbf4ab7276937b7a236be857e1427685a5eb539bf95e0497238a252d67f3da2fdd27e211e84a9042333645ea11e773e7969e4ae3a4eae7ce2
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/eslint-config@npm:1.12.61"
+"@saberhq/eslint-config@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/eslint-config@npm:1.12.64"
   dependencies:
-    "@typescript-eslint/eslint-plugin": ^5.19.0
-    "@typescript-eslint/parser": ^5.19.0
+    "@typescript-eslint/eslint-plugin": ^5.20.0
+    "@typescript-eslint/parser": ^5.20.0
     eslint-config-prettier: ^8.5.0
     eslint-import-resolver-node: ^0.3.6
     eslint-plugin-import: ^2.26.0
@@ -459,7 +459,7 @@ __metadata:
     prettier: ^2.6.2
   peerDependencies:
     eslint: ">=7"
-  checksum: 84a10dda5e0a5555e9347b472bcf96d7835f32cb5f2f4e6c81c794438a8d0289a3c0aafe662b41115f470b7eceed83f5f7319eecb2e13f8b2a12f89eac09bbdf
+  checksum: 6f50ea946997de5c2e88417f0f9091b9591989af7eefa135fe1c92c55de1e9540435f9911cb530dfc422e8fa735fda9b00ab4041431613384c305a34ca5ad99b
   languageName: node
   linkType: hard
 
@@ -469,20 +469,20 @@ __metadata:
   dependencies:
     "@project-serum/anchor": ^0.24.2
     "@rushstack/eslint-patch": ^1.1.3
-    "@saberhq/anchor-contrib": ^1.12.61
-    "@saberhq/eslint-config-react": ^1.12.61
-    "@saberhq/solana-contrib": ^1.12.61
-    "@saberhq/token-utils": ^1.12.61
-    "@saberhq/tsconfig": ^1.12.61
-    "@saberhq/use-solana": ^1.12.61
+    "@saberhq/anchor-contrib": ^1.12.64
+    "@saberhq/eslint-config-react": ^1.12.64
+    "@saberhq/solana-contrib": ^1.12.64
+    "@saberhq/token-utils": ^1.12.64
+    "@saberhq/tsconfig": ^1.12.64
+    "@saberhq/use-solana": ^1.12.64
     "@solana/web3.js": ^1.39.1
-    "@types/lodash.chunk": ^4.2.6
-    "@types/lodash.mapvalues": ^4.6.6
-    "@types/lodash.uniq": ^4.5.6
-    "@types/lodash.zip": ^4.2.6
+    "@types/lodash.chunk": ^4.2.7
+    "@types/lodash.mapvalues": ^4.6.7
+    "@types/lodash.uniq": ^4.5.7
+    "@types/lodash.zip": ^4.2.7
     "@types/node": ^17.0.25
-    "@types/react": ^18.0.5
-    "@types/react-dom": ^18.0.1
+    "@types/react": ^18.0.6
+    "@types/react-dom": ^18.0.2
     "@types/retry": ^0.12.1
     "@yarnpkg/doctor": ^4.0.0-rc.2
     bn.js: ^5.2.0
@@ -493,7 +493,7 @@ __metadata:
     eventemitter3: ^4.0.7
     husky: ^7.0.4
     jsbi: ^4.3.0
-    lint-staged: ^12.3.8
+    lint-staged: ^12.4.0
     lodash.chunk: ^4.2.0
     lodash.mapvalues: ^4.6.0
     lodash.uniq: ^4.5.0
@@ -501,10 +501,10 @@ __metadata:
     prettier: ^2.6.2
     react: ^18.0.0
     react-dom: ^18.0.0
-    react-query: ^3.35.0
+    react-query: ^3.38.0
     retry: ^0.13.1
     tiny-invariant: ^1.2.0
-    tslib: ^2.3.1
+    tslib: ^2.4.0
     typedoc: ^0.22.15
     typescript: ^4.6.3
     unstated-next: ^1.1.0
@@ -524,9 +524,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@saberhq/solana-contrib@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/solana-contrib@npm:1.12.61"
+"@saberhq/solana-contrib@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/solana-contrib@npm:1.12.64"
   dependencies:
     "@solana/buffer-layout": ^4.0.0
     "@types/promise-retry": ^1.1.3
@@ -538,15 +538,15 @@ __metadata:
   peerDependencies:
     "@solana/web3.js": ^1.37
     bn.js: ^4 || ^5
-  checksum: 29800595d97a28d3d0a2189afd06b07ff41b882b5426e06b4414ed1b8341b13eb7f9105db6c5574b4c991b23fc53473ec6c4438b35aacdcf67e7c8b3c7a3f482
+  checksum: 194b9342b0ee433beb268f22fdd377212478918f9b15ccb07789470c0ffba13bc0d69e72244ad59ffd922fcf692cd013dcd30b8184dc21c95a0b28c394b2e86e
   languageName: node
   linkType: hard
 
-"@saberhq/token-utils@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/token-utils@npm:1.12.61"
+"@saberhq/token-utils@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/token-utils@npm:1.12.64"
   dependencies:
-    "@saberhq/solana-contrib": ^1.12.61
+    "@saberhq/solana-contrib": ^1.12.64
     "@solana/buffer-layout": ^4.0.0
     "@solana/spl-token": ^0.1.8
     "@ubeswap/token-math": ^4.4.6
@@ -556,24 +556,24 @@ __metadata:
     "@solana/web3.js": ^1.29.2
     bn.js: ^4 || ^5
     jsbi: ^3 || ^4
-  checksum: 4944481657aa2e0a5c4924d63f41a1dc6ff934b9cd99f5ee252a8b4ab66cd8d05fa66ce4ace7e36ee2cde6a62fce3f409ba6ae6c6d5eaee48495b1e4e52ceeea
+  checksum: 47f1c47596b7d845419b7cc4717682da31c4597a8d12557d3f18d5b502602758cf5177b4ceadf09b8a27fa548089484fb48249852592fda7eb4bd745105655f8
   languageName: node
   linkType: hard
 
-"@saberhq/tsconfig@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/tsconfig@npm:1.12.61"
-  checksum: 73e13da1ed19a05161e3cee985660155dd0c6c6a765ea8b3d2e6c52647007b46a8f102419636817a84a74ee56bb3448e7e49b171ab66f50cfa617ce2e26f4da2
+"@saberhq/tsconfig@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/tsconfig@npm:1.12.64"
+  checksum: 4c91efa7f78e85f74a3708ee8cb2460e2bff34170d4d41be2a3072ead5c082dbc91d160c2a4ce5651a054541e5a434d1b26f5f5a4c34b013dd18a63b9ddfdcc8
   languageName: node
   linkType: hard
 
-"@saberhq/use-solana@npm:^1.12.61":
-  version: 1.12.61
-  resolution: "@saberhq/use-solana@npm:1.12.61"
+"@saberhq/use-solana@npm:^1.12.64":
+  version: 1.12.64
+  resolution: "@saberhq/use-solana@npm:1.12.64"
   dependencies:
     "@ledgerhq/hw-transport": ^6.27.1
     "@ledgerhq/hw-transport-webusb": ^6.27.1
-    "@saberhq/solana-contrib": ^1.12.61
+    "@saberhq/solana-contrib": ^1.12.64
     "@solana/wallet-adapter-base": ^0.9.5
     "@solana/wallet-adapter-clover": ^0.4.4
     "@solana/wallet-adapter-coin98": ^0.5.4
@@ -594,7 +594,7 @@ __metadata:
     "@solana/web3.js": ^1.37
     bn.js: ^4 || ^5
     react: ^17.0.2 || ^18
-  checksum: 091ab01d12d23fe50908c131c0c788dbcbd637b6029f4930c04444044f5add89b657ed375bb210e2b19f778d98ebd99f3c6249ecfb7389bcbe0e60d22947b2ce
+  checksum: ebe376b998e63d00b9633e8856ee5862feaee1ba0d3ba5e73a3dc459ec001cbdcf1f33632c73545823495df60781b6d7d8a3146064f6b2bbde9bb2724fea1d97
   languageName: node
   linkType: hard
 
@@ -967,39 +967,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.chunk@npm:^4.2.6":
-  version: 4.2.6
-  resolution: "@types/lodash.chunk@npm:4.2.6"
+"@types/lodash.chunk@npm:^4.2.7":
+  version: 4.2.7
+  resolution: "@types/lodash.chunk@npm:4.2.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: 18afe616730bc28de1280939923e2433ca70334f409d132917ddb2e513ad4a796053ef6282546be9601bce88eac3fe3ec595137eae87d65a728eca5acaea6066
+  checksum: 09df5ca00d8866776038bf94658d30b4ea84bffe5f81c14c01568bcb6be692bf59f6ea093de2bb0afbb3f8e54ae96ebd97595f2838ab59b77865427ca77d391e
   languageName: node
   linkType: hard
 
-"@types/lodash.mapvalues@npm:^4.6.6":
-  version: 4.6.6
-  resolution: "@types/lodash.mapvalues@npm:4.6.6"
+"@types/lodash.mapvalues@npm:^4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.mapvalues@npm:4.6.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: bd8fe9e99362d142f96b1868633f26d90d6d0602545087cf9cbd8bd011e31aa78291328116d653698f6d0ce3e86e2922583f181cf11507fe6214f00f3b6a9a07
+  checksum: f28db2c0629ddff44f42ee545c35a6079ab7619d14e41eea6963a014da535346b13595391787570267b9c20457a2cc5f6d2c390e87e40f12a7618e4b7b5d6682
   languageName: node
   linkType: hard
 
-"@types/lodash.uniq@npm:^4.5.6":
-  version: 4.5.6
-  resolution: "@types/lodash.uniq@npm:4.5.6"
+"@types/lodash.uniq@npm:^4.5.7":
+  version: 4.5.7
+  resolution: "@types/lodash.uniq@npm:4.5.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: cbc8d8f19d249dc708ec9cd2d618aa3ca50c21d6e66692579fcb0ef0153c4add918c5d9075686f66d140fa276ae5043eed64e09477a80be3720f9104410fdcab
+  checksum: b7e94c32efb52c354ac3aacbebd29b27a304b7fb05258d0d511627ac64d9147d04ad5d0a3bdbc6d1dcc32699296f8af668ba73f1909904482c2e3554df6b4d27
   languageName: node
   linkType: hard
 
-"@types/lodash.zip@npm:^4.2.6":
-  version: 4.2.6
-  resolution: "@types/lodash.zip@npm:4.2.6"
+"@types/lodash.zip@npm:^4.2.7":
+  version: 4.2.7
+  resolution: "@types/lodash.zip@npm:4.2.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: 1611b9abd3742a949159218c8fb697dc8d992ff6eba03c13711a1212e4ceaf60b3af713456c8e1eeccf89146353e0d498f0836abd6294024283d1f574f01a4c8
+  checksum: 841c86482a94cd39228dceb7974d4094f5afbaf3077c1ffa02ead680acb7cd097e78d64ede10ee6bfd4e81c9020daa8c28e456abd0202eb4bccdd93681d94216
   languageName: node
   linkType: hard
 
@@ -1075,16 +1075,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.1":
-  version: 18.0.1
-  resolution: "@types/react-dom@npm:18.0.1"
+"@types/react-dom@npm:^18.0.2":
+  version: 18.0.2
+  resolution: "@types/react-dom@npm:18.0.2"
   dependencies:
     "@types/react": "*"
-  checksum: 6c183e2e50240b77ed767cd968fe061ef4f2b47f84da5ec9e412a767d68c9a004d1f6ccca4295a5aa2c3ee723377e59006a2031f3767c00d8ac9e240a51bb142
+  checksum: 2b0b138d8634ccfd8a86b17cb5414b122ee0cb6f650377d772f6008761a27e4c2531c08e3cab71aaa19b6893af6a508c664aa314db3ebcff5b8179173c9c9307
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.0.5":
+"@types/react@npm:*":
   version: 18.0.5
   resolution: "@types/react@npm:18.0.5"
   dependencies:
@@ -1092,6 +1092,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 70d3336d43ef25509fa89ef3278f57fdf1945fc921e69b7890a78ab9a52a55ee38e2f13aa71eb4f6032b7311e7557860ce8836c1acf3028304989571c9736a96
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.0.6":
+  version: 18.0.6
+  resolution: "@types/react@npm:18.0.6"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 368b40176f0dab30a611c3263bf1d9878cebede9ce8015bc5661a396787dbe41f0b667b8d6d448dea7bc8c0557bf3cb329ab2b16ad2dacb18eaa764358bd16d4
   languageName: node
   linkType: hard
 
@@ -1148,7 +1159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.19.0":
+"@typescript-eslint/eslint-plugin@npm:^5.20.0":
   version: 5.20.0
   resolution: "@typescript-eslint/eslint-plugin@npm:5.20.0"
   dependencies:
@@ -1171,7 +1182,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.19.0":
+"@typescript-eslint/parser@npm:^5.20.0":
   version: 5.20.0
   resolution: "@typescript-eslint/parser@npm:5.20.0"
   dependencies:
@@ -4388,9 +4399,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^12.3.8":
-  version: 12.3.8
-  resolution: "lint-staged@npm:12.3.8"
+"lint-staged@npm:^12.4.0":
+  version: 12.4.0
+  resolution: "lint-staged@npm:12.4.0"
   dependencies:
     cli-truncate: ^3.1.0
     colorette: ^2.0.16
@@ -4408,7 +4419,7 @@ __metadata:
     yaml: ^1.10.2
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: af6a89ae4244e4eac7180c6e7da452f378fd156ff38eaa666ecbb78f1e2efb7f1a9fc766dcc1cdde2bd76e03da68e602056ca9d2f1c6e46cf10aa83d20bf4d49
+  checksum: e25b273a73b79f224ff1ccb22432c34a9050fe8318b9cf7e08c748e2efc80e1f48ed4f2aa61cd16a701bb7fd6323ecf0d94a497c97732db04f2b5382d6b70131
   languageName: node
   linkType: hard
 
@@ -5381,9 +5392,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-query@npm:^3.35.0":
-  version: 3.35.0
-  resolution: "react-query@npm:3.35.0"
+"react-query@npm:^3.38.0":
+  version: 3.38.0
+  resolution: "react-query@npm:3.38.0"
   dependencies:
     "@babel/runtime": ^7.5.5
     broadcast-channel: ^3.4.1
@@ -5395,7 +5406,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 07f5986a85c78274f25d5f725eb11b7abe9248d771b5c72397cd9fbc183acafbb5d1db5d426e833aeb28aeb42934035370e7b1cdc52c185733ea3035dced40a5
+  checksum: 9318952a3e09f1716edd7f934c6d78b8bb94d1b1cce2d6e8fe5b9298009394da0ef16c5ad57797561bb2bee894a9bce9ffeacdf9276466270e5ed232f5d5097f
   languageName: node
   linkType: hard
 
@@ -6290,6 +6301,13 @@ resolve@^2.0.0-next.3:
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
