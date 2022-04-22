@@ -26,6 +26,11 @@ export interface AssociatedTokenAccount {
   isInitialized?: boolean;
 }
 
+/**
+ * Cache of token/owner mapped to its ATA.
+ */
+const ataCache: Record<string, PublicKey> = {};
+
 const useUserATAsArray = (
   tokens: readonly (Token | null | undefined)[]
 ):
@@ -57,10 +62,16 @@ const useUserATAsArray = (
           if (!owner) {
             return null;
           }
-          return await getATAAddress({
+          const cacheKey = `${token.address}_${owner.toString()}`;
+          if (ataCache[cacheKey]) {
+            return ataCache[cacheKey];
+          }
+          const ata = await getATAAddress({
             mint: token.mintAccount,
             owner,
           });
+          ataCache[cacheKey] = ata;
+          return ata;
         })
       );
     }
