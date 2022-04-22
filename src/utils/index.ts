@@ -36,7 +36,7 @@ export const uniqKeys = (
  * @returns
  */
 export const makeListMemoKey = <T extends { toString: () => string }>(
-  list: (NonNullable<T> | null | undefined)[] | null | undefined
+  list: readonly (NonNullable<T> | null | undefined)[] | null | undefined
 ): string | null | undefined => {
   return mapSome(list, (ms) =>
     JSON.stringify(ms.map((mint) => mapSome(mint, (m) => m.toString())))

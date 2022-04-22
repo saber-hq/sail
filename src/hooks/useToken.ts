@@ -201,6 +201,15 @@ export const makeTokenQuery = ({
   staleTime: Infinity,
 });
 
+const useNormalizedMints = (
+  mints?: readonly (PublicKey | null | undefined)[] | null | undefined
+): (PublicKey | null | undefined)[] => {
+  return useMemo(() => {
+    return mints?.map(normalizeMint) ?? [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [makeListMemoKey(mints)]);
+};
+
 /**
  * Uses and loads a series of mints as {@link Token}s.
  * @param mints
@@ -209,10 +218,7 @@ export const makeTokenQuery = ({
 export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
   const { network } = useSolana();
   const { fetchKeys } = useSail();
-  const normalizedMints = useMemo(() => {
-    return mints?.map(normalizeMint) ?? [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [makeListMemoKey(mints)]);
+  const normalizedMints = useNormalizedMints(mints);
   return useQueries(
     normalizedMints.map((mint) => {
       return makeTokenQuery({
@@ -232,9 +238,7 @@ export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
 export const useBatchedTokens = (mints: BatchedParsedAccountQueryKeys) => {
   const { network } = useSolana();
   const { fetchKeys } = useSail();
-  const normalizedMints = useMemo(() => {
-    return mapSome(mints, (m) => m.map(normalizeMint));
-  }, [mints]);
+  const normalizedMints = useNormalizedMints(mints);
   return useQuery(
     makeBatchedTokensQuery({
       network,
@@ -254,10 +258,7 @@ export const useToken = (mintRaw?: PublicKey | string | null) => {
   const mint = usePubkey(mintRaw);
   const { network } = useSolana();
   const { fetchKeys } = useSail();
-  const normalizedMint = useMemo(
-    () => (mint ? normalizeMint(mint) : mint),
-    [mint]
-  );
+  const normalizedMint = useMemo(() => mapSome(mint, normalizeMint), [mint]);
   return useQuery(
     makeTokenQuery({
       network,
