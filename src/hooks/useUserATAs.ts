@@ -74,6 +74,9 @@ const useUserATAsArray = (
           return ata;
         })
       );
+    },
+    {
+      staleTime: Infinity,
     }
   );
   const { data: atas } = useBatchedTokenAccounts(userATAKeys);
