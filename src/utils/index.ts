@@ -1,8 +1,8 @@
+import { mapSome } from "@saberhq/solana-contrib";
 import { PublicKey } from "@solana/web3.js";
 import uniq from "lodash.uniq";
 
 import type { AccountDatum } from "../types";
-import { mapSome } from "./falsy";
 
 export * from "./falsy";
 export * from "./fetchNullable";

@@ -1,4 +1,5 @@
 import type { Network } from "@saberhq/solana-contrib";
+import { mapSome } from "@saberhq/solana-contrib";
 import type { TokenInfo } from "@saberhq/token-utils";
 import { deserializeMint, networkToChainId, Token } from "@saberhq/token-utils";
 import { useSolana } from "@saberhq/use-solana";
@@ -8,7 +9,7 @@ import type { UseQueryOptions } from "react-query";
 import { useQueries, useQuery } from "react-query";
 
 import type { FetchKeysFn } from "..";
-import { fetchNullableWithSessionCache, mapSome } from "..";
+import { fetchNullableWithSessionCache } from "..";
 import type { BatchedParsedAccountQueryKeys } from "../parsers";
 import { useSail } from "../provider";
 import { makeListMemoKey } from "../utils";

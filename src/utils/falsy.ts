@@ -1,5 +1,3 @@
-import { exists } from "@saberhq/solana-contrib";
-
 /**
  * Returns undefined if any argument is undefined, or null
  * if argument is null.
@@ -21,16 +19,3 @@ export const noneProduct = <Args extends unknown[]>(
   }
   throw new Error("failed check");
 };
-
-/**
- * Applies a function to a null/undefined inner value if it is null or undefined,
- * otherwise returns null/undefined.
- *
- * @param obj
- * @param fn
- * @returns
- */
-export const mapSome = <T, U>(
-  obj: NonNullable<T> | null | undefined,
-  fn: (obj: NonNullable<T>) => U
-): U | null | undefined => (exists(obj) ? fn(obj) : obj);
