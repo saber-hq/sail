@@ -1,5 +1,6 @@
+import type { AccountInfoFetcher, Provider } from "@saberhq/solana-contrib";
 import { exists } from "@saberhq/solana-contrib";
-import { useConnectionContext } from "@saberhq/use-solana";
+import { useSolana } from "@saberhq/use-solana";
 import type { AccountInfo } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
@@ -8,6 +9,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AccountFetchResult, SailError } from "..";
 import { SailRefetchSubscriptionsError } from "..";
 import type { AccountDatum } from "../types";
+import { SailBatchFetcher, SailBatchProvider } from "./batchProvider";
 import type { CacheBatchUpdateEvent } from "./emitter";
 import { AccountsEmitter } from "./emitter";
 import { getMultipleAccounts } from "./fetchers";
@@ -136,11 +138,21 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    * If the AccountInfo has been fetched but wasn't found, this returns null.
    */
   getDatum: (key: PublicKey | null | undefined) => AccountDatum;
+
+  /**
+   * Fetches accounts.
+   */
+  batchFetcher: AccountInfoFetcher;
+
+  /**
+   * Provider using the batch fetcher.
+   */
+  batchProviderMut: Provider | null;
 }
 
 export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   const { batchDurationMs = 500, refreshIntervalMs = 60_000, onError } = args;
-  const { network, connection } = useConnectionContext();
+  const { network, connection, providerMut } = useSolana();
 
   // Cache of accounts
   const [{ accountsCache, emitter, subscribedAccounts }, setState] =
@@ -187,6 +199,15 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       ),
     [accountsCache, batchDurationMs, connection, emitter, onError]
   );
+
+  const { batchFetcher, batchProviderMut } = useMemo(() => {
+    return {
+      batchFetcher: new SailBatchFetcher(accountLoader),
+      batchProviderMut: providerMut
+        ? new SailBatchProvider(providerMut, accountLoader)
+        : null,
+    };
+  }, [providerMut, accountLoader]);
 
   const fetchKeys = useCallback(
     async (keys: readonly PublicKey[]) => {
@@ -295,5 +316,8 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     batchDurationMs,
     refreshIntervalMs,
     onError,
+
+    batchFetcher,
+    batchProviderMut,
   };
 };
