@@ -10,11 +10,14 @@ import { useMemo } from "react";
  */
 export const useTokenAmount = (
   token: Token | null | undefined,
-  valueStr: string
+  valueStr: string | null | undefined
 ): TokenAmount | null | undefined => {
   return useMemo(() => {
     if (!token) {
       return token;
+    }
+    if (valueStr === null || valueStr === undefined) {
+      return valueStr;
     }
     if (!valueStr) {
       return null;
