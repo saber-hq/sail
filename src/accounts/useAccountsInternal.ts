@@ -61,7 +61,7 @@ export interface UseAccountsArgs {
   /**
    * If true, disables periodic account refetches for subscriptions.
    */
-  disableRefresh?: boolean;
+  disableAutoRefresh?: boolean;
 }
 
 /**
@@ -164,7 +164,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     refreshIntervalMs = 60_000,
     onError,
     useWebsocketAccountUpdates = false,
-    disableRefresh = false,
+    disableAutoRefresh: disableRefresh = false,
   } = args;
   const { network, connection, providerMut } = useSolana();
 
@@ -344,7 +344,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     batchDurationMs,
     refreshIntervalMs,
     useWebsocketAccountUpdates,
-    disableRefresh,
+    disableAutoRefresh: disableRefresh,
     onError,
 
     batchFetcher,
