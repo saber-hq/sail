@@ -31,14 +31,19 @@ export interface AssociatedTokenAccount {
  */
 const ataCache: Record<string, PublicKey> = {};
 
-const useUserATAsArray = (
+/**
+ * Loads ATAs owned by the provided owner.
+ * @param owner
+ * @param tokens
+ * @returns
+ */
+export const useATAs = (
+  owner: PublicKey | null | undefined,
   tokens: readonly (Token | null | undefined)[]
 ):
   | readonly (AssociatedTokenAccount | null | undefined)[]
   | null
   | undefined => {
-  const wallet = useConnectedWallet();
-  const owner = wallet?.publicKey;
   const solBalance = useSOLBalance(owner);
 
   const memoTokens = useMemo(
@@ -132,7 +137,8 @@ export type _TupleOf<
 export const useUserATAs = <N extends number>(
   ...tokens: Tuple<Token | null | undefined, N>
 ): Tuple<AssociatedTokenAccount | null | undefined, N> => {
-  const atasList = useUserATAsArray(tokens);
+  const wallet = useConnectedWallet();
+  const atasList = useATAs(wallet?.publicKey, tokens);
   if (!atasList) {
     return tokens.map(() => atasList) as Tuple<
       AssociatedTokenAccount | null | undefined,
