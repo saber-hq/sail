@@ -1,7 +1,7 @@
 import type { AccountInfoFetcher, Provider } from "@saberhq/solana-contrib";
 import { exists } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
-import type { AccountInfo } from "@solana/web3.js";
+import type { AccountInfo, ClientSubscriptionId } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import DataLoader from "dataloader";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -54,6 +54,14 @@ export interface UseAccountsArgs {
    * Called whenever an error occurs.
    */
   onError: (err: SailError) => void;
+  /**
+   * If true, allows one to subscribe to account updates via websockets rather than via polling.
+   */
+  useWebsocketAccountUpdates?: boolean;
+  /**
+   * If true, disables periodic account refetches for subscriptions.
+   */
+  disableRefresh?: boolean;
 }
 
 /**
@@ -61,7 +69,7 @@ export interface UseAccountsArgs {
  */
 export type FetchKeysFn = (
   keys: readonly PublicKey[]
-) => Promise<AccountFetchResult[]>;
+) => Promise<readonly AccountFetchResult[]>;
 
 /**
  * Fetches keys, passing through null/undefined values.
@@ -72,7 +80,7 @@ export type FetchKeysFn = (
 export const fetchKeysMaybe = async (
   fetchKeys: FetchKeysFn,
   keys: readonly (PublicKey | null | undefined)[]
-): Promise<(AccountFetchResult | null | undefined)[]> => {
+): Promise<readonly (AccountFetchResult | null | undefined)[]> => {
   const keysWithIndex = keys.map((k, i) => [k, i] as const);
   const nonEmptyKeysWithIndex = keysWithIndex.filter(
     (key): key is readonly [PublicKey, number] => exists(key[0])
@@ -151,7 +159,13 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
 }
 
 export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
-  const { batchDurationMs = 500, refreshIntervalMs = 60_000, onError } = args;
+  const {
+    batchDurationMs = 500,
+    refreshIntervalMs = 60_000,
+    onError,
+    useWebsocketAccountUpdates = false,
+    disableRefresh = false,
+  } = args;
   const { network, connection, providerMut } = useSolana();
 
   // Cache of accounts
@@ -254,17 +268,27 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       } else {
         subscribedAccounts.set(keyStr, amount + 1);
       }
-      return () => {
+
+      let listener: ClientSubscriptionId | null = null;
+      if (useWebsocketAccountUpdates) {
+        listener = connection.onAccountChange(key, (data) => {
+          accountLoader.clear(key).prime(key, data);
+        });
+      }
+
+      return async () => {
         const currentAmount = subscribedAccounts.get(keyStr);
         if ((currentAmount ?? 0) > 1) {
           subscribedAccounts.set(keyStr, (currentAmount ?? 0) - 1);
         } else {
           subscribedAccounts.delete(keyStr);
         }
-        return Promise.resolve();
+        if (listener) {
+          await connection.removeAccountChangeListener(listener);
+        }
       };
     },
-    [subscribedAccounts]
+    [accountLoader, connection, subscribedAccounts, useWebsocketAccountUpdates]
   );
 
   const refetchAllSubscriptions = useCallback(async () => {
@@ -275,13 +299,17 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
   }, [refetchMany, subscribedAccounts]);
 
   useEffect(() => {
+    // don't auto refetch if we're disabling the refresh
+    if (disableRefresh) {
+      return;
+    }
     const interval = setInterval(() => {
       void refetchAllSubscriptions().catch((e) => {
         onError(new SailRefetchSubscriptionsError(e));
       });
     }, refreshIntervalMs);
     return () => clearInterval(interval);
-  }, [onError, refetchAllSubscriptions, refreshIntervalMs]);
+  }, [disableRefresh, onError, refetchAllSubscriptions, refreshIntervalMs]);
 
   const getDatum = useCallback(
     (k: PublicKey | null | undefined) => {
@@ -315,6 +343,8 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
 
     batchDurationMs,
     refreshIntervalMs,
+    useWebsocketAccountUpdates,
+    disableRefresh,
     onError,
 
     batchFetcher,
