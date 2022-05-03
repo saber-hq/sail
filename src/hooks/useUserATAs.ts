@@ -5,7 +5,7 @@ import type { PublicKey } from "@solana/web3.js";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
 
-import { useNativeAccount } from "../native";
+import { useSOLBalance } from "../native";
 import { useBatchedTokenAccounts } from "../parsers/splHooks";
 
 /**
@@ -37,9 +37,9 @@ const useUserATAsArray = (
   | readonly (AssociatedTokenAccount | null | undefined)[]
   | null
   | undefined => {
-  const { nativeBalance, account } = useNativeAccount();
   const wallet = useConnectedWallet();
   const owner = wallet?.publicKey;
+  const solBalance = useSOLBalance(owner);
 
   const memoTokens = useMemo(
     () => tokens,
@@ -93,9 +93,8 @@ const useUserATAsArray = (
       if (token?.mintAccount.equals(RAW_SOL_MINT)) {
         return {
           key: owner,
-          balance: nativeBalance ?? new TokenAmount(token, 0),
-          isInitialized:
-            (nativeBalance && !nativeBalance.isZero()) || account !== null,
+          balance: solBalance ?? new TokenAmount(token, 0),
+          isInitialized: !!(solBalance && !solBalance.isZero()),
         };
       }
       if (!token) {
@@ -111,7 +110,7 @@ const useUserATAsArray = (
         isInitialized: datum?.account.isInitialized,
       };
     });
-  }, [account, atas, memoTokens, nativeBalance, owner, userATAKeys]);
+  }, [atas, memoTokens, owner, solBalance, userATAKeys]);
 };
 
 export type Tuple<T, N extends number> = N extends N
