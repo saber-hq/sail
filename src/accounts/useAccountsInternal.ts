@@ -272,7 +272,10 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       let listener: ClientSubscriptionId | null = null;
       if (useWebsocketAccountUpdates) {
         listener = connection.onAccountChange(key, (data) => {
+          const cacheKey = getCacheKeyOfPublicKey(key);
+          accountsCache.set(cacheKey, data);
           accountLoader.clear(key).prime(key, data);
+          emitter.raiseBatchCacheUpdated(new Set([cacheKey]));
         });
       }
 
@@ -288,7 +291,14 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
         }
       };
     },
-    [accountLoader, connection, subscribedAccounts, useWebsocketAccountUpdates]
+    [
+      accountLoader,
+      accountsCache,
+      connection,
+      emitter,
+      subscribedAccounts,
+      useWebsocketAccountUpdates,
+    ]
   );
 
   const refetchAllSubscriptions = useCallback(async () => {
