@@ -1,5 +1,6 @@
 import type { PublicKey } from "@solana/web3.js";
 import { EventEmitter as Emitter } from "eventemitter3";
+import { startTransition } from "react";
 
 import { getCacheKeyOfPublicKey } from ".";
 
@@ -48,13 +49,17 @@ export class AccountsEmitter {
   };
 
   raiseBatchCacheUpdated(ids: ReadonlySet<string>): void {
-    this._emitter.emit(
-      CacheBatchUpdateEvent.type,
-      new CacheBatchUpdateEvent(ids)
-    );
+    startTransition(() => {
+      this._emitter.emit(
+        CacheBatchUpdateEvent.type,
+        new CacheBatchUpdateEvent(ids)
+      );
+    });
   }
 
   raiseCacheCleared(): void {
-    this._emitter.emit(CacheClearEvent.type, new CacheClearEvent());
+    startTransition(() => {
+      this._emitter.emit(CacheClearEvent.type, new CacheClearEvent());
+    });
   }
 }

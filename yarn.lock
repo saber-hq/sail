@@ -500,8 +500,8 @@ __metadata:
     "@solana/web3.js": ^1.37
     bn.js: ^5.2.0
     jsbi: ^3 || ^4
-    react: ^17.0.2 || ^18
-    react-dom: ^17.0.2 || ^18
+    react: ^18
+    react-dom: ^18
     react-query: ^3
   languageName: unknown
   linkType: soft
