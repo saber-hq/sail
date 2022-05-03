@@ -114,15 +114,22 @@ const useUserATAsArray = (
   }, [account, atas, memoTokens, nativeBalance, owner, userATAKeys]);
 };
 
-type Tuple<T, N extends number> = N extends N
+export type Tuple<T, N extends number> = N extends N
   ? number extends N
     ? T[]
     : _TupleOf<T, N, []>
   : never;
-type _TupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
-  ? R
-  : _TupleOf<T, N, [T, ...R]>;
+export type _TupleOf<
+  T,
+  N extends number,
+  R extends unknown[]
+> = R["length"] extends N ? R : _TupleOf<T, N, [T, ...R]>;
 
+/**
+ * Loads ATAs owned by a user.
+ * @param tokens
+ * @returns
+ */
 export const useUserATAs = <N extends number>(
   ...tokens: Tuple<Token | null | undefined, N>
 ): Tuple<AssociatedTokenAccount | null | undefined, N> => {

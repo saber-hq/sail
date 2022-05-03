@@ -16,6 +16,7 @@ import type { AccountDatum } from "../types";
  * Fetches data of the given accounts.
  * @param keys Keys to fetch. Ensure that this is memoized or unlikely to change.
  *
+ * @deprecated use {@link useBatchedParsedAccounts} instead
  * @returns One of three types:
  * - Buffer -- the account was found
  * - null -- account not found or an error occurred while loading the account

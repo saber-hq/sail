@@ -11,7 +11,7 @@ import type { HandleTXOptions } from "./useHandleTXs";
 /**
  * Transaction handler helpers.
  */
-interface TXHandlers {
+export interface TXHandlers {
   /**
    * Signs and confirms a transaction before returning.
    */
