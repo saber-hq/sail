@@ -46,6 +46,8 @@ export const makeParserHooks = <M>(
 
 /**
  * Parses accounts with the given parser.
+ *
+ * @deprecated use {@link useBatchedParsedAccounts} instead
  * @param keys
  * @param parser
  * @returns
