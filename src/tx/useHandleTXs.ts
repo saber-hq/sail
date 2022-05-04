@@ -3,6 +3,7 @@ import type {
   PendingTransaction,
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
+import { mapN } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { ConfirmOptions, Finality, Transaction } from "@solana/web3.js";
 import { useCallback } from "react";
@@ -217,10 +218,13 @@ export const useHandleTXsInternal = ({
 
         // TODO(igm): when we support other accounts being the payer,
         // we need to alter this check
-        const nativeBalance = (
-          await provider.getAccountInfo(provider.wallet.publicKey)
-        )?.accountInfo.lamports;
-        if (!nativeBalance || nativeBalance === 0) {
+        const [nativeAccount] = await refetchMany([provider.wallet.publicKey]);
+        const nativeBalance = mapN(
+          (nativeAccount) =>
+            "data" in nativeAccount ? nativeAccount.lamports : null,
+          nativeAccount
+        );
+        if (!nativeBalance) {
           const error = new InsufficientSOLError(nativeBalance);
           onError(error);
           return {

@@ -177,7 +177,7 @@ export class SailTransactionError extends SailError {
  * Thrown if there is not enough SOL to pay for a transaction.
  */
 export class InsufficientSOLError extends SailError {
-  constructor(readonly currentBalance?: number) {
+  constructor(readonly currentBalance?: number | null) {
     super("SailInsufficientSOLError", null, "Insufficient SOL balance");
   }
 }
