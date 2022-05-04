@@ -2,7 +2,7 @@ import type { AccountParsers } from "@saberhq/anchor-contrib";
 import type { KeyedAccountInfo, PublicKey } from "@solana/web3.js";
 import mapValues from "lodash.mapvalues";
 import zip from "lodash.zip";
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 
 import type { ParserHooks } from "..";
 import { getCacheKeyOfPublicKey, SailAccountParseError, useSail } from "..";
@@ -69,41 +69,43 @@ export const useParsedAccountsData = <T>(
   );
 
   useEffect(() => {
-    setParsed((prevParsed) => {
-      const nextParsed = { ...prevParsed };
-      zip(keys, data).forEach(([key, datum]) => {
-        if (datum) {
-          const key = getCacheKeyOfPublicKey(datum.accountId);
-          const prevValue = prevParsed[key];
-          if (
-            prevValue &&
-            prevValue.raw.length === datum.accountInfo.data.length &&
-            prevValue.raw.equals(datum.accountInfo.data)
-          ) {
-            // preserve referential equality if buffers are equal
-            return;
+    startTransition(() => {
+      setParsed((prevParsed) => {
+        const nextParsed = { ...prevParsed };
+        zip(keys, data).forEach(([key, datum]) => {
+          if (datum) {
+            const key = getCacheKeyOfPublicKey(datum.accountId);
+            const prevValue = prevParsed[key];
+            if (
+              prevValue &&
+              prevValue.raw.length === datum.accountInfo.data.length &&
+              prevValue.raw.equals(datum.accountInfo.data)
+            ) {
+              // preserve referential equality if buffers are equal
+              return;
+            }
+            try {
+              const parsed = parser(datum);
+              nextParsed[key] = {
+                ...datum,
+                accountInfo: {
+                  ...datum.accountInfo,
+                  data: parsed,
+                },
+                raw: datum.accountInfo.data,
+              };
+            } catch (e) {
+              onError(new SailAccountParseError(e, datum));
+              nextParsed[key] = null;
+              return;
+            }
           }
-          try {
-            const parsed = parser(datum);
-            nextParsed[key] = {
-              ...datum,
-              accountInfo: {
-                ...datum.accountInfo,
-                data: parsed,
-              },
-              raw: datum.accountInfo.data,
-            };
-          } catch (e) {
-            onError(new SailAccountParseError(e, datum));
-            nextParsed[key] = null;
-            return;
+          if (key && datum === null) {
+            nextParsed[getCacheKeyOfPublicKey(key)] = null;
           }
-        }
-        if (key && datum === null) {
-          nextParsed[getCacheKeyOfPublicKey(key)] = null;
-        }
+        });
+        return nextParsed;
       });
-      return nextParsed;
     });
   }, [data, keys, onError, parser]);
 

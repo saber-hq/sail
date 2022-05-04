@@ -1,5 +1,5 @@
 import type { PublicKey } from "@solana/web3.js";
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import type { FetchKeysFn } from "..";
@@ -56,7 +56,9 @@ export const useAccountsData = (
           }
         }
       });
-      setData(nextData);
+      startTransition(() => {
+        setData(nextData);
+      });
     },
     100
   );
