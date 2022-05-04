@@ -470,8 +470,6 @@ __metadata:
     bn.js: ^5.2.0
     dataloader: ^2.1.0
     eslint: ^8.14.0
-    eslint-import-resolver-node: ^0.3.6
-    eslint-plugin-import: ^2.26.0
     eventemitter3: ^4.0.7
     husky: ^7.0.4
     jsbi: ^4.3.0
