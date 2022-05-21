@@ -79,7 +79,7 @@
     "tiny-invariant": "^1.2.0",
     "tslib": "^2.4.0",
     "unstated-next": "^1.1.0",
-    "use-debounce": "^7.0.1"
+    "use-debounce": "^8.0.1"
   },
   "peerDependencies": {
     "@project-serum/anchor": "*",
