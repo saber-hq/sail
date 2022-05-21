@@ -12,6 +12,19 @@ import {
 } from "..";
 import type { AccountDatum } from "../types";
 
+const loadKeysFromCache = (
+  getDatum: (key: PublicKey | null | undefined) => AccountDatum,
+  keys: (PublicKey | null | undefined)[]
+) => {
+  const ret: Record<string, AccountDatum> = {};
+  keys.forEach((key) => {
+    if (key) {
+      ret[getCacheKeyOfPublicKey(key)] = getDatum(key);
+    }
+  });
+  return ret;
+};
+
 /**
  * Fetches data of the given accounts.
  * @param keys Keys to fetch. Ensure that this is memoized or unlikely to change.
@@ -28,13 +41,7 @@ export const useAccountsData = (
   const { getDatum, onBatchCache, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
-    keys.reduce<{ [cacheKey: string]: AccountDatum }>((acc, key) => {
-      if (key) {
-        acc[getCacheKeyOfPublicKey(key)] = getDatum(key);
-      }
-
-      return acc;
-    }, {})
+    loadKeysFromCache(getDatum, keys)
   );
 
   // TODO: add cancellation
