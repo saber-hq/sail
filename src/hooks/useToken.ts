@@ -15,8 +15,11 @@ import { useSail } from "../provider";
 import { makeListMemoKey } from "../utils";
 import { usePubkey } from "./usePubkey";
 
+// const makeCertifiedTokenInfoURLCDN = (chainId: number, address: string) =>
+//   `https://cdn.jsdelivr.net/gh/CLBExchange/certified-token-list/${chainId}/${address}.json`;
+
 const makeCertifiedTokenInfoURL = (chainId: number, address: string) =>
-  `https://cdn.jsdelivr.net/gh/CLBExchange/certified-token-list/${chainId}/${address}.json`;
+  `https://raw.githubusercontent.com/CLBExchange/certified-token-list/master/${chainId}/${address}.json`;
 
 const normalizeMint = (
   mint: PublicKey | null | undefined
