@@ -2,6 +2,12 @@
   "name": "@saberhq/sail",
   "version": "4.0.2",
   "description": "Account caching and batched loading for React-based Solana applications.",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "keywords": [
     "solana",
     "blockchain",
