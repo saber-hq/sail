@@ -1,7 +1,9 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "@saberhq/tsconfig/tsconfig.cjs.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "outDir": "dist/cjs/"
-  }
+    "lib": ["ES2019", "DOM"],
+    "outDir": "dist/cjs/",
+    "rootDir": "src/"
+  },
+  "include": ["./src"]
 }
