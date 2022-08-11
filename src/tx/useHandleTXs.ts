@@ -282,7 +282,7 @@ export const useHandleTXsInternal = ({
 
         if (waitForConfirmation) {
           // await for the tx to be confirmed
-          await Promise.all(pending.map(async (p) => await p.wait()));
+          await Promise.all(pending.map((p) => p.wait()));
         }
 
         return {
