@@ -35,3 +35,13 @@ const MyApp: React.FC = () => (
   </QueryClientProvider>
 );
 ```
+
+## Examples
+
+The most prominent open source example is the [Friktion frontend](https://github.com/Friktion-Labs/frontend).
+
+You can view a list of open source GitHub projects that use Sail [here](https://github.com/saber-hq/sail/network/dependents).
+
+## License
+
+Sail is licensed under the Apache License, Version 2.0.
