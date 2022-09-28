@@ -1,3 +1,5 @@
+"use strict";
+
 require("@rushstack/eslint-patch/modern-module-resolution");
 
 module.exports = {
@@ -7,7 +9,6 @@ module.exports = {
   extends: ["@saberhq/eslint-config-react"],
   settings: { react: { version: "detect" } },
   parserOptions: {
-    tsconfigRootDir: __dirname,
     project: "tsconfig.json",
   },
 };
