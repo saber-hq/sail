@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           always-auth: true
-          node-version: 14.x
+          node-version: 16.x
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
