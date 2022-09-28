@@ -100,7 +100,7 @@
     "react-dom": "^18",
     "react-query": "^3"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@3.2.3",
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix",
     "*.{json,js,jsx,html,css,md,yml,yaml}": "prettier --write"
