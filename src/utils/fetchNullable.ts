@@ -7,7 +7,7 @@
  */
 export const fetchNullable = async <T>(
   url: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<T | null> => {
   const resp = await fetch(url, { signal });
   if (resp.status === 404) {
@@ -30,7 +30,7 @@ const sessionCache: Record<string, unknown> = {};
  */
 export const fetchNullableWithSessionCache = async <T>(
   url: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<T | null> => {
   if (sessionCache[url]) {
     return sessionCache[url] as T | null;

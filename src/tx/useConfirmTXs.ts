@@ -18,7 +18,7 @@ export interface TXHandlers {
   signAndConfirmTX: (
     txEnv: TransactionEnvelope,
     msg?: string,
-    options?: HandleTXOptions
+    options?: HandleTXOptions,
   ) => Promise<TransactionReceipt>;
 
   /**
@@ -27,7 +27,7 @@ export interface TXHandlers {
   signAndConfirmTXs: (
     txEnvs: readonly TransactionEnvelope[],
     msg?: string,
-    options?: HandleTXOptions
+    options?: HandleTXOptions,
   ) => Promise<readonly TransactionReceipt[]>;
 }
 
@@ -37,7 +37,7 @@ export const useTXHandlers = (): TXHandlers => {
     async (
       txEnv: TransactionEnvelope,
       msg?: string,
-      options?: HandleTXOptions
+      options?: HandleTXOptions,
     ): Promise<TransactionReceipt> => {
       const { pending, success, errors } = await handleTX(txEnv, msg, options);
       if (!pending || !success) {
@@ -45,28 +45,28 @@ export const useTXHandlers = (): TXHandlers => {
       }
       return await pending.wait({ useWebsocket: true });
     },
-    [handleTX]
+    [handleTX],
   );
 
   const signAndConfirmTXs = useCallback(
     async (
       txEnvs: readonly TransactionEnvelope[],
       msg?: string,
-      options?: HandleTXOptions
+      options?: HandleTXOptions,
     ): Promise<readonly TransactionReceipt[]> => {
       const { pending, success, errors } = await handleTXs(
         txEnvs,
         msg,
-        options
+        options,
       );
       if (!pending || !success) {
         throw new SailSignAndConfirmError(errors);
       }
       return await Promise.all(
-        pending.map((p) => p.wait({ useWebsocket: true }))
+        pending.map((p) => p.wait({ useWebsocket: true })),
       );
     },
-    [handleTXs]
+    [handleTXs],
   );
 
   return { signAndConfirmTX, signAndConfirmTXs };

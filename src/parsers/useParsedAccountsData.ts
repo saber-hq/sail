@@ -19,7 +19,7 @@ export type AccountParser<T> = (info: KeyedAccountInfo) => T;
 export const makeParsersFromCoder = <M>(parsers: AccountParsers<M>) => {
   return mapValues(
     parsers,
-    (p) => (info: KeyedAccountInfo) => p(info.accountInfo.data)
+    (p) => (info: KeyedAccountInfo) => p(info.accountInfo.data),
   );
 };
 
@@ -29,7 +29,7 @@ export const makeParsersFromCoder = <M>(parsers: AccountParsers<M>) => {
  * @returns
  */
 export const makeParserHooks = <M>(
-  parsers: AccountParsers<M>
+  parsers: AccountParsers<M>,
 ): {
   [K in keyof M]: ParserHooks<M[K]>;
 } => {
@@ -54,7 +54,7 @@ export const makeParserHooks = <M>(
  */
 export const useParsedAccountsData = <T>(
   keys: (PublicKey | null | undefined)[],
-  parser: AccountParser<T>
+  parser: AccountParser<T>,
 ): ParsedAccountDatum<T>[] => {
   const { onError } = useSail();
   const data = useAccountsData(keys);
@@ -65,7 +65,7 @@ export const useParsedAccountsData = <T>(
       }
 
       return acc;
-    }, {})
+    }, {}),
   );
 
   useEffect(() => {
@@ -125,7 +125,7 @@ export const useParsedAccountsData = <T>(
  */
 export const useParsedAccountData = <T>(
   key: PublicKey | null | undefined,
-  parser: AccountParser<T>
+  parser: AccountParser<T>,
 ): { loading: boolean; data: ParsedAccountDatum<T> } => {
   const theKey = useMemo(() => [key], [key]);
   const [data] = useParsedAccountsData(theKey, parser);

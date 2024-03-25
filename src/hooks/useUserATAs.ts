@@ -39,7 +39,7 @@ const ataCache: Record<string, PublicKey> = {};
  */
 export const useATAs = (
   owner: PublicKey | null | undefined,
-  tokens: readonly (Token | null | undefined)[]
+  tokens: readonly (Token | null | undefined)[],
 ):
   | readonly (AssociatedTokenAccount | null | undefined)[]
   | null
@@ -49,7 +49,7 @@ export const useATAs = (
   const memoTokens = useMemo(
     () => tokens,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(tokens.map((tok) => tok?.mintAccount.toString()))]
+    [JSON.stringify(tokens.map((tok) => tok?.mintAccount.toString()))],
   );
 
   const { data: userATAKeys } = useQuery(
@@ -77,12 +77,12 @@ export const useATAs = (
           });
           ataCache[cacheKey] = ata;
           return ata;
-        })
+        }),
       );
     },
     {
       staleTime: Infinity,
-    }
+    },
   );
   const { data: atas } = useBatchedTokenAccounts(userATAKeys);
 
@@ -126,7 +126,7 @@ export type Tuple<T, N extends number> = N extends N
 export type _TupleOf<
   T,
   N extends number,
-  R extends unknown[]
+  R extends unknown[],
 > = R["length"] extends N ? R : _TupleOf<T, N, [T, ...R]>;
 
 /**

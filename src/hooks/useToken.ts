@@ -22,7 +22,7 @@ const makeCertifiedTokenInfoURL = (chainId: number, address: string) =>
   `https://raw.githubusercontent.com/CLBExchange/certified-token-list/master/${chainId}/${address}.json`;
 
 const normalizeMint = (
-  mint: PublicKey | null | undefined
+  mint: PublicKey | null | undefined,
 ): PublicKey | null | undefined => {
   if (!mint) {
     return mint;
@@ -36,7 +36,7 @@ const normalizeMint = (
 
 const makeCertifiedTokenQuery = (
   network: Network,
-  address: string | null | undefined
+  address: string | null | undefined,
 ): UseQueryOptions<Token | null | undefined> => ({
   queryKey: ["sail/certifiedTokenInfo", network, address],
   queryFn: async ({ signal }): Promise<Token | null | undefined> => {
@@ -46,7 +46,7 @@ const makeCertifiedTokenQuery = (
     const chainId = networkToChainId(network);
     const info = await fetchNullableWithSessionCache<TokenInfo>(
       makeCertifiedTokenInfoURL(chainId, address),
-      signal
+      signal,
     );
     if (info === null) {
       return null;
@@ -65,7 +65,7 @@ const makeCertifiedTokenQuery = (
 export const useCertifiedTokens = (mints: (string | null | undefined)[]) => {
   const { network } = useSolana();
   return useQueries(
-    mints.map((mint) => makeCertifiedTokenQuery(network, mint))
+    mints.map((mint) => makeCertifiedTokenQuery(network, mint)),
   );
 };
 
@@ -123,13 +123,13 @@ export const makeBatchedTokensQuery = ({
         const chainId = networkToChainId(network);
         const info = await fetchNullableWithSessionCache<TokenInfo>(
           makeCertifiedTokenInfoURL(chainId, address.toString()),
-          signal
+          signal,
         );
         if (info !== null) {
           return new Token(info);
         }
         addressesToFetch.push({ key: address, index: i });
-      })
+      }),
     );
 
     if (signal?.aborted) {
@@ -183,7 +183,7 @@ export const makeTokenQuery = ({
     const chainId = networkToChainId(network);
     const info = await fetchNullableWithSessionCache<TokenInfo>(
       makeCertifiedTokenInfoURL(chainId, address.toString()),
-      signal
+      signal,
     );
     if (info !== null) {
       return new Token(info);
@@ -206,7 +206,7 @@ export const makeTokenQuery = ({
 });
 
 const useNormalizedMints = (
-  mints?: readonly (PublicKey | null | undefined)[] | null | undefined
+  mints?: readonly (PublicKey | null | undefined)[] | null | undefined,
 ): (PublicKey | null | undefined)[] => {
   return useMemo(() => {
     return mints?.map(normalizeMint) ?? [];
@@ -230,7 +230,7 @@ export const useTokens = (mints?: (PublicKey | null | undefined)[]) => {
         address: mint,
         fetchKeys,
       });
-    })
+    }),
   );
 };
 
@@ -248,7 +248,7 @@ export const useBatchedTokens = (mints: BatchedParsedAccountQueryKeys) => {
       network,
       addresses: normalizedMints,
       fetchKeys,
-    })
+    }),
   );
 };
 
@@ -268,6 +268,6 @@ export const useToken = (mintRaw?: PublicKey | string | null) => {
       network,
       address: normalizedMint,
       fetchKeys,
-    })
+    }),
   );
 };

@@ -14,7 +14,7 @@ import type { AccountDatum } from "../types";
 
 const loadKeysFromCache = (
   getDatum: (key: PublicKey | null | undefined) => AccountDatum,
-  keys: (PublicKey | null | undefined)[]
+  keys: (PublicKey | null | undefined)[],
 ) => {
   const ret: Record<string, AccountDatum> = {};
   keys.forEach((key) => {
@@ -36,19 +36,19 @@ const loadKeysFromCache = (
  * - undefined -- account key not provided or not yet loaded
  */
 export const useAccountsData = (
-  keys: (PublicKey | null | undefined)[]
+  keys: (PublicKey | null | undefined)[],
 ): readonly AccountDatum[] => {
   const { getDatum, onBatchCache, fetchKeys, onError } = useSail();
 
   const [data, setData] = useState<{ [cacheKey: string]: AccountDatum }>(() =>
-    loadKeysFromCache(getDatum, keys)
+    loadKeysFromCache(getDatum, keys),
   );
 
   // TODO: add cancellation
   const fetchAndSetKeys = useDebouncedCallback(
     async (
       fetchKeys: FetchKeysFn,
-      keys: readonly (PublicKey | null | undefined)[]
+      keys: readonly (PublicKey | null | undefined)[],
     ) => {
       const keysData = await fetchKeysMaybe(fetchKeys, keys);
 
@@ -67,7 +67,7 @@ export const useAccountsData = (
         setData(nextData);
       });
     },
-    100
+    100,
   );
 
   useEffect(() => {

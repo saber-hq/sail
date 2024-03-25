@@ -29,7 +29,7 @@ export type ProgramParserHooks<T> = {
     options?: Omit<
       UseQueryOptions<ProgramAccount<T> | null | undefined>,
       "queryFn" | "queryKey"
-    >
+    >,
   ) => ParsedAccountQueryResult<T>;
   /**
    * Uses the data of multiple keys.
@@ -39,7 +39,7 @@ export type ProgramParserHooks<T> = {
     options?: Omit<
       UseQueryOptions<ProgramAccount<T> | null | undefined>,
       "queryFn" | "queryKey"
-    >
+    >,
   ) => ParsedAccountQueryResult<T>[];
   /**
    * Uses the data of multiple keys, batched into a single call.
@@ -49,7 +49,7 @@ export type ProgramParserHooks<T> = {
     options?: Omit<
       UseQueryOptions<BatchedParsedAccountQueryData<T>>,
       "queryFn" | "queryKey"
-    >
+    >,
   ) => BatchParsedAccountQueryResult<T>;
 };
 
@@ -59,7 +59,7 @@ export type ProgramParserHooks<T> = {
  * @returns
  */
 export const makeProgramParserHooks = <M, A extends keyof M>(
-  parsers: ProgramAccountParsers<M>
+  parsers: ProgramAccountParsers<M>,
 ): {
   [K in A]: ProgramParserHooks<M[K]>;
 } => {
@@ -67,21 +67,21 @@ export const makeProgramParserHooks = <M, A extends keyof M>(
   const hooks = mapValues(
     sailParsers,
     <T extends M[A]>(
-      parser: ProgramAccountParser<T>
+      parser: ProgramAccountParser<T>,
     ): ProgramParserHooks<T> => ({
       useSingleData: (
         key: PublicKey | null | undefined,
         options?: Omit<
           UseQueryOptions<ProgramAccount<T> | null | undefined>,
           "queryFn" | "queryKey"
-        >
+        >,
       ): ParsedAccountQueryResult<T> => useParsedAccount(key, parser, options),
       useData: (
         keys: (PublicKey | null | undefined)[],
         options?: Omit<
           UseQueryOptions<ProgramAccount<T> | null | undefined>,
           "queryFn" | "queryKey"
-        >
+        >,
       ): ParsedAccountQueryResult<T>[] =>
         useParsedAccounts<T>(keys, parser, options),
       useBatchedData: (
@@ -89,10 +89,10 @@ export const makeProgramParserHooks = <M, A extends keyof M>(
         options?: Omit<
           UseQueryOptions<BatchedParsedAccountQueryData<T>>,
           "queryFn" | "queryKey"
-        >
+        >,
       ): BatchParsedAccountQueryResult<T> =>
         useBatchedParsedAccounts<T>(keys, parser, options),
-    })
+    }),
   );
   return hooks as unknown as {
     [K in A]: ProgramParserHooks<M[K]>;

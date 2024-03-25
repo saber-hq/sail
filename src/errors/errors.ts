@@ -72,7 +72,7 @@ export class SailError extends Error {
     /**
      * Underlying error message.
      */
-    readonly cause = `${extractErrorMessage(originalError) ?? "unknown"}`
+    readonly cause = `${extractErrorMessage(originalError) ?? "unknown"}`,
   ) {
     super(`${ERROR_TITLES[sailErrorName]}: ${cause}`);
     this.name = sailErrorName;
@@ -108,7 +108,7 @@ export class SailUnknownTXFailError extends SailError {
   constructor(
     originalError: unknown,
     readonly network: Network,
-    readonly txs: readonly TransactionEnvelope[]
+    readonly txs: readonly TransactionEnvelope[],
   ) {
     super("SailUnknownTXFailError", originalError);
   }
@@ -125,7 +125,7 @@ export class SailTransactionError extends SailError {
     /**
      * User message representing the transaction.
      */
-    readonly userMessage?: string
+    readonly userMessage?: string,
   ) {
     super("SailTransactionError", originalError);
   }
@@ -165,8 +165,8 @@ export class SailTransactionError extends SailError {
     if (this.network !== "localnet") {
       parts.push(
         `Inspect transaction details: ${this.tx.generateInspectLink(
-          this.network
-        )}`
+          this.network,
+        )}`,
       );
     }
     return parts.join("\n");
@@ -189,7 +189,7 @@ export class SailRefetchAfterTXError extends SailError {
   constructor(
     originalError: unknown,
     readonly writable: readonly PublicKey[],
-    readonly txs: readonly PendingTransaction[]
+    readonly txs: readonly PendingTransaction[],
   ) {
     super("SailRefetchAfterTXError", originalError);
   }
@@ -217,7 +217,7 @@ export class SailRefetchSubscriptionsError extends SailError {
 export class SailTransactionSignError extends SailError {
   constructor(
     originalError: unknown,
-    readonly txs: readonly TransactionEnvelope[]
+    readonly txs: readonly TransactionEnvelope[],
   ) {
     super("SailTransactionSignError", originalError);
   }
@@ -229,7 +229,7 @@ export class SailTransactionSignError extends SailError {
 export class SailCacheRefetchError extends SailError {
   constructor(
     originalError: unknown,
-    readonly keys: readonly (PublicKey | null | undefined)[]
+    readonly keys: readonly (PublicKey | null | undefined)[],
   ) {
     super("SailCacheRefetchError", originalError);
   }
@@ -239,7 +239,10 @@ export class SailCacheRefetchError extends SailError {
  * Thrown if there is an error parsing an account.
  */
 export class SailAccountParseError extends SailError {
-  constructor(originalError: unknown, readonly data: KeyedAccountInfo) {
+  constructor(
+    originalError: unknown,
+    readonly data: KeyedAccountInfo,
+  ) {
     super("SailAccountParseError", originalError);
   }
 }
@@ -251,7 +254,7 @@ export class SailProgramAccountParseError extends SailError {
   constructor(
     originalError: unknown,
     readonly data: KeyedAccountInfo,
-    readonly parser: ProgramAccountParser<unknown>
+    readonly parser: ProgramAccountParser<unknown>,
   ) {
     super("SailProgramAccountParseError", originalError);
   }
@@ -261,7 +264,10 @@ export class SailProgramAccountParseError extends SailError {
  * Thrown if an account could not be loaded.
  */
 export class SailAccountLoadError extends SailError {
-  constructor(originalError: unknown, readonly accountId: PublicKey) {
+  constructor(
+    originalError: unknown,
+    readonly accountId: PublicKey,
+  ) {
     super("SailAccountLoadError", originalError);
   }
 
@@ -277,7 +283,7 @@ export class SailGetMultipleAccountsError extends SailError {
   constructor(
     readonly keys: readonly PublicKey[],
     readonly commitment: Commitment,
-    originalError: unknown
+    originalError: unknown,
   ) {
     super("SailGetMultipleAccountsError", originalError);
   }

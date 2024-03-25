@@ -16,7 +16,7 @@ import { useParsedAccountData } from "./parsers/useParsedAccountsData";
  * @returns
  */
 export const useSOLBalance = (
-  accountId?: PublicKey | null | undefined
+  accountId?: PublicKey | null | undefined,
 ): TokenAmount | null | undefined => {
   const { network } = useSolana();
   const sol = RAW_SOL[network];
@@ -24,12 +24,12 @@ export const useSOLBalance = (
     (data) => {
       return new TokenAmount(sol, data.accountInfo.lamports);
     },
-    [sol]
+    [sol],
   );
   const { data } = useParsedAccountData(accountId, parser);
   return useMemo(
     () => mapN((data) => new TokenAmount(sol, data.accountInfo.lamports), data),
-    [data, sol]
+    [data, sol],
   );
 };
 
@@ -49,7 +49,7 @@ export function useNativeAccount(): {
     (data) => {
       return new TokenAmount(sol, data.accountInfo.lamports);
     },
-    [sol]
+    [sol],
   );
   const { data } = useParsedAccountData(wallet?.publicKey, parser);
   const balance = data?.accountInfo.lamports;

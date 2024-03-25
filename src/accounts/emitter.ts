@@ -19,7 +19,7 @@ export class CacheBatchUpdateEvent {
    */
   static fromKeys(keys: readonly PublicKey[]) {
     return new CacheBatchUpdateEvent(
-      new Set([...keys.map((k) => getCacheKeyOfPublicKey(k))])
+      new Set([...keys.map((k) => getCacheKeyOfPublicKey(k))]),
     );
   }
 
@@ -41,7 +41,7 @@ export class AccountsEmitter {
   private readonly _emitter = new Emitter();
 
   onBatchCache = (
-    callback: (args: CacheBatchUpdateEvent) => void
+    callback: (args: CacheBatchUpdateEvent) => void,
   ): (() => void) => {
     this._emitter.on(CacheBatchUpdateEvent.type, callback);
     return () =>
@@ -52,7 +52,7 @@ export class AccountsEmitter {
     startTransition(() => {
       this._emitter.emit(
         CacheBatchUpdateEvent.type,
-        new CacheBatchUpdateEvent(ids)
+        new CacheBatchUpdateEvent(ids),
       );
     });
   }
