@@ -7,7 +7,7 @@ import { useMemo } from "react";
  * @returns
  */
 export const useKeypair = (
-  valueStr: string | null | undefined
+  valueStr: string | null | undefined,
 ): Keypair | null | undefined => {
   return useMemo(() => {
     if (typeof valueStr !== "string") {
@@ -18,7 +18,7 @@ export const useKeypair = (
     }
     try {
       return Keypair.fromSecretKey(
-        Uint8Array.from([...(JSON.parse(valueStr) as number[])])
+        Uint8Array.from([...(JSON.parse(valueStr) as number[])]),
       );
     } catch (e) {
       return null;

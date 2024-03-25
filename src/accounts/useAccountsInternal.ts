@@ -68,7 +68,7 @@ export interface UseAccountsArgs {
  * Function signature for fetching keys.
  */
 export type FetchKeysFn = (
-  keys: readonly PublicKey[]
+  keys: readonly PublicKey[],
 ) => Promise<readonly AccountFetchResult[]>;
 
 /**
@@ -79,11 +79,11 @@ export type FetchKeysFn = (
  */
 export const fetchKeysMaybe = async (
   fetchKeys: FetchKeysFn,
-  keys: readonly (PublicKey | null | undefined)[]
+  keys: readonly (PublicKey | null | undefined)[],
 ): Promise<readonly (AccountFetchResult | null | undefined)[]> => {
   const keysWithIndex = keys.map((k, i) => [k, i] as const);
   const nonEmptyKeysWithIndex = keysWithIndex.filter(
-    (key): key is readonly [PublicKey, number] => exists(key[0])
+    (key): key is readonly [PublicKey, number] => exists(key[0]),
   );
   const nonEmptyKeys = nonEmptyKeysWithIndex.map((n) => n[0]);
   const accountsData = await fetchKeys(nonEmptyKeys);
@@ -113,7 +113,7 @@ export interface UseAccounts extends Required<UseAccountsArgs> {
    * Refetches multiple accounts.
    */
   refetchMany: (
-    keys: readonly PublicKey[]
+    keys: readonly PublicKey[],
   ) => Promise<(AccountInfo<Buffer> | Error | null)[]>;
   /**
    * Refetches all accounts that are being subscribed to.
@@ -191,7 +191,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
             connection,
             keys,
             onError,
-            "confirmed"
+            "confirmed",
           );
           const batch = new Set<string>();
           result.array.forEach((info, i) => {
@@ -209,9 +209,9 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
           // aggregate all requests over 500ms
           batchScheduleFn: (callback) => setTimeout(callback, batchDurationMs),
           cacheKeyFn: getCacheKeyOfPublicKey,
-        }
+        },
       ),
-    [accountsCache, batchDurationMs, connection, emitter, onError]
+    [accountsCache, batchDurationMs, connection, emitter, onError],
   );
 
   const { batchFetcher, batchProviderMut } = useMemo(() => {
@@ -227,7 +227,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
     async (keys: readonly PublicKey[]) => {
       return await fetchKeysUsingLoader(accountLoader, keys);
     },
-    [accountLoader]
+    [accountLoader],
   );
 
   const onBatchCache = emitter.onBatchCache;
@@ -237,7 +237,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       const result = await accountLoader.clear(key).load(key);
       return result;
     },
-    [accountLoader]
+    [accountLoader],
   );
 
   const refetchMany = useCallback(
@@ -247,7 +247,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       });
       return await accountLoader.loadMany(keys);
     },
-    [accountLoader]
+    [accountLoader],
   );
 
   const getCached = useCallback(
@@ -256,7 +256,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       // undefined: cache miss (not yet fetched)
       return accountsCache.get(getCacheKeyOfPublicKey(key));
     },
-    [accountsCache]
+    [accountsCache],
   );
 
   const subscribe = useCallback(
@@ -298,7 +298,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       emitter,
       subscribedAccounts,
       useWebsocketAccountUpdates,
-    ]
+    ],
   );
 
   const refetchAllSubscriptions = useCallback(async () => {
@@ -335,7 +335,7 @@ export const useAccountsInternal = (args: UseAccountsArgs): UseAccounts => {
       }
       return accountInfo;
     },
-    [getCached]
+    [getCached],
   );
 
   return {

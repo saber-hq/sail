@@ -12,14 +12,14 @@ export class SailBatchProvider extends SolanaAugmentedProvider {
 
   constructor(
     override readonly provider: Provider,
-    readonly loader: DataLoader<PublicKey, AccountInfo<Buffer> | null, string>
+    readonly loader: DataLoader<PublicKey, AccountInfo<Buffer> | null, string>,
   ) {
     super(provider);
     this.fetcher = new SailBatchFetcher(loader);
   }
 
   override async getAccountInfo(
-    accountId: PublicKey
+    accountId: PublicKey,
   ): Promise<KeyedAccountInfo | null> {
     const data = await this.loader.load(accountId);
     if (!data) {
@@ -34,7 +34,7 @@ export class SailBatchProvider extends SolanaAugmentedProvider {
 
 export class SailBatchFetcher implements AccountInfoFetcher {
   constructor(
-    readonly loader: DataLoader<PublicKey, AccountInfo<Buffer> | null, string>
+    readonly loader: DataLoader<PublicKey, AccountInfo<Buffer> | null, string>,
   ) {}
 
   async getAccountInfo(accountId: PublicKey): Promise<KeyedAccountInfo | null> {

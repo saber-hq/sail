@@ -47,7 +47,7 @@ export const makeBatchedParsedAccountQuery = <T>(
   options: Omit<
     UseQueryOptions<BatchedParsedAccountQueryData<T>>,
     "queryFn" | "queryKey"
-  > = {}
+  > = {},
 ): UseQueryOptions<BatchedParsedAccountQueryData<T>> => ({
   queryKey: [
     "sail/batchedParsedAccounts",
@@ -96,13 +96,13 @@ export const useBatchedParsedAccounts = <T>(
   options: Omit<
     UseQueryOptions<BatchedParsedAccountQueryData<T>>,
     "queryFn" | "queryKey"
-  > = {}
+  > = {},
 ): BatchParsedAccountQueryResult<T> => {
   const { fetchKeys, onBatchCache } = useSail();
   const { network } = useSolana();
 
   const query = useQuery(
-    makeBatchedParsedAccountQuery(keys, network, fetchKeys, parser, options)
+    makeBatchedParsedAccountQuery(keys, network, fetchKeys, parser, options),
   );
 
   useAccountsSubscribe(keys);

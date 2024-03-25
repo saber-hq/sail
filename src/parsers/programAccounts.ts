@@ -48,12 +48,12 @@ export const makeProgramAccountParsers = <M, A extends keyof M>({
     accountParsers,
     <T>(
       parser: (data: Buffer) => T,
-      name: string
+      name: string,
     ): ProgramAccountParser<T> => ({
       name,
       programID: address,
       parse: parser,
-    })
+    }),
   ) as unknown as {
     [K in keyof M]: ProgramAccountParser<M[K]>;
   };

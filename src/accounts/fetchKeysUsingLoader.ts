@@ -8,7 +8,7 @@ import type { AccountLoader } from "./useAccountsInternal";
 
 export const fetchKeysUsingLoader = async (
   loader: AccountLoader,
-  keys: readonly PublicKey[]
+  keys: readonly PublicKey[],
 ): Promise<AccountFetchResult[]> => {
   const keysWithIndex = keys.map((k, i) => [k, i] as const);
   const result = await loader.loadMany(keysWithIndex.map((k) => k[0]));

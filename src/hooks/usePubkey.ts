@@ -9,7 +9,7 @@ import { serializeKeys } from "../utils";
  * @returns
  */
 export const usePubkey = (
-  raw: PublicKey | string | null | undefined
+  raw: PublicKey | string | null | undefined,
 ): PublicKey | null | undefined => {
   return useMemo(() => {
     if (raw === undefined) {
@@ -35,7 +35,7 @@ export const usePubkey = (
  * @returns
  */
 export const usePubkeyMemo = (
-  raw: PublicKey | string | null | undefined
+  raw: PublicKey | string | null | undefined,
 ): PublicKey | null | undefined => {
   const keyNoMemo = usePubkey(raw);
   return useMemo(() => {
@@ -48,7 +48,7 @@ export const usePubkeyMemo = (
  * Loads and parses multiple {@link PublicKey}s, preserving the reference.
  */
 export const usePubkeysMemo = (
-  keys: (PublicKey | string | null | undefined)[]
+  keys: (PublicKey | string | null | undefined)[],
 ): (PublicKey | null | undefined)[] => {
   return useMemo(() => {
     return keys.map((k) => {

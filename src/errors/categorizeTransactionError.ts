@@ -13,7 +13,7 @@ export enum TransactionErrorType {
  * @returns
  */
 export const categorizeTransactionError = (
-  msg: string
+  msg: string,
 ): TransactionErrorType | null => {
   if (msg.startsWith("Transaction was not confirmed in")) {
     return TransactionErrorType.NotConfirmed;

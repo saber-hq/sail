@@ -143,7 +143,7 @@ export interface HandleTXOptions extends ConfirmOptions {
 export type HandleTX = (
   txEnv: TransactionEnvelope,
   msg?: string,
-  options?: HandleTXOptions
+  options?: HandleTXOptions,
 ) => Promise<HandleTXResponse>;
 
 /**
@@ -152,7 +152,7 @@ export type HandleTX = (
 export type HandleTXs = (
   txEnv: readonly TransactionEnvelope[],
   msg?: string,
-  options?: HandleTXOptions
+  options?: HandleTXOptions,
 ) => Promise<HandleTXsResponse>;
 export interface UseHandleTXs {
   /**
@@ -180,7 +180,7 @@ export const useHandleTXsInternal = ({
     async (
       txs: readonly TransactionEnvelope[],
       message?: string,
-      options?: HandleTXOptions
+      options?: HandleTXOptions,
     ): Promise<{
       success: boolean;
       pending: readonly PendingTransaction[];
@@ -197,7 +197,7 @@ export const useHandleTXsInternal = ({
         const txTable = await Promise.all(
           txs.map(async (tx) => {
             return await tx.simulateTable({ verifySigners: false, ...options });
-          })
+          }),
         );
         txs.forEach((tx, i) => {
           const table = txTable[i];
@@ -222,7 +222,7 @@ export const useHandleTXsInternal = ({
         const nativeBalance = mapN(
           (nativeAccount) =>
             "data" in nativeAccount ? nativeAccount.lamports : null,
-          nativeAccount
+          nativeAccount,
         );
         if (!nativeBalance) {
           const error = new InsufficientSOLError(nativeBalance);
@@ -238,7 +238,7 @@ export const useHandleTXsInternal = ({
         try {
           signedTXs = await provider.signer.signAll(
             txs.map((tx) => ({ tx: tx.build(), signers: tx.signers })),
-            options
+            options,
           );
         } catch (e) {
           const fail = new SailTransactionSignError(e, txs);
@@ -265,7 +265,7 @@ export const useHandleTXsInternal = ({
                 network,
                 e,
                 txEnvelope,
-                message
+                message,
               );
               console.error(`Error sending TX ${i}: ${txError.message}`);
               console.debug(txError.generateLogMessage());
@@ -273,12 +273,12 @@ export const useHandleTXsInternal = ({
               onError(txError);
               return null;
             }
-          })
+          }),
         );
 
         // if any TXs could not send, do not continue.
         const pending = maybePending.filter(
-          (p): p is PendingTransaction => !!p
+          (p): p is PendingTransaction => !!p,
         );
         if (errors.length > 0) {
           // don't throw anything here because we already threw the errors above
@@ -310,10 +310,10 @@ export const useHandleTXsInternal = ({
                     throw new Error(
                       `Could not await confirmation of transaction ${
                         p.signature
-                      }: ${extractErrorMessage(err) ?? "unknown"}`
+                      }: ${extractErrorMessage(err) ?? "unknown"}`,
                     );
-                  })
-              )
+                  }),
+              ),
             );
             // then fetch, after a delay
             setTimeout(() => {
@@ -347,7 +347,7 @@ export const useHandleTXsInternal = ({
           console.debug(tx.debugStr);
           if (network !== "localnet") {
             console.debug(
-              `View on Solana Explorer: ${tx.generateInspectLink(network)}`
+              `View on Solana Explorer: ${tx.generateInspectLink(network)}`,
             );
           }
         });
@@ -366,14 +366,14 @@ export const useHandleTXsInternal = ({
       refetchMany,
       txRefetchDelayMs,
       waitForConfirmation,
-    ]
+    ],
   );
 
   const handleTX = useCallback(
     async (
       txEnv: TransactionEnvelope,
       message?: string,
-      options?: HandleTXOptions
+      options?: HandleTXOptions,
     ): Promise<{
       success: boolean;
       pending: PendingTransaction | null;
@@ -382,11 +382,11 @@ export const useHandleTXsInternal = ({
       const { success, pending, errors } = await handleTXs(
         [txEnv],
         message,
-        options
+        options,
       );
       return { success, pending: pending[0] ?? null, errors };
     },
-    [handleTXs]
+    [handleTXs],
   );
 
   return { handleTX, handleTXs };

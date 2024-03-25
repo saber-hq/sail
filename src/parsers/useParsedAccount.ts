@@ -38,7 +38,7 @@ export const useParsedAccounts = <T>(
   options: Omit<
     UseQueryOptions<ProgramAccount<T> | null | undefined>,
     "queryFn" | "queryKey"
-  > = {}
+  > = {},
 ): ParsedAccountQueryResult<T>[] => {
   const { network } = useSolana();
   const data = useAccountsData(keys);
@@ -68,8 +68,8 @@ export const useParsedAccounts = <T>(
           enabled: key !== undefined && datum !== undefined,
           ...options,
         };
-      }
-    )
+      },
+    ),
   );
 };
 
@@ -89,7 +89,7 @@ export const makeParsedAccountQuery = <T>(
   options: Omit<
     UseQueryOptions<ProgramAccount<T> | null | undefined>,
     "queryFn" | "queryKey"
-  > = {}
+  > = {},
 ): UseQueryOptions<ProgramAccount<T> | null | undefined> => ({
   queryKey: [
     "sail/parsedAccount",
@@ -136,13 +136,13 @@ export const useParsedAccount = <T>(
   options: Omit<
     UseQueryOptions<ProgramAccount<T> | null | undefined>,
     "queryFn" | "queryKey"
-  > = {}
+  > = {},
 ): ParsedAccountQueryResult<T> => {
   const { fetchKeys, onBatchCache } = useSail();
   const { network } = useSolana();
 
   const query = useQuery(
-    makeParsedAccountQuery(key, network, fetchKeys, parser, options)
+    makeParsedAccountQuery(key, network, fetchKeys, parser, options),
   );
 
   useAccountsSubscribe(useMemo(() => [key], [key]));
