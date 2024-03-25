@@ -1,4 +1,4 @@
-import type { ProgramAccount } from "@project-serum/anchor";
+import type { ProgramAccount } from "@coral-xyz/anchor";
 import type { Network } from "@saberhq/solana-contrib";
 import { useSolana } from "@saberhq/use-solana";
 import type { PublicKey } from "@solana/web3.js";
